@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Admin from '../views/admin/Index.vue'
 import store from "../store"
 
 Vue.use(VueRouter)
@@ -9,7 +8,7 @@ const routes = [
   {
     path: '/',
     name: 'Admin',
-    component: Admin,
+    component: () => import(/* webpackChunkName: "Index" */ '../views/admin/Index.vue'),
     meta: {
       requiresAuth: false
     },
