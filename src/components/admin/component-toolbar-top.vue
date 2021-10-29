@@ -1,6 +1,12 @@
 <template>
-  <v-toolbar
+  <v-app-bar
     dense
+    absolute
+    width="100%"
+    color="black"
+    dark
+    app
+    temporary
     >
     <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
 
@@ -42,7 +48,7 @@
       </v-tooltip>
     </div>
 
-  </v-toolbar>
+  </v-app-bar>
 
 </template>
 
@@ -53,7 +59,7 @@ export default {
   props: ['NavItems','error'],
   mixins: [mixins], 
   methods: {
-    toggleDrawer(){ this.$emit('toggleDrawer') },
+    toggleDrawer(){ this.$store.commit("toggleAdminDrawer") },
     logout(){ this.$emit("logout") },
     signin() { this.$emit("signin")},
   }

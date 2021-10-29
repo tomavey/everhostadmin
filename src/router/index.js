@@ -19,7 +19,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "signin" */ '../views/auth/Signin.vue')
   },
   {
-    path: "welcome",
+    path: "/welcome",
     name: "Welcome",
     component: () => import(/* webpackChunkName: "welcome" */ '../views/admin/Welcome.vue'),
     meta: {
@@ -35,7 +35,7 @@ const routes = [
     },
   },
   {
-    path: "propertieslist",
+    path: "/propertieslist",
     name: "PropertiesList",
     component: () => import(/* webpackChunkName: "propertieslist" */ '../views/admin/PropertiesList.vue'),
     meta: {
@@ -43,7 +43,7 @@ const routes = [
     },
   },
   {
-    path: "newpropertyinfodialog/:contentName",
+    path: "/newpropertyinfodialog/:contentName",
     name: "NewPropertyInfoDialog",
     component: () => import(/* webpackChunkName: "newpropertyinfodialog" */ '../views/admin/NewPropertyInfoDialog.vue'),
     meta: {
@@ -59,7 +59,7 @@ const routes = [
     },
   },
   {
-    path: "newpropertycodedialog",
+    path: "/newpropertycodedialog",
     name: "NewPropertyCodeDialog",
     component: () => import(/* webpackChunkName: "newpropertycodedialog" */ '../views/admin/NewPropertyCodeDialog.vue'),
     meta: {
@@ -67,7 +67,7 @@ const routes = [
     },
   },
   {
-    path: "instructionsdialog/:contentName",
+    path: "/instructionsdialog/:contentName",
     name: "InstructionsDialog",
     component: () => import(/* webpackChunkName: "instructionsdialog" */ '../views/admin/InstructionsDialog.vue'),
     meta: {
@@ -75,7 +75,7 @@ const routes = [
     },
   },
   {
-    path: "imagegallery",
+    path: "/imagegallery",
     name: "ImageGallery",
     component: () => import(/* webpackChunkName: "imagegallery" */ '../views/admin/ImageGallery.vue'),
     meta: {
@@ -83,7 +83,7 @@ const routes = [
     },
   },
   {
-    path: "imagegallerydialog",
+    path: "/imagegallerydialog",
     name: "ImageGalleryDialog",
     component: () => import(/* webpackChunkName: "imagegallerydialog" */ '../views/admin/ImageGalleryDialog.vue'),
     meta: {
@@ -91,7 +91,7 @@ const routes = [
     },
   },
   {
-    path: "users",
+    path: "/users",
     name: "Users",
     component: () => import(/* webpackChunkName: "users" */ '../views/admin/Users.vue'),
     meta: {

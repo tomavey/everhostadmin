@@ -1,9 +1,10 @@
 <template>
   <v-navigation-drawer
-    v-model="drawer2"
-    app
+    v-model="drawer"
     class="pt-4"
     color="grey lighten-3"
+    absolute
+    temporary
     >
 
     <v-list>
@@ -56,7 +57,7 @@
 import mixins from "@/mixins"
 
 export default {
-  props: ['navItems','error','drawer'],
+  props: ['navItems','error',],
   mixins: [mixins],
   data() {
     return {
@@ -64,9 +65,9 @@ export default {
     }
   },
   computed: {
-    drawer2: {
-      get() { return this.drawer },
-      set(value) { return }
+    drawer: {
+      get(){ return this.$store.getters.adminDrawer },
+      set(value) { this.$store.commit('setAdminDrawer', value)}
     }
   },
   methods: {

@@ -1,15 +1,5 @@
 <template>
   <v-app>
-    <component-toolbar-top 
-      @toggleDrawer="toggleDrawer()" 
-      :error=error 
-      @logout="logout()"
-      @signin="signin()"
-      />
-
-    <v-main>
-      <router-view/>
-    </v-main>
 
     <component-navdrawer-side 
       :navItems=navItems 
@@ -19,20 +9,24 @@
       @signin="signin()"
     />
 
-    <v-dialog
-      v-model="showSignin"
-      persistent
-      max-width="600px"
-    >
-      <template>
-        <component-signin-user @onSignin="signin"/>
-      </template>
-    </v-dialog>      
+    <component-toolbar-top 
+      @toggleDrawer="toggleDrawer()" 
+      :error=error 
+      @logout="logout()"
+      @signin="signin()"
+      />
+
+    <v-main>
+      <v-container>
+        <router-view :key="$route.fullPath"/>
+      </v-container>
+    </v-main>
 
     <p class="float-right">
       PropertryId: {{propertyId}}
       <span v-if="userIsAdmin" class="float-right">&nbsp;*</span>
     </p>
+
 
   </v-app>
 </template>
@@ -40,16 +34,15 @@
 <script>
 import ComponentToolbarTop from './components/admin/component-toolbar-top.vue';
 import ComponentNavdrawerSide from './components/admin/component-navdrawer-side.vue';
-import ComponentSigninUser from './components/admin/component-signin-user.vue'
 import mixins from "@/mixins"
 
 export default {
-  components: { ComponentToolbarTop, ComponentNavdrawerSide, ComponentSigninUser },
+  components: { ComponentToolbarTop, ComponentNavdrawerSide, },
   mixins: [mixins],
   name: 'App',
 
   data: () => ({
-    drawer: true,
+    drawer: null,
     showSignin: false,
     showSignin: false,
     navItems: [

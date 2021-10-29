@@ -206,7 +206,10 @@ export default new Vuex.Store({
       state.loading = payload
     },
     toggleAdminDrawer ( state ) {
-      state.adminDrawer = !getters.adminDrawer
+      state.adminDrawer = !state.adminDrawer
+    },
+    setAdminDrawer ( state, payload ) {
+      state.adminDrawer = payload
     },
     clearError ( state ) {
       state.error = ""
