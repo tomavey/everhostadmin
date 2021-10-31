@@ -1,109 +1,79 @@
 <template>
-  <v-container>
-      <v-chip
-        class="mr-2 pa-3 halfWide"
-        @click="goToRoute('NewPropertyCreateDialog')"
-        x-large
-        color="primary"
-        dark
-        outlined
-      >
-        <v-icon left>
-          mdi-brightness-5
-        </v-icon>
-        Create a new property
-      </v-chip>  
-      <v-chip
-        class="mr-2 pa-3 halfWide"
-        @click="goToRoute('PropertiesList')"
-        x-large
-        color="primary"
-        dark
-        outlined
-      >
-        <v-icon left>
-          mdi-brightness-5
-        </v-icon>
-        List my properties
-      </v-chip>  
+  <v-card
+    max-width="400"
+    class="mx-auto"
+  >
 
-      <v-card
-        
-      >
-        <v-card-text class=text-center>
-          <v-container>
-            <v-row
-            >
-              <v-col cols="4" class="mx-auto my-12">
-                <v-chip
-                  class="ma-2 pa-3 wide"
-                  @click="goToRoute('NewPropertyCreateDialog')"
-                  x-large
-                  color="primary"
-                  dark
-                  outlined
-                >
-                  <v-icon left>
-                    mdi-brightness-5
-                  </v-icon>
-                  Create a new property
-                </v-chip>  
-              </v-col>
+    <v-app-bar
+      dark
+      color="pink"
+      c
+    >
+      <v-spacer></v-spacer>
+      <v-toolbar-title>Welcome to Everhost!</p></v-toolbar-title>
+      <v-spacer></v-spacer>
 
-              <v-col cols="4" class="mx-auto my-12">
-                <v-chip
-                  class="mr-2 pa-3 wide"
-                  @click="goToRoute('PropertiesList')"
-                  x-large
-                  color="primary"
-                  dark
-                  outlined
-                >
-                  <v-icon left>
-                    mdi-brightness-5
-                  </v-icon>
-                  List my properties
-                </v-chip>  
-              </v-col>
+    </v-app-bar>
 
-              <v-col cols="4" class="mx-auto my-12">
-                <v-btn
-                  class="mx-2"
-                  fab
-                  dark
-                  large
-                  color="primary"
-                >
-                  <v-icon dark>
-                    mdi-minus
-                  </v-icon>
-                </v-btn>
-                  My Properties
-              </v-col>
+    <v-container>
+      <v-row dense>
 
-            </v-row>
-          </v-container>
-        </v-card-text>
-      </v-card>
-  </v-container>
+        <v-col cols="12" v-for="(item,index) in items" :key=index>
+          <v-card
+            :color=item.color
+            dark
+            :to=item.routeName
+             class="center-text"
+          >
+            <v-card-title class="text-h5">
+              <p class="center-text" v-html="item.title">
+              </p>
+            </v-card-title>
+
+            <v-card-subtitle class="center-text" v-html="item.subtitle"></v-card-subtitle>
+
+            <v-card-actions>
+              <v-btn
+                :to=item.routeName 
+                text
+              >
+                {{item.action}}
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+
+      </v-row>
+    </v-container>
+  </v-card>
 </template>
 
 <script>
-import mixins from '@/mixins'
-
-export default {
-  mixins: [ mixins ],
-  data () {
-    return {
-      message: "admin Home"
-    }
+  export default {
+    data: () => ({
+      items: [
+        {
+          color: '#1F7087',
+          routeName: 'NewPropertyCreateDialog',
+          title: 'Create a new property web',
+          subtitle: 'Enter all the information your guests will need in an web app for your property.',
+          action: "Start Now"
+        },
+        {
+          color: '#952175',
+          routeName: 'PropertiesList',
+          title: 'List all of your properties.',
+          subtitle: 'List, edit or delete all of your properties.',
+          action: "See the list"
+        },
+      ],
+    }),
   }
-}
 </script>
 
 <style scoped>
-  .halfWide {
-    min-width:50%;
-  }
-
+  .center-text {
+    width:100%;
+    text-align: center;
+}
 </style>
