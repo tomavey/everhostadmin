@@ -19,6 +19,7 @@ export default new Vuex.Store({
     devMode: false,
     adminDrawer: null,
     images: [],
+    everhostUrl: "https://everhostio.web.app/",
     subSections: [
       {
         tabLabel: "Welcome",
@@ -122,13 +123,13 @@ export default new Vuex.Store({
         validRegex: "",
       },
       {
-        fieldName: "platform",
+        fieldName: "telephone",
         validMinLength: 3,
         validType: "string",
         validRegex: "",
       },
       {
-        fieldName: "telephone",
+        fieldName: "platform",
         validMinLength: 3,
         validType: "string",
         validRegex: "",
@@ -160,6 +161,7 @@ export default new Vuex.Store({
     error: state => state.error,
     loading: state => state.loading,
     subSections: state => state.subSections,
+    everhostUrl: state => state.everhostUrl,
     basicMetaInfo: state => state.basicMetaInfo,
     basicMetaInfoFieldNamesArray: state => {
       let fieldNamesArray = []

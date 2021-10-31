@@ -48,6 +48,20 @@
       </component-new-property-dialog>
 
       <component-new-property-dialog
+        :dialog=showDialog.telephone
+        :instruction="getInstruction('telephone')"
+        :contentName="'telephone'"
+        @dialogFalse="dialogFalse"
+        @closeDialog="closeDialog"
+      >
+        <v-text-field
+          v-model="property.telephone"
+          label="Telephone"
+          required
+        ></v-text-field>
+      </component-new-property-dialog>
+
+      <component-new-property-dialog
         :dialog=showDialog.platform
         :instruction="getInstruction('platform')"
         :contentName="'platform'"
@@ -84,6 +98,19 @@
           <v-text-field
             v-model="property.address"
             label="Address"
+            required
+          ></v-text-field>
+        </v-col>  
+       </v-row>
+      <v-row>
+        <v-col
+          cols="12"
+          md="4"
+        >
+          <p>{{instructions.telephone}}</p>
+          <v-text-field
+            v-model="property.telephone"
+            label="Telephone"
             required
           ></v-text-field>
         </v-col>  
@@ -154,7 +181,6 @@ export default {
       this.showDialog[nextContentName] = false 
     },  
     submit: async function() {
-      alert(this.validateFieldLengths())
       let obj = this.property
       let docId = obj.propertyId
       console.log(obj)

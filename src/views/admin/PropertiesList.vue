@@ -33,6 +33,12 @@
         >
           mdi-pencil
         </v-icon>
+        <v-icon
+          small
+          @click="goToEverhostProperty(item.propertyId)"
+        >
+          mdi-eye-arrow-right
+        </v-icon>
       </template>
     </v-data-table>
 
@@ -73,8 +79,15 @@ export default {
     }
   },
   computed: {
+    everhostUrl: function(){
+      return this.$store.getters.everhostUrl
+    }
   },
   methods: {
+    goToEverhostProperty: function (code) {
+      let newUrl = this.everhostUrl + code
+      window.open(newUrl)
+    },
     closeDialog(){
       this.dialogDelete = false
     },
