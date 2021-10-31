@@ -68,9 +68,6 @@
 
 <script>
 import mixins from '@/mixins/'
-import firebase from 'firebase'
-
-let authRef = firebase.auth()
 
 export default {
   mixins: [mixins],
@@ -103,10 +100,14 @@ export default {
   },
   methods: {
     onSignin () {
-      authRef.signInWithEmailAndPassword(this.email, this.password)
+      const payload = {
+        email: this.email,
+        password: this.password
+      }
+      this.$store.dispatch("signInWithEmailAndPassword", payload)
       .then(() => {
         this.$store.commit('clearError')
-        this.$emit("onSignin")
+        this.goToRoute("Admin")
         }
       )
       .catch( error => {

@@ -47,9 +47,13 @@ export default {
         return false
       }
     },
-    onLogout: function () {
-      this.$store.dispatch('logout')
-    },
+    // onLogout: function () {
+    //   this.$store.dispatch('logout')
+    // },
+    logout(){ 
+      this.$store.dispatch("logout")
+      .then( () => this.goToRoute("Signin") )
+      },
     goTo: function (route) {
       if ( route.includes("http") ) {
         this.goToOffSite(route)

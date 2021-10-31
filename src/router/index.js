@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from "../store"
+import Admin from '../views/admin/Index.vue'
+import firebase from "firebase"
 
 Vue.use(VueRouter)
 
@@ -8,22 +10,25 @@ const routes = [
   {
     path: '/',
     name: 'Admin',
-    component: () => import(/* webpackChunkName: "Index" */ '../views/admin/Index.vue'),
+    component: Admin,
     meta: {
-      requiresAuth: false
+      requiresAuth: true
     },
   },  
   {
     path: '/signin',
     name: 'Signin',
-    component: () => import(/* webpackChunkName: "signin" */ '../views/auth/Signin.vue')
+    component: () => import(/* webpackChunkName: "signin" */ '../views/auth/Signin.vue'),
+    meta: {
+      requiresAuth: false
+    },
   },
   {
     path: "/welcome",
     name: "Welcome",
     component: () => import(/* webpackChunkName: "welcome" */ '../views/admin/Welcome.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: false
     },
   },
   {
@@ -98,6 +103,15 @@ const routes = [
       requiresAuth: true
     },
   },
+  {
+    path: '*',
+    name: 'Admin',
+    component: Admin,
+    meta: {
+      requiresAuth: true
+    },
+  },  
+
 ]
 
 const router = new VueRouter({
@@ -106,25 +120,51 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach( (to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const isAuthenticated = firebase.auth().currentUser
+  console.log("RouteName", to.name)
+  console.log("requiresAuth",requiresAuth)
+  console.log("isAuthenticated",isAuthenticated)
+  if (requiresAuth && !isAuthenticated){
+    console.log("Authorized",store.getters.user.loggedIn)
+    router.push({ name: 'Signin' }).catch( () => {} )
+  } else {
+    next();
+  }
+})
+
 // router.beforeEach(async (to, from, next) => {
-//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-//   console.log(to)
+//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+//   console.log("requiresAuth",requiresAuth)
 //   if (requiresAuth && !await store.getters.user.loggedIn){
-//     next({name:'Admin'});
+//     console.log("Authorized",store.getters.user.loggedIn)
+//     router.push({ name: 'Signin' }).catch( () => {} )
 //   } else {
 //     next();
-//   }})
+//   }
+// })
 
-router.beforeEach((to, from, next) => {
-  let isAuthenticated = store.getters.user.loggedIn
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (isAuthenticated) {
-      next()
-      return
-    }
-    next('/admin')
-  }
-  next()
-})
+// router.beforeEach((to, from, next) => {
+//   let isAuthenticated = store.getters.user.loggedIn
+//   if (to.name !== 'Signin' && !isAuthenticated) next({ name:    'Signin' })
+//   else next()
+// })
+
+// router.beforeEach((to, from, next) => {
+//   let isAuthenticated = store.getters.user.loggedIn
+//   if (to.matched.some((record) => record.meta.requiresAuth)) {
+//     if (!isAuthenticated) {
+//       console.log("is not authenticated")
+//       next({name: "Signin"})
+//     } else {
+//       console.log("is authenticated")
+//       next()
+//     }
+//   } else {
+//     console.log("does not require authentication")
+//     next()
+//   }
+// })
   
 export default router

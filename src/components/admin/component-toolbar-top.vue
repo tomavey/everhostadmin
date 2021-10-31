@@ -60,8 +60,9 @@ export default {
   mixins: [mixins], 
   methods: {
     toggleDrawer(){ this.$store.commit("toggleAdminDrawer") },
-    logout(){ this.$emit("logout") },
-    signin() { this.$emit("signin")},
+    signin() { 
+      this.goToRoute("Signin")
+    },
   }
 }
 </script>

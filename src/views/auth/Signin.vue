@@ -68,9 +68,6 @@
 
 <script>
 import mixins from '@/mixins/'
-import firebase from 'firebase'
-
-let authRef = firebase.auth()
 
 export default {
   mixins: [mixins],
@@ -94,19 +91,26 @@ export default {
       return this.$store.getters.error
     }
   },
-  watch: {
-    user (value) {
-      if (value !== null && value !== undefined) {
-        this.$router.push('/')
-      }
-    }
-  },
+  // watch: {
+  //   user (value) {
+  //     if (value !== null && value !== undefined) {
+  //       this.$router.push('/')
+  //     }
+  //   }
+  // },
   methods: {
     onSignin () {
-      authRef.signInWithEmailAndPassword(this.email, this.password)
+      const payload = {
+        "email":this.email,
+        "password":this.password
+      }
+      console.log(payload)
+      this.$store.dispatch('signInWithEmailAndPassword', payload)
       .then(() => {
         this.$store.commit('clearError')
-        this.$router.replace("/eh-admin")
+        // this.$store.commit('setAdminDrawer', true)
+        console.log("logged in")
+        this.goToRoute("Welcome")
         }
       )
       .catch( error => {

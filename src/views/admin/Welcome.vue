@@ -67,19 +67,18 @@
               </v-col>
 
               <v-col cols="4" class="mx-auto my-12">
-                <v-chip
-                  class="mr-2 pa-3 wide"
-                  @click="goToRoute('PropertiesList')"
-                  x-large
-                  color="primary"
+                <v-btn
+                  class="mx-2"
+                  fab
                   dark
-                  outlined
+                  large
+                  color="primary"
                 >
-                  <v-icon left>
-                    mdi-brightness-5
+                  <v-icon dark>
+                    mdi-minus
                   </v-icon>
-                  List my properties
-                </v-chip>  
+                </v-btn>
+                  My Properties
               </v-col>
 
             </v-row>

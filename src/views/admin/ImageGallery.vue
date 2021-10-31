@@ -99,7 +99,7 @@
 
 <script>
 import mixins from "@/mixins"
-import ComponentImageGalleryDialog from '../../components/component-image-gallery-dialog.vue'
+import ComponentImageGalleryDialog from '../../components/admin/component-image-gallery-dialog.vue'
 
 export default {
   mixins: [mixins],

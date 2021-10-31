@@ -4,27 +4,23 @@
     <component-navdrawer-side 
       :navItems=navItems 
       :error=error 
-      :drawer=drawer
-      @logout="logout()"
-      @signin="signin()"
     />
 
     <component-toolbar-top 
       @toggleDrawer="toggleDrawer()" 
       :error=error 
-      @logout="logout()"
-      @signin="signin()"
       />
 
     <v-main>
       <v-container>
-        <router-view :key="$route.fullPath"/>
+        <router-view :key="$route.fullPath" />
       </v-container>
     </v-main>
 
     <p class="float-right">
       PropertryId: {{propertyId}}
       <span v-if="userIsAdmin" class="float-right">&nbsp;*</span>
+      <span v-if="userIsAuthenticated" class="float-right">&nbsp;*</span>
     </p>
 
 
@@ -43,8 +39,6 @@ export default {
 
   data: () => ({
     drawer: null,
-    showSignin: false,
-    showSignin: false,
     navItems: [
       {
         n: 1,
@@ -72,26 +66,9 @@ export default {
       }, 
     ],
   }),
+  watch: {
+  },
   methods: {
-    signin(){
-      this.drawer = true
-      this.showSignin = false
-    },
-    logout(){
-      this.$store.dispatch('logout')
-      this.showSignin = true
-      this.goToRoute("Admin")
-    },
-    toggleDrawer(){
-      if ( this.userIsAuthenticated ) {
-        if ( this.drawer !== null ) {
-          this.drawer = !this.drawer
-        } else { this.drawer = false }
-      } else {
-        this.setError("Signin before navigating to admin pages.")
-        this.showSignin = true   
-      } 
-    },
   },
   computed: {
     error: function(){ return this.$store.getters.error },

@@ -42,7 +42,7 @@
       <div v-if="!userIsAuthenticated">
         <v-list-item 
           class="d-block text-center mx-auto mb-9"
-          @click="showSignin = !showSignin"
+          @click="goToRoute('Signin')"
         >
           Signin
         </v-list-item>
@@ -61,7 +61,6 @@ export default {
   mixins: [mixins],
   data() {
     return {
-      showSignin: false,
     }
   },
   computed: {
@@ -76,8 +75,6 @@ export default {
       if ( !n.adminOnly && this.userIsAuthenticated ) { return true }
       return false
     },
-    logout(){ this.$emit("logout") },
-    signin() { this.$emit("signin")},
   }
 }
 </script>
