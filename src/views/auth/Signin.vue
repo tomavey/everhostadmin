@@ -80,6 +80,13 @@ export default {
       showBottomButtons: false,
     }
   },
+  watch:{
+    userIsAuthenticated: function(){
+      if ( this.userIsAuthenticated ) {
+        this.goToRoute("Welcome")
+      }
+    }
+  },
   computed: {
     user () {
       return this.$store.getters.user
