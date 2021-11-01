@@ -55,5 +55,5 @@ const app = new Vue({
 firebase.auth().onAuthStateChanged(user => {
   console.log("onAuthStateChanged: ", user)
   store.dispatch("fetchUser", user)
-  app.$mount('#app')
+  .then( app.$mount('#app') )
 });
