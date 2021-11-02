@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from "../store"
 import Admin from '../views/admin/Index.vue'
-import firebase from "firebase"
+import AuthGuard from 'auth-guard'
 
 Vue.use(VueRouter)
 
@@ -43,6 +42,14 @@ const routes = [
     path: "/propertieslist",
     name: "PropertiesList",
     component: () => import(/* webpackChunkName: "propertieslist" */ '../views/admin/PropertiesList.vue'),
+    meta: {
+      requiresAuth: true
+    },
+  },
+  {
+    path: "/propertiesgallery/",
+    name: "PropertiesGallery",
+    component: () => import(/* webpackChunkName: "propertiesgallery" */ '../views/admin/PropertiesGallery.vue'),
     meta: {
       requiresAuth: true
     },
@@ -99,6 +106,7 @@ const routes = [
     path: "/users",
     name: "Users",
     component: () => import(/* webpackChunkName: "users" */ '../views/admin/Users.vue'),
+    beforeEnter: AuthGuard,
     meta: {
       requiresAuth: true
     },
@@ -120,19 +128,19 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach( (to, from, next) => {
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  const isAuthenticated = firebase.auth().currentUser
-  console.log("RouteName", to.name)
-  console.log("requiresAuth",requiresAuth)
-  console.log("isAuthenticated",isAuthenticated)
-  if (requiresAuth && !isAuthenticated){
-    console.log("Authorized",store.getters.user.loggedIn)
-    router.push({ name: 'Signin' }).catch( () => {} )
-  } else {
-    next();
-  }
-})
+// router.beforeEach( (to, from, next) => {
+//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+//   const isAuthenticated = firebase.auth().currentUser
+//   console.log("RouteName", to.name)
+//   console.log("requiresAuth",requiresAuth)
+//   console.log("isAuthenticated",isAuthenticated)
+//   if (requiresAuth && !isAuthenticated){
+//     console.log("Authorized",store.getters.user.loggedIn)
+//     router.push({ name: 'Signin' }).catch( () => {} )
+//   } else {
+//     next();
+//   }
+// })
 
 // router.beforeEach(async (to, from, next) => {
 //   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
