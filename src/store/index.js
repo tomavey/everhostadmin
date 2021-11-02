@@ -16,6 +16,7 @@ export default new Vuex.Store({
     instructions: [],
     error: "",
     loading: false,
+    showAllProperties: true,
     devMode: false,
     adminDrawer: null,
     images: [],
@@ -241,10 +242,14 @@ export default new Vuex.Store({
     subscribeToProperties(context){
       const properties = []
       const propertiesRef = firebase.firestore().collection('properties')
+      if ( !context.state.showAllProperties ) { propertiesRef = propertiesRef.where("uid","==", state.user.data.uid) }
       propertiesRef.onSnapshot( (docs) => {
         context.commit("setProperties","")        
         docs.forEach( (doc) => {
           let obj = doc.data()
+          if ( obj.createdAt ) {
+            obj.dateString = Date(obj.createdAt).toString()
+          }
           properties.push(obj)  
         })
         context.commit("setProperties",properties)  

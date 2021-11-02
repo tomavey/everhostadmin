@@ -9,8 +9,8 @@
 
     <v-list>
       <div
-        v-for="n in navItems"
-        :key=n.n
+        v-for="(n,i) in navItems"
+        :key=i
       >
         <v-list-item
           v-if="showNavItem(n)"
