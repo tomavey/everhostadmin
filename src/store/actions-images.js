@@ -54,9 +54,13 @@ export default{
       obj.homeImage = true
       let propertyId = context.getters.propertyId
       const propertiesRef = firebase.firestore().collection('properties')
-      const imageRef = propertiesRef.doc(propertyId).collection("images").doc(docid)
+      const propertyRef = propertiesRef.doc(propertyId)
+      const imageRef = propertyRef.collection("images").doc(docid)
       imageRef.set(obj, {merge:true})
-      .then( ()=> console.log("image made defult ",docid) )
+      .then( ()=> console.log("image made default ",docid) )
+      .then( () => {
+        propertyRef.set({homeImage: image.src}, {merge:true})
+      } )
       .catch( (err)=> console.log(err) )
     },
     clearAllHomeImageFields(context){

@@ -53,6 +53,12 @@ export default {
         adminOnly: true
       }, 
       {
+        n: 2,
+        label: "My Properties Galler",
+        routeName: "PropertiesGallery",
+        adminOnly: true
+      }, 
+      {
         n: 3,
         label: "Image Gallery",
         routeName: "ImageGallery",

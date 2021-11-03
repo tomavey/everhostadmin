@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from "../store"
 import Admin from '../views/admin/Index.vue'
-import firebase from "firebase"
+import store from '../store'
 
 Vue.use(VueRouter)
 
@@ -48,9 +47,25 @@ const routes = [
     },
   },
   {
-    path: "/newpropertyinfodialog/:contentName",
+    path: "/propertiesgallery/",
+    name: "PropertiesGallery",
+    component: () => import(/* webpackChunkName: "propertiesgallery" */ '../views/admin/PropertiesGallery.vue'),
+    meta: {
+      requiresAuth: true
+    },
+  },
+  {
+    path: "/newpropertyinfodialog/:propertyId",
     name: "NewPropertyInfoDialog",
     component: () => import(/* webpackChunkName: "newpropertyinfodialog" */ '../views/admin/NewPropertyInfoDialog.vue'),
+    meta: {
+      requiresAuth: true
+    },
+  },
+  {
+    path: "/propertyinfodialog/:contentName",
+    name: "PropertyInfoDialog",
+    component: () => import(/* webpackChunkName: "propertyinfodialog" */ '../views/admin/PropertyInfoDialog.vue'),
     meta: {
       requiresAuth: true
     },
@@ -121,18 +136,31 @@ const router = new VueRouter({
 })
 
 router.beforeEach( (to, from, next) => {
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  const isAuthenticated = firebase.auth().currentUser
-  console.log("RouteName", to.name)
+  const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
   console.log("requiresAuth",requiresAuth)
-  console.log("isAuthenticated",isAuthenticated)
-  if (requiresAuth && !isAuthenticated){
-    console.log("Authorized",store.getters.user.loggedIn)
-    router.push({ name: 'Signin' }).catch( () => {} )
-  } else {
-    next();
-  }
+  const currentUser = store.getters.user
+  console.log('currentUser',currentUser)
+
+  if (requiresAuth && !currentUser) next({ path: '/signin'})
+  else if (!requiresAuth && currentUser) next()
+  else if (!requiresAuth && !currentUser) next()
+  else next()
 })
+
+//Tried all these authguards - some did not register authentication soon enough
+// router.beforeEach( (to, from, next) => {
+//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+//   const isAuthenticated = firebase.auth().currentUser
+//   console.log("RouteName", to.name)
+//   console.log("requiresAuth",requiresAuth)
+//   console.log("isAuthenticated",isAuthenticated)
+//   if (requiresAuth && !isAuthenticated){
+//     console.log("Authorized",store.getters.user.loggedIn)
+//     router.push({ name: 'Signin' }).catch( () => {} )
+//   } else {
+//     next();
+//   }
+// })
 
 // router.beforeEach(async (to, from, next) => {
 //   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)

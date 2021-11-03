@@ -243,14 +243,15 @@ export default new Vuex.Store({
       const properties = []
       const propertiesRef = firebase.firestore().collection('properties')
       if ( !state.showAllProperties ) { propertiesRef = propertiesRef.where("uid","==", state.user.data.uid) }
-      propertiesRef.onSnapshot( (docs) => {
         context.commit("setProperties","")        
         docs.forEach( (doc) => {
           let obj = doc.data()
+          if ( obj.createdAt ) {
+            obj.dateString = Date(obj.createdAt).toString()
+          }
           properties.push(obj)  
         })
-        context.commit("setProperties",properties)  
-      })
+      context.commit("setProperties",properties)  
     },
     deleteProperty(context,payload){
       const propertiesRef = firebase.firestore().collection('properties')
