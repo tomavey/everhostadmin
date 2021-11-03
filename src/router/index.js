@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Admin from '../views/admin/Index.vue'
-import AuthGuard from 'auth-guard'
+import store from '../store'
 
 Vue.use(VueRouter)
 
@@ -55,9 +55,17 @@ const routes = [
     },
   },
   {
-    path: "/newpropertyinfodialog/:contentName",
+    path: "/newpropertyinfodialog/:propertyId",
     name: "NewPropertyInfoDialog",
     component: () => import(/* webpackChunkName: "newpropertyinfodialog" */ '../views/admin/NewPropertyInfoDialog.vue'),
+    meta: {
+      requiresAuth: true
+    },
+  },
+  {
+    path: "/propertyinfodialog/:contentName",
+    name: "PropertyInfoDialog",
+    component: () => import(/* webpackChunkName: "propertyinfodialog" */ '../views/admin/PropertyInfoDialog.vue'),
     meta: {
       requiresAuth: true
     },
@@ -106,7 +114,6 @@ const routes = [
     path: "/users",
     name: "Users",
     component: () => import(/* webpackChunkName: "users" */ '../views/admin/Users.vue'),
-    beforeEnter: AuthGuard,
     meta: {
       requiresAuth: true
     },
@@ -128,6 +135,19 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach( (to, from, next) => {
+  const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
+  console.log("requiresAuth",requiresAuth)
+  const currentUser = store.getters.user
+  console.log('currentUser',currentUser)
+
+  if (requiresAuth && !currentUser) next({ path: '/signin'})
+  else if (!requiresAuth && currentUser) next()
+  else if (!requiresAuth && !currentUser) next()
+  else next()
+})
+
+//Tried all these authguards - some did not register authentication soon enough
 // router.beforeEach( (to, from, next) => {
 //   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 //   const isAuthenticated = firebase.auth().currentUser
