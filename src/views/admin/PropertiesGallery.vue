@@ -59,11 +59,7 @@
                 </v-icon>
                 <v-icon
                   small
-<<<<<<< HEAD
                   @click="goToPropertyInfoDialog(item.propertyId)"
-=======
-                  @click="goToRoute('PropertyInfoDialog')"
->>>>>>> newauthguard
                 >
                   mdi-pencil
                 </v-icon>
@@ -139,13 +135,10 @@ export default {
       let newUrl = this.everhostUrl + code
       window.open(newUrl)
     },
-<<<<<<< HEAD
     goToPropertyInfoDialog: function(propertyId){
       this.$store.commit("setPropertyId",propertyId)  
       this.$router.push({name: "PropertyInfoDialog"})
     },
-=======
->>>>>>> newauthguard
     closeDialog(){
       this.dialogDelete = false
     },
@@ -196,10 +189,7 @@ export default {
   },
   created(){
     this.subscribeToProperties()
-<<<<<<< HEAD
     this.$store.dispatch("subscribeToProperties")
-=======
->>>>>>> newauthguard
     if ( this.$route.params.showAll === true ) { this.showAll = true }
   }
 
