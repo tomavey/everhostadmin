@@ -242,10 +242,7 @@ export default new Vuex.Store({
     subscribeToProperties(context){
       const properties = []
       const propertiesRef = firebase.firestore().collection('properties')
-<<<<<<< Updated upstream
-=======
-      if ( !context.state.showAllProperties ) { propertiesRef = propertiesRef.where("uid","==", context.state.user.data.uid) }
->>>>>>> Stashed changes
+      if ( !state.showAllProperties ) { propertiesRef = propertiesRef.where("uid","==", state.user.data.uid) }
       propertiesRef.onSnapshot( (docs) => {
         context.commit("setProperties","")        
         docs.forEach( (doc) => {
