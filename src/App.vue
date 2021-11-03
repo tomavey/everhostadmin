@@ -64,6 +64,12 @@ export default {
         routeName: "Users",
         adminOnly: true
       }, 
+      {
+        n: 4,
+        label: "Set Property Id",
+        routeName: "NewPropertyCodeDialog",
+        adminOnly: true
+      }, 
     ],
   }),
   watch: {
@@ -75,10 +81,8 @@ export default {
     propertyId: function() { return this.$store.getters.propertyId }
   },
   created() {
-    let setPropertyId = this.$route.params.propertyId || "lux"
-    this.$store.commit('setPropertyId', setPropertyId)
-    this.$store.dispatch('getProperty')
     this.$store.dispatch('getInstructions')
+    this.$store.dispatch('subscribeToProperties')
   }  
 };
 </script>

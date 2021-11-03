@@ -16,6 +16,10 @@ export default new Vuex.Store({
     instructions: [],
     error: "",
     loading: false,
+<<<<<<< Updated upstream
+=======
+    showAllProperties: false,
+>>>>>>> Stashed changes
     devMode: false,
     adminDrawer: null,
     images: [],
@@ -241,6 +245,10 @@ export default new Vuex.Store({
     subscribeToProperties(context){
       const properties = []
       const propertiesRef = firebase.firestore().collection('properties')
+<<<<<<< Updated upstream
+=======
+      if ( !context.state.showAllProperties ) { propertiesRef = propertiesRef.where("uid","==", context.state.user.data.uid) }
+>>>>>>> Stashed changes
       propertiesRef.onSnapshot( (docs) => {
         context.commit("setProperties","")        
         docs.forEach( (doc) => {
