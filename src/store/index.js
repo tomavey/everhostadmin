@@ -16,10 +16,7 @@ export default new Vuex.Store({
     instructions: [],
     error: "",
     loading: false,
-<<<<<<< Updated upstream
-=======
     showAllProperties: false,
->>>>>>> Stashed changes
     devMode: false,
     adminDrawer: null,
     images: [],
