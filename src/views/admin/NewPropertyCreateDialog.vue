@@ -184,7 +184,8 @@ export default {
       let obj = this.property
       let docId = obj.propertyId
       console.log(obj)
-      propertiesRef.doc(docId).set(obj, {merge: true})
+      await propertiesRef.doc(docId).set(obj, {merge: true})
+      await this.$store.commit("setPropertyId", docId)
       console.log(`New Property ${docId} was created!`)
       await this.$store.dispatch('getProperty', docId)
       this.$store.commit("setPropertyId", docId)

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Admin from '../views/admin/Index.vue'
+import Welcome from '../views/admin/Welcome.vue'
 import store from '../store'
 
 Vue.use(VueRouter)
@@ -8,10 +8,10 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Admin',
-    component: Admin,
+    name: 'Welcome',
+    component: Welcome,
     meta: {
-      requiresAuth: true
+      requiresAuth: false
     },
   },  
   {
@@ -22,14 +22,14 @@ const routes = [
       requiresAuth: false
     },
   },
-  {
-    path: "/welcome",
-    name: "Welcome",
-    component: () => import(/* webpackChunkName: "welcome" */ '../views/admin/Welcome.vue'),
-    meta: {
-      requiresAuth: false
-    },
-  },
+  // {
+  //   path: "/welcome",
+  //   name: "Welcome",
+  //   component: Welcome,
+  //   meta: {
+  //     requiresAuth: false
+  //   },
+  // },
   {
     path: "/newproperty",
     name: "NewProperty",
@@ -120,10 +120,10 @@ const routes = [
   },
   {
     path: '*',
-    name: 'Admin',
-    component: Admin,
+    name: 'wild',
+    component: Welcome,
     meta: {
-      requiresAuth: true
+      requiresAuth: false
     },
   },  
 

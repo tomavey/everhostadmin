@@ -74,7 +74,7 @@ export default {
       console.log(obj)
       propertiesRef.doc(docId).set(obj, {merge: true})
       console.log("Property content updated successfully")
-      await this.$store.dispatch('getProperty',this.propertyId)
+      await this.$store.dispatch('getProperty')
       await this.goToContentDialog(this.nextContentName)
     },
     goToContentDialog: function(contentName){

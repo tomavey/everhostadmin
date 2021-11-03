@@ -95,7 +95,6 @@ export default {
   mixins: [mixins],
   data(){
     return {
-      pageTitle: "Properties List",
       searchString: null,
       dialogDelete: false,
       propertyToDelete: {},
@@ -115,15 +114,12 @@ export default {
     everhostUrl: function(){
       return this.$store.getters.everhostUrl
     },
-    // properties: function(){
-    //   return this.$store.getters.properties.map( (el) => {
-    //     el.searchAble = el.propertyId + el.name
-    //     return el
-    //   })
-    // },
     propertiesFiltered: function(){
-      if ( !this.searchString ) { return this.properties }
-      return this.properties.filter(  (el) => el.searchAble.toLowerCase().includes(this.searchString.toLowerCase()) )
+      if ( !this.searchString ) { return this.myProperties }
+      return this.myProperties.filter(  (el) => el.searchAble.toLowerCase().includes(this.searchString.toLowerCase()) )
+    },
+    myProperties: function(){
+      return this.$store.getters.myProperties
     }
   },
   methods: {
@@ -156,7 +152,11 @@ export default {
     deleteProperty: function(){
       let propertyId = this.propertyToDelete.propertyId
       this.$store.dispatch("deleteProperty",propertyId)
-      .then( this.dialogDelete = false )
+      .then( () => {
+        this.dialogDelete = false
+        this.$store.dispatch("getMyProperties")
+        }
+      )  
     },
     showAllString: function(){
       return this.showAll ? "TRUE" : "FALSE"
@@ -177,7 +177,6 @@ export default {
         let propertiesArray = []
         docs.forEach( (doc) => {
           let obj = doc.data()
-          obj.searchAble = obj.name+obj.propertyId+obj.email
           if ( obj.createdAt ) {
             obj.dateString = this.dateFormat(obj.createdAt, "dateOnly")
           }
@@ -188,9 +187,7 @@ export default {
     },
   },
   created(){
-    this.subscribeToProperties()
-    this.$store.dispatch("subscribeToProperties")
-    if ( this.$route.params.showAll === true ) { this.showAll = true }
+    this.$store.dispatch("getMyProperties")
   }
 
 }

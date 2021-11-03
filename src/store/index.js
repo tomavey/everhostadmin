@@ -13,6 +13,7 @@ export default new Vuex.Store({
     property: {},
     propertyTab: "Welcome",
     properties: [],
+    myProperties: [],
     instructions: [],
     error: "",
     loading: false,
@@ -154,6 +155,7 @@ export default new Vuex.Store({
     propertyId: state => state.propertyId,
     propertyTab: state => state.propertyTab,
     properties: state => state.properties,
+    myProperties: state => state.myProperties,
     instructions: state => state.instructions,
     instruction: state => docId => {
       state.instructions.filter( (el) => el.docId === docId )
@@ -196,6 +198,9 @@ export default new Vuex.Store({
     setProperties (state,payload) {
       state.properties = payload
     },
+    setMyProperties (state,payload) {
+      state.myProperties = payload
+    },
     setInstructions (state,payload) {
       state.instructions = payload
     },
@@ -225,6 +230,24 @@ export default new Vuex.Store({
       propertiesRef.doc(propertyId).get()
       .then( (doc) => this.commit('setProperty', doc.data()) )
     },
+    getMyProperties(context){
+      const uid = context.getters.user.data.uid
+      const propertiesRef = firebase.firestore().collection('properties')
+      propertiesRef.where("uid", "==", uid).get()
+      .then( (docs) => {
+        let properties = []
+        docs.forEach( (doc) => {
+          let obj = doc.data()
+          if ( obj.createdAt ) {
+            obj.dateString = Date(obj.createdAt).toString()
+          }
+          obj.searchAble = obj.name+obj.propertyId+obj.email
+          properties.push(obj)
+          })
+          context.commit("setMyProperties",properties)
+        }
+      )
+    },
     getInstructions(context){
       const instructionsRef = firebase.firestore().collection('instructions')
       instructionsRef.get()
@@ -241,16 +264,17 @@ export default new Vuex.Store({
     },
     subscribeToProperties(context){
       const properties = []
-      const propertiesRef = firebase.firestore().collection('properties')
-      if ( !state.showAllProperties ) { propertiesRef = propertiesRef.where("uid","==", state.user.data.uid) }
-        context.commit("setProperties","")        
+      let propertiesRef = firebase.firestore().collection('properties')
+      propertiesRef.onSnapshot( (docs) => {
         docs.forEach( (doc) => {
           let obj = doc.data()
           if ( obj.createdAt ) {
             obj.dateString = Date(obj.createdAt).toString()
+            obj.searchAble = obj.name+obj.propertyId+obj.email
           }
           properties.push(obj)  
         })
+      })
       context.commit("setProperties",properties)  
     },
     deleteProperty(context,payload){
