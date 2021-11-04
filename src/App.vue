@@ -17,7 +17,10 @@
       </v-container>
     </v-main>
 
-    <p class="float-right">
+    <p 
+      class="float-right pointer"
+      @click="toggleShowSetPropertyCodeDialog()"
+      >
       PropertryId: {{propertyId}}
       <span v-if="userIsAdmin" class="float-right">&nbsp;*</span>
       <span v-if="userIsAuthenticated" class="float-right">&nbsp;*</span>
@@ -48,13 +51,13 @@ export default {
       }, 
       {
         n: 2,
-        label: "My Properties List",
+        label: "All Properties",
         routeName: "PropertiesList",
         adminOnly: true
       }, 
       {
         n: 2,
-        label: "My Properties Galler",
+        label: "My Properties",
         routeName: "PropertiesGallery",
         adminOnly: true
       }, 
@@ -72,8 +75,8 @@ export default {
       }, 
       {
         n: 4,
-        label: "Set Property Id",
-        routeName: "NewPropertyCodeDialog",
+        label: "Set Property Code",
+        routeName: "SetPropertyCodeDialog",
         adminOnly: true
       }, 
     ],

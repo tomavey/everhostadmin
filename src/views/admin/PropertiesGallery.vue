@@ -98,16 +98,7 @@ export default {
       searchString: null,
       dialogDelete: false,
       propertyToDelete: {},
-      showAll: false,
       noHomeImageText: "<p class='text-center'>No home page<br/>image is set</p>",
-      properties: [],
-      headers: [
-        {text: "Code", value: "propertyId"},
-        {text: "Name", value: "name"},
-        {text: "Address", value: "address"},
-        {text: "Created", value: "dateString"},
-        {text: 'Actions', value: 'actions', sortable: false },      
-      ]
     }
   },
   computed: {
@@ -142,13 +133,6 @@ export default {
       this.propertyToDelete = property
       this.dialogDelete = true
     },
-    toggleShowAll: function(){
-      this.showAll = !this.showAll
-      this.subscribeToProperties()
-    },
-    getProperties: function(){
-      this.properties = this.$store.getters.properties
-    },
     deleteProperty: function(){
       let propertyId = this.propertyToDelete.propertyId
       this.$store.dispatch("deleteProperty",propertyId)
@@ -158,32 +142,8 @@ export default {
         }
       )  
     },
-    showAllString: function(){
-      return this.showAll ? "TRUE" : "FALSE"
-    },
-    loadProperty: function(){
-      alert("load property")
-    },
     clearSearchString() {
       this.searchString = ""
-    },
-    clearProperties(){
-      this.properties = []
-    },
-    subscribeToProperties(){
-      let propertiesRef = firebase.firestore().collection('properties')
-      if ( !this.showAll ) { propertiesRef = propertiesRef.where("uid","==", this.user.data.uid) }
-      propertiesRef.onSnapshot( (docs) => {
-        let propertiesArray = []
-        docs.forEach( (doc) => {
-          let obj = doc.data()
-          if ( obj.createdAt ) {
-            obj.dateString = this.dateFormat(obj.createdAt, "dateOnly")
-          }
-          propertiesArray.push(obj)  
-        })
-        this.properties = propertiesArray
-      })
     },
   },
   created(){

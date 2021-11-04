@@ -1,4 +1,14 @@
 <template>
+<div>
+  <v-dialog
+    v-model="showSetPropertyCodeDialog"
+    transition="dialog-top-transition"
+    max-width="600"    
+    >
+    <component-set-property-code-dialog/>
+
+  </v-dialog>
+
   <v-app-bar
     dense
     absolute
@@ -46,18 +56,55 @@
         </template>
         <span>Logout</span>
       </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+            <v-icon 
+              @click="goToRoute('Welcome')"
+              v-bind="attrs"
+              v-on="on"
+              >mdi-home</v-icon>
+        </template>
+        <span>Home</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+            <v-icon 
+              @click="returnHome()"
+              v-bind="attrs"
+              v-on="on"
+              >mdi-undo</v-icon>
+        </template>
+        <span>Go Back</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+            <v-icon 
+              @click="returnBack()"
+              v-bind="attrs"
+              v-on="on"
+              >mdi-Home</v-icon>
+        </template>
+        <span>Back</span>
+      </v-tooltip>
     </div>
 
   </v-app-bar>
-
+</div>
 </template>
 
 <script>
 import mixins from '@/mixins'
+import componentSetPropertyCodeDialog from './component-set-property-code-dialog.vue'
 
 export default {
+  components: { componentSetPropertyCodeDialog },
   props: ['NavItems','error'],
-  mixins: [mixins], 
+  mixins: [mixins],
+  computed: {
+    showSetPropertyCodeDialog: function(){
+      return this.$store.getters.showSetPropertyCodeDialog
+    }
+  }, 
   methods: {
     toggleDrawer(){ this.$store.commit("toggleAdminDrawer") },
     signin() { 

@@ -1,16 +1,16 @@
 <template>
-  <component-new-property-code-dialog></component-new-property-code-dialog>
+  <component-set-property-code-dialog></component-set-property-code-dialog>
 
 
 </template>
 
 <script>
 import mixins from '@/mixins'
-import ComponentNewPropertyCodeDialog from "../../components/admin/component-new-property-code-dialog"
+import ComponentSetPropertyCodeDialog from "../../components/admin/component-set-property-code-dialog"
 
 export default {
   mixins: [mixins],
-  components: {ComponentNewPropertyCodeDialog},
+  components: {ComponentSetPropertyCodeDialog},
   data(){
     return {
       propertyId: null,

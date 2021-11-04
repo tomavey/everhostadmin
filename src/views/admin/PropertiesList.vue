@@ -1,10 +1,5 @@
 <template>
   <v-container>
-     <v-switch
-      v-if="userIsAdmin"
-      @click="toggleShowAll()"
-      :label="`ShowAll: ${showAll.toString()}`"
-    ></v-switch>
     <v-data-table
       :headers="headers"
       :items="properties"
@@ -65,10 +60,8 @@ export default {
     return {
       pageTitle: "Properties List",
       searchString: "",
-      properties: [],
       dialogDelete: false,
       propertyToDelete: {},
-      showAll: false,
       headers: [
         {text: "Code", value: "propertyId"},
         {text: "Name", value: "name"},
@@ -81,6 +74,9 @@ export default {
   computed: {
     everhostUrl: function(){
       return this.$store.getters.everhostUrl
+    },
+    properties: function(){
+      return this.$store.getters.properties
     }
   },
   methods: {
@@ -99,16 +95,13 @@ export default {
       this.showAll = !this.showAll
       this.subscribeToProperties()
     },
-    getProperties: function(){
-      this.properties = this.$store.getters.properties
-    },
     deleteProperty: function(){
       let propertyId = this.propertyToDelete.propertyId
       this.$store.dispatch("deleteProperty",propertyId)
-      .then( this.dialogDelete = false )
-    },
-    showAllString: function(){
-      return this.showAll ? "TRUE" : "FALSE"
+      .then( () => {
+        this.dialogDelete = false
+        this.$store.dispatch("getProperties") 
+      })
     },
     loadProperty: function(){
       alert("load property")
@@ -119,25 +112,9 @@ export default {
     clearProperties(){
       this.properties = []
     },
-    subscribeToProperties(){
-      let propertiesRef = firebase.firestore().collection('properties')
-      if ( !this.showAll ) { propertiesRef = propertiesRef.where("uid","==", this.user.data.uid) }
-      propertiesRef.onSnapshot( (docs) => {
-        let propertiesArray = []
-        docs.forEach( (doc) => {
-          let obj = doc.data()
-          if ( obj.createdAt ) {
-            obj.dateString = this.dateFormat(obj.createdAt, "dateOnly")
-          }
-          propertiesArray.push(obj)  
-        })
-        this.properties = propertiesArray
-      })
-    },
   },
   created(){
-    this.subscribeToProperties()
-    if ( this.$route.params.showAll === true ) { this.showAll = true }
+    this.$store.dispatch("getProperties")
   }
 
 }

@@ -61,7 +61,7 @@
         },
         {
           color: '#952175',
-          routeName: 'PropertiesList',
+          routeName: 'PropertiesGallery',
           title: 'List all of your properties.',
           subtitle: 'List, edit or delete all of your properties.',
           action: "See the list"

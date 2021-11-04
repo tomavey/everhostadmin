@@ -18,6 +18,7 @@ export default new Vuex.Store({
     error: "",
     loading: false,
     showAllProperties: false,
+    showSetPropertyCodeDialog: false,
     devMode: false,
     adminDrawer: null,
     images: [],
@@ -111,42 +112,49 @@ export default new Vuex.Store({
         validMinLength: 3,
         validType: "string",
         validRegex: "",
+        editable: false,
       },
       {
         fieldName: "name",
         validMinLength: 10,
         validType: "string",
         validRegex: "",
+        editable: true,
       },
       {
         fieldName: "address",
         validMinLength: 10,
         validType: "string",
         validRegex: "",
+        editable: true,
       },
       {
         fieldName: "telephone",
         validMinLength: 3,
         validType: "string",
         validRegex: "",
+        editable: true,
       },
       {
         fieldName: "platform",
         validMinLength: 3,
         validType: "string",
         validRegex: "",
+        editable: false,
       },
       {
         fieldName: "airbnb",
         validMinLength: 5,
         validType: "binary",
         validRegex: "",
+        editable: true,
       },
       {
         fieldName: "vrbo",
         validMinLength: 5,
         validType: "binary",
         validRegex: "",
+        editable: true,
       },
     ]
   },
@@ -162,6 +170,7 @@ export default new Vuex.Store({
     },
     adminDrawer: state => state.adminDrawer,
     error: state => state.error,
+    showSetPropertyCodeDialog: state => state.showSetPropertyCodeDialog,
     loading: state => state.loading,
     subSections: state => state.subSections,
     everhostUrl: state => state.everhostUrl,
@@ -216,6 +225,9 @@ export default new Vuex.Store({
     toggleAdminDrawer ( state ) {
       state.adminDrawer = !state.adminDrawer
     },
+    toggleShowSetPropertyCodeDialog ( state ) {
+      state.showSetPropertyCodeDialog = !state.showSetPropertyCodeDialog
+    },
     setAdminDrawer ( state, payload ) {
       state.adminDrawer = payload
     },
@@ -269,7 +281,8 @@ export default new Vuex.Store({
         docs.forEach( (doc) => {
           let obj = doc.data()
           if ( obj.createdAt ) {
-            obj.dateString = Date(obj.createdAt).toString()
+            let options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }
+            obj.dateString = new Date(obj.createdAt).toLocaleDateString("en-US", options)
             obj.searchAble = obj.name+obj.propertyId+obj.email
           }
           properties.push(obj)  

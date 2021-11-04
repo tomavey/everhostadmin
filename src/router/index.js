@@ -79,9 +79,9 @@ const routes = [
     },
   },
   {
-    path: "/newpropertycodedialog",
-    name: "NewPropertyCodeDialog",
-    component: () => import(/* webpackChunkName: "newpropertycodedialog" */ '../views/admin/NewPropertyCodeDialog.vue'),
+    path: "/setpropertycodedialog",
+    name: "SetPropertyCodeDialog",
+    component: () => import(/* webpackChunkName: "setpropertycodedialog" */ '../views/admin/SetPropertyCodeDialog.vue'),
     meta: {
       requiresAuth: true
     },

@@ -110,6 +110,7 @@ export default {
       return this.$store.getters.user
     },
     loading: function () { return this.$store.getters.loading },
+    toggleShowSetPropertyCodeDialog: function() { this.$store.commit("toggleShowSetPropertyCodeDialog") }
   }
 }
 

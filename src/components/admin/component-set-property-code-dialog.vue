@@ -1,17 +1,15 @@
 <template>
+<v-card>
+  <v-card-actions>
+  <v-container>
   <v-form @submit.prevent="submit">
     <v-container>
       <v-row>
-        <v-col
-          cols="12"
-          md="4"
-        >
           <v-text-field
             v-model="propertyId"
             label="Set Property Code"
-            required
+            full-width
           ></v-text-field>
-        </v-col>
       </v-row>  
       <v-row>  
         <v-btn
@@ -24,6 +22,11 @@
       </v-row>
     </v-container>
   </v-form>
+  </v-container>
+
+  </v-card-actions>
+
+</v-card>
 
 </template>
 
@@ -40,6 +43,7 @@ export default {
   methods: {
     submit: function(){
       this.$store.commit("setPropertyId",this.propertyId)
+      this.$store.commit("toggleShowSetPropertyCodeDialog")
       this.goToRoute("ImageGallery")
     }
   }

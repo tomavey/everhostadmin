@@ -5,6 +5,50 @@
     <v-alert type="warning" v-if="htmlEdit">HTML edit is on - this will not show for normal users</v-alert>
       <v-expansion-panels>
 
+      <v-expansion-panel v-for="(item,index) in basicMetaInfo" :key="index">    
+        <v-expansion-panel-header>
+          {{item.fieldName}}
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+        <v-row v-if="item.validType === 'binary'">
+          <v-col
+            cols="12"
+            md="4"
+          >
+            <v-text-field
+              v-model="property[item.fieldName]"
+              :label=item.fieldName
+              required
+              tabindex="2"
+            ></v-text-field>
+          </v-col>  
+        </v-row>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+
+      <v-expansion-panel>    
+        <v-expansion-panel-header>
+          Platform(s)
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+        <v-row>
+          <v-col
+            cols="12"
+            md="4"
+          >
+          <v-checkbox
+            v-model="property.airbnb"
+            :label="`AirBnb: ${property.platform.toString()}`"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="property.vrbo"
+            :label="`Verbo: ${property.platform.toString()}`"
+          ></v-checkbox>
+          </v-col>  
+        </v-row>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+
       <v-expansion-panel v-for="section in subSections" :key=section.tabLabel>    
         <v-expansion-panel-header>
           {{section.tabLabel}}
@@ -27,28 +71,6 @@
           </v-row>
         </v-expansion-panel-content>
       </v-expansion-panel>
-
-      <v-expansion-panel>    
-        <v-expansion-panel-header>
-          Address
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
-        <v-row>
-          <v-col
-            cols="12"
-            md="4"
-          >
-            <v-text-field
-              v-model="property.address"
-              label="Address"
-              required
-              tabindex="2"
-            ></v-text-field>
-          </v-col>  
-        </v-row>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-
 
       </v-expansion-panels>
 
@@ -97,6 +119,24 @@ export default {
     subSections: function(){
       return this.$store.getters.subSections
     },
+    basicMetaInfo: function(){
+      return this.$store.getters.basicMetaInfo.filter( (el) => {
+        if ( el.editable === true && el.validType !== 'binary' ) {
+          return true
+        } else {
+          return false
+        }
+      })
+    },
+    platforms: function(){
+      return this.$store.getters.basicMetaInfo.filter( (el) => {
+        if ( el.editable === true && el.validType == 'binary' ) {
+          return true
+        } else {
+          return false
+        }
+      })
+    }
   },
   methods: {
     toggleHtml: function(){
