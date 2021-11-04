@@ -10,7 +10,7 @@
           {{item.fieldName}}
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-        <v-row v-if="item.validType === 'binary'">
+        <v-row>
           <v-col
             cols="12"
             md="4"
