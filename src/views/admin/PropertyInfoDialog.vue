@@ -7,7 +7,7 @@
 
       <v-expansion-panel v-for="(item,index) in basicMetaInfo" :key="index">    
         <v-expansion-panel-header>
-          {{item.fieldName}}
+          {{item.label}}
         </v-expansion-panel-header>
         <v-expansion-panel-content>
         <v-row>

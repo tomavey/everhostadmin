@@ -75,7 +75,7 @@ export default {
       propertiesRef.doc(docId).set(obj, {merge: true})
       console.log("Property content updated successfully")
       await this.$store.dispatch('getProperty')
-      await this.goToContentDialog(this.nextContentName)
+      await this.$store.commit("serContentName". this.nextContentName)
     },
     goToContentDialog: function(contentName){
       if ( contentName === "images" ) {
@@ -86,11 +86,15 @@ export default {
     },
     getContent: function(){
       this.content = this.$store.getters.property[this.contentName]
-    }
+    },
+    setFirstContentName: function(){
+      let namesArray = this.$store.getters.subSectionsRoutesArray
+      this.contentName = namesArray[0].docid
+    },
   },
   created(){
     console.log("created running")
-    this.contentName = this.$route.params.contentName
+    this.setFirstContentName()
     this.content = ""
     console.log(this.content)
     this.$store.dispatch("getProperty")

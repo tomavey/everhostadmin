@@ -77,6 +77,19 @@
         ></v-checkbox>
       </component-new-property-dialog>
 
+      <component-new-property-dialog
+        :dialog=showDialog.backgroundColor
+        :instruction="getInstruction('backgroundColor')"
+        :contentName="'backgroundColor'"
+        @dialogFalse="dialogFalse"
+      >
+        <v-text-field
+          v-model="property.backgroundColor"
+          label="Telephone"
+          required
+        ></v-text-field>
+      </component-new-property-dialog>
+
       <v-row>
         <v-col
           cols="12"
@@ -101,7 +114,7 @@
             required
           ></v-text-field>
         </v-col>  
-       </v-row>
+      </v-row>
       <v-row>
         <v-col
           cols="12"
@@ -114,7 +127,7 @@
             required
           ></v-text-field>
         </v-col>  
-       </v-row>
+      </v-row>
       <v-row>
         <v-col
           cols="12"
@@ -123,14 +136,27 @@
           <p>{{instructions.platform}}</p>
           <v-checkbox
             v-model="property.airbnb"
-            :label="`AirBnb: ${property.platform.toString()}`"
+            :label="`AirBnb: ${property.airbnb.toString()}`"
           ></v-checkbox>
           <v-checkbox
             v-model="property.vrbo"
-            :label="`Verbo: ${property.platform.toString()}`"
+            :label="`Verbo: ${property.vrbo.toString()}`"
           ></v-checkbox>
         </v-col>  
-       </v-row>
+      </v-row>
+      <v-row>
+        <v-col
+          cols="12"
+          md="4"
+        >
+          <p>{{instructions.backgroundColor}}</p>
+          <v-text-field
+            v-model="property.backgroundColor"
+            label="Background Color"
+            required
+          ></v-text-field>
+        </v-col>  
+      </v-row>
       <v-btn
         class="mr-4"
         color="primary"

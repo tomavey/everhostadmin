@@ -2,13 +2,6 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <v-btn
-          to="PropertiesList"
-        >
-
-          View as a list
-        </v-btn>
-
       </v-col>
     </v-row>
     <v-row>
@@ -25,6 +18,7 @@
         ></v-text-field>
       </v-col>
     </v-row>
+
     <div class="gridContainer">
         <v-card 
           class="gridItem mx-auto" 
@@ -33,9 +27,9 @@
           elevation="24"
           width="200"
           >
-
           <v-card-text class="text-center text-h5">{{item.name}}</v-card-text> 
           <v-card-subtitle class="text-center">{{item.propertyId}}</v-card-subtitle>
+          <v-card-subtitle class="text-center">{{getBackgroundImage(item.backgroundColor)}}</v-card-subtitle>
           <v-card-actions v-if="item.homeImage" >
             <v-avatar
               size="100px"
@@ -49,6 +43,18 @@
             </v-avatar>
           </v-card-actions>
           <v-card-text v-else v-html="noHomeImageText"></v-card-text>
+          <v-card-actions>
+            <v-avatar
+              size="100px"
+              rounded
+              class="mx-auto"
+            >
+              <v-img
+                :src="getBackgroundImage(item.backgroundColor)"
+                position="center"
+              ></v-img>
+            </v-avatar>
+          </v-card-actions>
           <v-card-actions>  
             <p class="mx-auto">
                 <v-icon
@@ -71,9 +77,9 @@
                 </v-icon>         
             </p>
           </v-card-actions>
-
         </v-card>
     </div>
+
       <component-delete-confirm 
         @close="closeDialog" 
         @confirmedAction="deleteProperty"
@@ -111,6 +117,9 @@ export default {
     },
     myProperties: function(){
       return this.$store.getters.myProperties
+    },
+    backgrounds: function(){
+      return this.$store.getters.backgrounds
     }
   },
   methods: {
@@ -128,6 +137,13 @@ export default {
     },
     closeDialog(){
       this.dialogDelete = false
+    },
+    getBackgroundImage: function(color){
+        return "../../assets/img/app-bg-pink.png"  
+      if ( !color ) { return null }
+      else {
+        return "../../assets/img/app-bg-pink.png"  
+      }
     },
     openDialogDelete(property){
       this.propertyToDelete = property
