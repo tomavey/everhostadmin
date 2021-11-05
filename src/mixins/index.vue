@@ -97,6 +97,7 @@ export default {
       let newNumberString = number.toFixed(2)
       return '$' + newNumberString
     },
+    toggleShowSetPropertyCodeDialog: function() { this.$store.commit("toggleShowSetPropertyCodeDialog") }
    },
   computed: {
     userIsAuthenticated: function () {
@@ -110,7 +111,6 @@ export default {
       return this.$store.getters.user
     },
     loading: function () { return this.$store.getters.loading },
-    toggleShowSetPropertyCodeDialog: function() { this.$store.commit("toggleShowSetPropertyCodeDialog") }
   }
 }
 

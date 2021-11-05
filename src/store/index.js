@@ -23,6 +23,7 @@ export default new Vuex.Store({
     adminDrawer: null,
     images: [],
     everhostUrl: "https://everhostio.web.app/",
+    contentName: "",
     subSections: [
       {
         tabLabel: "Welcome",
@@ -109,6 +110,7 @@ export default new Vuex.Store({
     [
       {
         fieldName: "propertyId",
+        label: "Property Code",
         validMinLength: 3,
         validType: "string",
         validRegex: "",
@@ -116,6 +118,7 @@ export default new Vuex.Store({
       },
       {
         fieldName: "name",
+        label: "Name",
         validMinLength: 10,
         validType: "string",
         validRegex: "",
@@ -123,6 +126,7 @@ export default new Vuex.Store({
       },
       {
         fieldName: "address",
+        label: "Address",
         validMinLength: 10,
         validType: "string",
         validRegex: "",
@@ -130,6 +134,7 @@ export default new Vuex.Store({
       },
       {
         fieldName: "telephone",
+        label: "Telephone",
         validMinLength: 3,
         validType: "string",
         validRegex: "",
@@ -137,6 +142,7 @@ export default new Vuex.Store({
       },
       {
         fieldName: "platform",
+        label: "Platform",
         validMinLength: 3,
         validType: "string",
         validRegex: "",
@@ -144,6 +150,7 @@ export default new Vuex.Store({
       },
       {
         fieldName: "airbnb",
+        label: "Airbnb",
         validMinLength: 5,
         validType: "binary",
         validRegex: "",
@@ -151,12 +158,39 @@ export default new Vuex.Store({
       },
       {
         fieldName: "vrbo",
+        label: "Vrbo",
         validMinLength: 5,
         validType: "binary",
         validRegex: "",
         editable: true,
       },
-    ]
+      {
+        fieldName: "backgroundColor",
+        label: "Background Color",
+        validMinLength: 5,
+        validType: "string",
+        validRegex: "",
+        editable: true,
+      },
+    ],
+    backgrounds: {
+      teal: { 
+        label: 'Teal',
+        file: '../../assets/img/app-bg-teal.png'
+      },
+      blue: { 
+        label: 'Blue',
+        file: '../../assets/img/app-bg-blue.png'
+      },
+      pink: { 
+        label: 'Pink',
+        file: '../../assets/img/app-bg-pink.png'
+      },
+      purple: { 
+        label: 'Purple',
+        file: '../../assets/img/app-bg-purple.png'
+      },
+    }
   },
   getters: {
     property: state => state.property,
@@ -173,8 +207,10 @@ export default new Vuex.Store({
     showSetPropertyCodeDialog: state => state.showSetPropertyCodeDialog,
     loading: state => state.loading,
     subSections: state => state.subSections,
+    contentName: state => state.contentName,
     everhostUrl: state => state.everhostUrl,
     basicMetaInfo: state => state.basicMetaInfo,
+    backgrounds: state => state.backgrounds,
     basicMetaInfoFieldNamesArray: state => {
       let fieldNamesArray = []
       state.basicMetaInfo.forEach( (el) => fieldNamesArray.push(el.fieldName) )
@@ -195,6 +231,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setContentName (state, payload) {
+      state.contentName = payload
+    },
     setPropertyId (state,payload) {
       state.propertyId = payload
     },
@@ -245,6 +284,8 @@ export default new Vuex.Store({
     getMyProperties(context){
       const uid = context.getters.user.data.uid
       const propertiesRef = firebase.firestore().collection('properties')
+      const backgrounds = context.getters.backgrounds
+      console.log(backgrounds)
       propertiesRef.where("uid", "==", uid).get()
       .then( (docs) => {
         let properties = []
@@ -254,6 +295,7 @@ export default new Vuex.Store({
             obj.dateString = Date(obj.createdAt).toString()
           }
           obj.searchAble = obj.name+obj.propertyId+obj.email
+          obj.backgroundImage = backgrounds[obj.backgroundColor].file
           properties.push(obj)
           })
           context.commit("setMyProperties",properties)

@@ -55,7 +55,7 @@ const routes = [
     },
   },
   {
-    path: "/newpropertyinfodialog/:propertyId",
+    path: "/newpropertyinfodialog/",
     name: "NewPropertyInfoDialog",
     component: () => import(/* webpackChunkName: "newpropertyinfodialog" */ '../views/admin/NewPropertyInfoDialog.vue'),
     meta: {
