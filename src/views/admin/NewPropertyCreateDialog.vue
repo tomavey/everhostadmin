@@ -26,6 +26,9 @@
         <p v-if="isPropertyIdValid && !isPropertyIdUnique">
           Property code must be Unique
         </p>
+        <p v-if="!isPropertyIdNoSpace">
+          Property code cannot contain spaces
+        </p>
         </template>
       </component-new-property-dialog>
 
@@ -218,16 +221,13 @@
 </template>  
 
 <script>
-import firebase from 'firebase'
 import mixins from '@/mixins'
+import validations from '@/mixins/validations'
 import componentNewPropertyDialog from '../../components/admin/component-new-property-dialog.vue'
-
-
-const propertiesRef = firebase.firestore().collection('properties')
 
 export default {
   components: { componentNewPropertyDialog },
-  mixins: [mixins],
+  mixins: [mixins,validations],
   data() {
     return {
       pageTitle: "welcome to property dialog",
@@ -240,20 +240,6 @@ export default {
     }
   },
   computed: {
-    instructions: function() {
-      return this.$store.getters.instructions
-    },
-    isPropertyIdValid: function(){
-      if ( this.property.propertyId.length > 6 ) {
-        return true
-      } else {
-        return false
-      }   
-    },
-    isPropertyIdUnique: function(){
-      let propertyId = this.property.propertyId
-      return !this.propertyIds.includes( propertyId )
-    },
   },
   methods: {
     onValidPropertyIdBlur: function(){
@@ -273,7 +259,7 @@ export default {
       let obj = this.property
       let docId = obj.propertyId
       console.log(obj)
-      await propertiesRef.doc(docId).set(obj, {merge: true})
+      await this.$store.dispatch('updateProperty',obj)
       .catch((err) => console.log(err) )
       await this.$store.commit("setPropertyId", docId)
       console.log(`New Property ${docId} was created!`)

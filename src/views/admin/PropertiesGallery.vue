@@ -22,7 +22,7 @@
     <div class="gridContainer">
         <v-card 
           class="gridItem mx-auto" 
-          v-for="(item, index) in propertiesFiltered" 
+          v-for="(item, index) in myPropertiesFilteredSorted" 
           :key="index"
           elevation="24"
           width="200"
@@ -90,45 +90,103 @@
                 >
                   mdi-eye-arrow-right
                 </v-icon>         
+                <v-icon
+                  small
+                  @click="openDialogCopy(item.propertyId)"
+                >
+                  mdi-content-copy
+                </v-icon>         
             </p>
           </v-card-actions>
+          <v-card-subtitle>{{item.createdAt}}</v-card-subtitle>
         </v-card>
     </div>
 
       <component-delete-confirm 
-        @close="closeDialog" 
+        @close="closeDialogDelete" 
         @confirmedAction="deleteProperty"
         :dialogDelete = dialogDelete
         >
         Are you sure you want to delete this property? Code: {{this.propertyToDelete.propertyId}}
       </component-delete-confirm>
 
+      <component-copy-confirm
+        @close="closeDialogCopy" 
+        @confirmedAction="copyProperty()"
+        :dialogCopy = dialogCopy
+        >
+        <template v-slot:header>
+          We need a code for your new property.
+        </template>
+        <template v-slot:default>
+          <v-text-field
+            v-model="newPropertyId"
+            label="Property Code for the new property"
+            full-width
+          ></v-text-field>
+        </template>
+        <template v-slot:footer>
+        <p v-if="!isPropertyIdValid">
+          Property code must be more than 7 digits
+        </p>
+        <p v-if="isPropertyIdValid && !isPropertyIdUnique">
+          Property code must be Unique
+        </p>
+        <p v-if="!isPropertyIdNoSpace">
+          Property code cannot contain spaces
+        </p>
+        </template>
+
+      </component-copy-confirm>
+
   </v-container>
 </template>
 
 <script>
-import firebase from "firebase"
 import mixins from "@/mixins"
-import componentDeleteConfirm from '../../components/admin/component-delete-confirm.vue'
+import validations from '@/mixins/validations'
+import ComponentDeleteConfirm from '../../components/admin/component-delete-confirm.vue'
+import ComponentCopyConfirm from '../../components/admin/component-copy-confirm.vue'
 
 export default {
-  components: { componentDeleteConfirm },
-  mixins: [mixins],
+  components: { ComponentDeleteConfirm, ComponentCopyConfirm },
+  mixins: [mixins,validations],
   data(){
     return {
       searchString: null,
       dialogDelete: false,
+      dialogCopy: false,
+      propertyIds: [],
       propertyToDelete: {},
+      propertyToCopy: {},
+      newPropertyId: '',
       noHomeImageText: "<p class='text-center'>No home page<br/>image is set</p>",
     }
   },
   computed: {
+    isPropertyIdValid: function(){
+      if ( this.newPropertyId.length > 6 ) {
+        return true
+      } else {
+        return false
+      }   
+    },
+    isPropertyIdUnique: function(){
+      let propertyId = this.newPropertyId
+      return !this.propertyIds.includes( propertyId )
+    },
+    isPropertyIdNoSpace:function(){
+      return !this.newPropertyId.includes(' ')
+    },
     everhostUrl: function(){
       return this.$store.getters.everhostUrl
     },
-    propertiesFiltered: function(){
+    myPropertiesFiltered: function(){
       if ( !this.searchString ) { return this.myProperties }
       return this.myProperties.filter(  (el) => el.searchAble.toLowerCase().includes(this.searchString.toLowerCase()) )
+    },
+    myPropertiesFilteredSorted: function(){
+      return this.myPropertiesFiltered.sort( (a,b) => b.createdAt - a.createdAt )
     },
     myProperties: function(){
       return this.$store.getters.myProperties
@@ -138,6 +196,20 @@ export default {
     }
   },
   methods: {
+    openDialogCopy(property){
+      this.propertyToCopy = property
+      this.dialogCopy = true
+    },
+    copyProperty: function(){
+      let payload = {
+        propertyId: this.propertyToCopy,
+        newPropertyId: this.newPropertyId
+      }
+      this.$store.dispatch("copyProperty",payload)
+      .then( () => {
+        this.dialogCopy = false
+      } )
+    },
     getImage: function(item) {
       if ( item.homeImage ) { return item.homeImage }
       else {return "../assets/img/placeholder.png"}
@@ -150,8 +222,11 @@ export default {
       this.$store.commit("setPropertyId",propertyId)  
       this.$router.push({name: "PropertyInfoDialog"})
     },
-    closeDialog(){
+    closeDialogDelete(){
       this.dialogDelete = false
+    },
+    closeDialogCopy(){
+      this.dialogCopy = false
     },
     getBackgroundImage: function(color){
         return "../../assets/img/app-bg-pink.png"  
@@ -176,9 +251,19 @@ export default {
     clearSearchString() {
       this.searchString = ""
     },
+    buildPropertyIdArray: function(){
+      let propertyIdsArray = []
+      let propertiesArray = this.$store.getters.properties
+      propertiesArray.forEach( (el) => {
+        propertyIdsArray.push(el.propertyId)
+      })
+      this.propertyIds = propertyIdsArray
+    }
+
   },
   created(){
     this.$store.dispatch("getMyProperties")
+    .then( () => this.buildPropertyIdArray() )
   }
 
 }

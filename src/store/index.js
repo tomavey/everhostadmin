@@ -357,6 +357,37 @@ export default new Vuex.Store({
       propertiesRef.doc(payload).delete()
       .then( () => console.log("deleted ", payload))
       .catch( (err) => console.log(err) )
+    },
+    copyProperty(context,payload){
+      let {propertyId, newPropertyId} = payload
+      console.log(propertyId,newPropertyId)
+      const propertiesRef = firebase.firestore().collection('properties')
+      propertiesRef.doc(propertyId).get()
+      .then( (doc) => {
+        let obj = doc.data()
+        obj.docId = newPropertyId
+        obj.propertyId = newPropertyId
+        obj.createdAt = Date.now()
+        obj.updatedAt = Date.now()
+        propertiesRef.doc(newPropertyId).set(obj)
+        .then ( () => {
+          console.log( `Copied ${propertyId} to ${newPropertyId}`)
+          context.dispatch("getMyProperties")
+        })
+        .catch( (err) => console.log(err) )
+      })
+      .catch( (err) => console.log(err) )
+    },
+    updateProperty(context,payload){
+      let obj = payload
+      let docId = obj.docId || obj.propertyId
+      obj.updatedAt = Date.now()
+      const propertiesRef = firebase.firestore().collection('properties')
+      propertiesRef.doc(docId).set(obj, {merge: true})
+      .then( () => {
+        console.log(`Updated ${docId}`)
+        context.dispatch('getMyProperties')
+      })
     }
   },
   modules: {Auth,ActionsImages},
