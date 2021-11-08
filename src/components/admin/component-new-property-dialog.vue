@@ -23,6 +23,9 @@
       <v-card-actions>
         <slot/>
       </v-card-actions>
+      <v-card-subtitle>
+        <slot name="footer"/>
+      </v-card-subtitle>
       <v-card-actions>
         <v-btn @click="dialogFalse()" block color="primary">Next</v-btn>
       </v-card-actions>  

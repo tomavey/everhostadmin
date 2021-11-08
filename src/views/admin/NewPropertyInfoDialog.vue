@@ -18,7 +18,7 @@
         class="float-right">
         mdi-asterisk
       </v-icon>
-      <wysiwyg v-model="content2"/>
+      <wysiwyg v-model="content"/>
       <v-btn
         class="mr-4"
         color="primary"
@@ -36,16 +36,14 @@
 import firebase from 'firebase'
 import mixins from '@/mixins'
 
-
 const propertiesRef = firebase.firestore().collection('properties')
 
 export default {
   mixins: [mixins],
   data() {
     return {
+      pencilColor: "green",
       content: "",
-      contentName: "",
-      pencilColor: "green"
     }
   },
   computed: {
@@ -53,54 +51,47 @@ export default {
       return this.$store.getters.propertyId
     },
     instruction: function() {
-      return this.$store.getters.instructions.filter( (el) => el.docId === this.contentName )[0].content
+      let instructionArray = this.$store.getters.instructions.filter( (el) => el.docId === this.contentName )
+      if ( instructionArray.length ) {
+        return this.$store.getters.instructions.filter( (el) => el.docId === this.contentName )[0].content
+      } else { return "no instructions yet" }
     },
-    nextContentName: function(){
-      let namesArray = this.$store.getters.subSectionsRoutesArray
-      let i = namesArray.indexOf(this.contentName)
-      if ( i === namesArray.length ) { return "propertieslist" }
-      return namesArray[i + 1] 
-    },
-    content2: {
-      get() { return this.$store.getters.property[this.contentName] },
-      set(value) { this.$store.commit("setContent", value) }
+    contentName: function(){
+      return this.$store.getters.contentName
     }
   },
   methods: {
     submit: async function() {
       let obj = {}
-      obj[this.contentName] = this.content2
+      obj[this.contentName] = this.content
       let docId = this.propertyId
-      console.log(obj)
+      console.log('Now I will set: ',obj)
+      console.log('To docId: ', docId)
       propertiesRef.doc(docId).set(obj, {merge: true})
-      console.log("Property content updated successfully")
+      .then( () => console.log("Property content updated successfully", docId) )
+      await this.clearContent()
       await this.$store.dispatch('getProperty')
-      await this.$store.commit("serContentName". this.nextContentName)
+      await this.$store.dispatch('setContentNameToNext')
+      await this.goToContentDialog()
     },
-    goToContentDialog: function(contentName){
-      if ( contentName === "images" ) {
+    goToContentDialog: function(){
+      if ( this.contentName === "images" ) {
         this.$router.push({name:'ImageGallery'})
       } else {
-        this.$router.push({name:'NewPropertyInfoDialog', params: {contentName:contentName}})
+        this.goToRoute('NewPropertyInfoDialog')
       }
     },
-    getContent: function(){
-      this.content = this.$store.getters.property[this.contentName]
+    setContent: function(){
+      let content = this.$store.getters.property[this.contentName]
+      this.$store.commit('setContent',content)
     },
-    setFirstContentName: function(){
-      let namesArray = this.$store.getters.subSectionsRoutesArray
-      this.contentName = namesArray[0].docid
-    },
+    clearContent: function(){
+      this.content = ""
+    }
   },
   created(){
-    console.log("created running")
-    this.setFirstContentName()
-    this.content = ""
-    console.log(this.content)
-    this.$store.dispatch("getProperty")
-    .then( () => {
-      this.getContent()
-    })
+    // this.$store.dispatch("getProperty")
+    this.setContent()
   }
 }
 </script>

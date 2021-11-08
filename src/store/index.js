@@ -23,7 +23,8 @@ export default new Vuex.Store({
     adminDrawer: null,
     images: [],
     everhostUrl: "https://everhostio.web.app/",
-    contentName: "",
+    contentName: null,
+    content: "",
     subSections: [
       {
         tabLabel: "Welcome",
@@ -207,7 +208,17 @@ export default new Vuex.Store({
     showSetPropertyCodeDialog: state => state.showSetPropertyCodeDialog,
     loading: state => state.loading,
     subSections: state => state.subSections,
-    contentName: state => state.contentName,
+    contentName: function(state,getters){
+      if ( !state.contentName ) { return getters.firstContentName }
+      else { return state.contentName }
+    },
+    firstContentName: state => state.subSections[0].docid,
+    nextContentName: function(state, getters){
+      let namesArray = getters.subSectionsRoutesArray
+      let i = namesArray.indexOf(getters.contentName)
+      if ( i === namesArray.length ) { return "propertieslist" }
+      return namesArray[i + 1] 
+    },
     everhostUrl: state => state.everhostUrl,
     basicMetaInfo: state => state.basicMetaInfo,
     backgrounds: state => state.backgrounds,
@@ -231,6 +242,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setContent (state, payload) {
+      state.content = payload
+    },
     setContentName (state, payload) {
       state.contentName = payload
     },
@@ -275,6 +289,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    setContentNameToNext (context) {
+      context.state.contentName = context.getters.nextContentName
+    },
     getProperty(context){
       const propertiesRef = firebase.firestore().collection('properties')
       const propertyId = context.getters.propertyId
@@ -295,6 +312,9 @@ export default new Vuex.Store({
             obj.dateString = Date(obj.createdAt).toString()
           }
           obj.searchAble = obj.name+obj.propertyId+obj.email
+          if ( !obj.backgroundColor ) {
+            obj.backgroundColor = "purple"
+          }
           obj.backgroundImage = backgrounds[obj.backgroundColor].file
           properties.push(obj)
           })

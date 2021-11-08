@@ -29,7 +29,6 @@
           >
           <v-card-text class="text-center text-h5">{{item.name}}</v-card-text> 
           <v-card-subtitle class="text-center">{{item.propertyId}}</v-card-subtitle>
-          <v-card-subtitle class="text-center">{{getBackgroundImage(item.backgroundColor)}}</v-card-subtitle>
           <v-card-actions v-if="item.homeImage" >
             <v-avatar
               size="100px"
@@ -50,7 +49,23 @@
               class="mx-auto"
             >
               <v-img
-                :src="getBackgroundImage(item.backgroundColor)"
+                v-if="item.backgroundColor === 'pink'"
+                src="../../assets/img/app-bg-pink.png"
+                position="center"
+              ></v-img>
+              <v-img
+                v-if="item.backgroundColor === 'purple'"
+                src="../../assets/img/app-bg-purple.png"
+                position="center"
+              ></v-img>
+              <v-img
+                v-if="item.backgroundColor === 'blue'"
+                src="../../assets/img/app-bg-blue.png"
+                position="center"
+              ></v-img>
+              <v-img
+                v-if="item.backgroundColor === 'teal'"
+                src="../../assets/img/app-bg-teal.png"
                 position="center"
               ></v-img>
             </v-avatar>

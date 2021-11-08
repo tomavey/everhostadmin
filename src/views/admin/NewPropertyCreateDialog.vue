@@ -12,11 +12,21 @@
         @dialogFalse="dialogFalse"
         @closeDialog="closeDialog"
       >
-        <v-text-field
-          v-model="property.propertyId"
-          label="Property Code"
-          required
-        ></v-text-field>
+        <template v-slot:default>
+          <v-text-field
+            v-model="property.propertyId"
+            label="Property Code"
+            full-width
+          ></v-text-field>
+        </template>
+        <template v-slot:footer>
+        <p v-if="!isPropertyIdValid">
+          Property code must be more than 7 digits
+        </p>
+        <p v-if="isPropertyIdValid && !isPropertyIdUnique">
+          Property code must be Unique
+        </p>
+        </template>
       </component-new-property-dialog>
 
       <component-new-property-dialog
@@ -83,11 +93,27 @@
         :contentName="'backgroundColor'"
         @dialogFalse="dialogFalse"
       >
-        <v-text-field
-          v-model="property.backgroundColor"
-          label="Telephone"
-          required
-        ></v-text-field>
+          <v-checkbox
+            v-model="property.backgroundColor"
+            label="Pink"
+            value="pink"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="property.backgroundColor"
+            label="Blue"
+            value="blue"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="property.backgroundColor"
+            label="Teal"
+            value="teal"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="property.backgroundColor"
+            label="Purple"
+            value="purple"
+          ></v-checkbox>
+
       </component-new-property-dialog>
 
       <v-row>
@@ -150,11 +176,31 @@
           md="4"
         >
           <p>{{instructions.backgroundColor}}</p>
-          <v-text-field
+          <!-- <v-text-field
             v-model="property.backgroundColor"
             label="Background Color"
             required
-          ></v-text-field>
+          ></v-text-field> -->
+          <v-checkbox
+            v-model="property.backgroundColor"
+            label="Pink"
+            value="pink"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="property.backgroundColor"
+            label="Blue"
+            value="blue"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="property.backgroundColor"
+            label="Teal"
+            value="teal"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="property.backgroundColor"
+            label="Purple"
+            value="purple"
+          ></v-checkbox>
         </v-col>  
       </v-row>
       <v-btn
@@ -186,6 +232,7 @@ export default {
     return {
       pageTitle: "welcome to property dialog",
       property: {},
+      propertyIds: [],
       fieldsObj: {},
       fieldsArray: [],
       showDialog: {},
@@ -196,8 +243,24 @@ export default {
     instructions: function() {
       return this.$store.getters.instructions
     },
+    isPropertyIdValid: function(){
+      if ( this.property.propertyId.length > 6 ) {
+        return true
+      } else {
+        return false
+      }   
+    },
+    isPropertyIdUnique: function(){
+      let propertyId = this.property.propertyId
+      return !this.propertyIds.includes( propertyId )
+    },
   },
   methods: {
+    onValidPropertyIdBlur: function(){
+      if ( this.property.propertyId.length > 6 ) {
+        this.isValidPropertyId = true
+      }
+    },
     dialogFalse: function(contentName) { 
       this.showDialog[contentName] = false
       let nextContentName = this.nextContentName(contentName)
@@ -211,6 +274,7 @@ export default {
       let docId = obj.propertyId
       console.log(obj)
       await propertiesRef.doc(docId).set(obj, {merge: true})
+      .catch((err) => console.log(err) )
       await this.$store.commit("setPropertyId", docId)
       console.log(`New Property ${docId} was created!`)
       await this.$store.dispatch('getProperty', docId)
@@ -275,6 +339,14 @@ export default {
       } else {
         return testsPassed
       }
+    },
+    buildPropertyIdArray: function(){
+      let propertyIdsArray = []
+      let propertiesArray = this.$store.getters.properties
+      propertiesArray.forEach( (el) => {
+        propertyIdsArray.push(el.propertyId)
+      })
+      this.propertyIds = propertyIdsArray
     }
   },
   created(){
@@ -282,6 +354,8 @@ export default {
     if ( this.$route.params.propertyId ) { alert(this.$route.params.propertyId) }
     this.buildShowDialog()
     this.addPropertySectionsToObj()
+    this.buildPropertyIdArray()
+    this.$store.commit("setContentName",this.$store.getters.firstContentName)
   }
 
 }
