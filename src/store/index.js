@@ -22,7 +22,9 @@ export default new Vuex.Store({
     devMode: false,
     adminDrawer: null,
     images: [],
+    host: window.location.host,
     everhostUrl: "https://everhostio.web.app/",
+    devUrl: "http://localhost:5000/",
     contentName: null,
     content: "",
     subSections: [
@@ -219,8 +221,11 @@ export default new Vuex.Store({
       if ( i === namesArray.length ) { return "propertieslist" }
       return namesArray[i + 1] 
     },
-    everhostUrl: state => state.everhostUrl,
-    basicMetaInfo: state => state.basicMetaInfo,
+    everhostUrl: state => {
+      if ( state.host.includes("localhost:") ) { return state.devUrl }
+      else { return state.everhostUrl }
+    },
+    basicMetaInfo: state => state.basiMetaInfo,
     backgrounds: state => state.backgrounds,
     basicMetaInfoFieldNamesArray: state => {
       let fieldNamesArray = []
@@ -375,6 +380,30 @@ export default new Vuex.Store({
           context.dispatch("getMyProperties")
         })
         .catch( (err) => console.log(err) )
+      })
+      .catch( (err) => console.log(err) )
+    },
+    copyPropertyImages(context,payload){
+      let {propertyId, newPropertyId} = payload
+      console.log(propertyId,newPropertyId)
+      const propertiesRef = firebase.firestore().collection('properties')
+      const propertyRef = propertiesRef.doc(propertyId)
+      const propertyImagesRef = propertyRef.collection('images')
+      propertyImagesRef.get()
+      .then( (docs) => {
+        docs.forEach( (doc) => {
+          let obj = doc.data()
+          obj.docId = newPropertyId
+          obj.propertyId = newPropertyId
+          obj.createdAt = Date.now()
+          obj.updatedAt = Date.now()
+          propertiesRef.doc(newPropertyId).collection('images').doc().set(obj)
+          .then ( () => {
+            console.log( `Copied ${propertyId} to ${newPropertyId}`)
+            context.dispatch("getMyProperties")
+          })
+          .catch( (err) => console.log(err) )
+          })
       })
       .catch( (err) => console.log(err) )
     },
