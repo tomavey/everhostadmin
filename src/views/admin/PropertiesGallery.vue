@@ -27,8 +27,18 @@
           elevation="24"
           width="200"
           >
-          <v-card-text class="text-center text-h5">{{item.name}}</v-card-text> 
-          <v-card-subtitle class="text-center">{{item.propertyId}}</v-card-subtitle>
+          <v-card-text 
+            class="text-center text-h5 pointer" 
+            @click="goToPropertyInfoDialog(item.propertyId)"
+            >
+            {{item.name}}
+          </v-card-text> 
+          <v-card-subtitle 
+            class="text-center pointer"
+            @click="goToPropertyInfoDialog(item.propertyId)"
+            >
+              {{item.propertyId}}
+          </v-card-subtitle>
           <v-card-actions v-if="item.homeImage" >
             <v-avatar
               size="100px"
@@ -73,32 +83,27 @@
           <v-card-actions>  
             <p class="mx-auto">
                 <v-icon
-                  small
                   @click="openDialogDelete(item)"
                 >
                   mdi-delete
                 </v-icon>
                 <v-icon
-                  small
                   @click="goToPropertyInfoDialog(item.propertyId)"
                 >
                   mdi-pencil
                 </v-icon>
                 <v-icon
-                  small
                   @click="goToEverhostProperty(item.propertyId)"
                 >
                   mdi-eye-arrow-right
                 </v-icon>         
                 <v-icon
-                  small
                   @click="openDialogCopy(item.propertyId)"
                 >
                   mdi-content-copy
                 </v-icon>         
             </p>
           </v-card-actions>
-          <v-card-subtitle>{{item.createdAt}}</v-card-subtitle>
         </v-card>
     </div>
 
@@ -135,6 +140,10 @@
         <p v-if="!isPropertyIdNoSpace">
           Property code cannot contain spaces
         </p>
+          <v-checkbox
+            v-model="copyImages"
+            :label="`Copy Images also? ${copyImages.toString()}`"
+          ></v-checkbox>        
         </template>
 
       </component-copy-confirm>
@@ -159,6 +168,7 @@ export default {
       propertyIds: [],
       propertyToDelete: {},
       propertyToCopy: {},
+      copyImages: false,
       newPropertyId: '',
       noHomeImageText: "<p class='text-center'>No home page<br/>image is set</p>",
     }
@@ -207,6 +217,13 @@ export default {
       }
       this.$store.dispatch("copyProperty",payload)
       .then( () => {
+        if ( this.copyImages ) {
+          this.$store.dispatch("copyPropertyImages",payload)
+          .then( () => console.log("images copied") )
+          .catch( (err) => console.log(err) )
+        }
+      })
+      .then( () => {
         this.dialogCopy = false
       } )
     },
@@ -215,7 +232,7 @@ export default {
       else {return "../assets/img/placeholder.png"}
     },
     goToEverhostProperty: function (code) {
-      let newUrl = this.everhostUrl + code
+      let newUrl = `${this.everhostUrl}${code}`
       window.open(newUrl)
     },
     goToPropertyInfoDialog: function(propertyId){
