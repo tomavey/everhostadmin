@@ -26,6 +26,11 @@
           :key="index"
           elevation="24"
           width="200"
+          height="500"
+          >
+          <v-card
+            height="100"
+            flat
           >
           <v-card-text 
             class="text-center text-h5 pointer" 
@@ -33,6 +38,7 @@
             >
             {{item.name}}
           </v-card-text> 
+          </v-card>
 
           <v-card-subtitle 
             class="text-center pointer"
@@ -83,76 +89,97 @@
               ></v-img>
             </v-avatar>
           </v-card-actions>
+
           <v-card-actions>  
-            <p class="mx-auto">
+            <v-card
+              class="d-flex justify-center mb-6 mx-auto"
+              flat
+              tile
+            >  
+              <v-card
+                class="pa-0"
+                flat
+                dense
+                tile>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }"> 
+                      <v-icon
+                        @click="openDialogDelete(item)"
+                        v-bind="attrs"
+                        v-on="on"
+                        class="pa-1"
+                      >
+                        mdi-delete
+                      </v-icon>
+                    </template>
+                    <span>Delete Property</span>
+                  </v-tooltip>
 
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }"> 
-                  <v-icon
-                    @click="openDialogDelete(item)"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    mdi-delete
-                  </v-icon>
-                </template>
-                <span>Delete Property</span>
-              </v-tooltip>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }"> 
+                      <v-icon
+                        @click="goToPropertyInfoDialog(item.propertyId)"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        mdi-pencil
+                      </v-icon>
+                    </template>
+                    <span>Edit property</span>
+                  </v-tooltip>
 
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }"> 
-                  <v-icon
-                    @click="goToPropertyInfoDialog(item.propertyId)"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    mdi-pencil
-                  </v-icon>
-                </template>
-                <span>Edit property</span>
-              </v-tooltip>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }"> 
+                      <v-icon
+                        @click="goToEverhostProperty(item.propertyId)"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        mdi-eye-arrow-right
+                      </v-icon>         
+                    </template>
+                    <span>Go to public property page</span>
+                  </v-tooltip>
+              </v-card>
+            </v-card>
+            <v-card
+              class="d-flex justify-center mb-6 mx-auto"
+              flat
+              tile
+            >  
+              <v-card
+                class="pa-0"
+                flat
+                tile>
 
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }"> 
-                  <v-icon
-                    @click="goToEverhostProperty(item.propertyId)"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    mdi-eye-arrow-right
-                  </v-icon>         
-                </template>
-                <span>Go to public property page</span>
-              </v-tooltip>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }"> 
+                      <v-icon
+                        @click="openDialogCopy(item.propertyId)"
+                        v-bind="attrs"
+                        v-on="on"
+                        class="pa-2"
+                      >
+                        mdi-content-copy
+                      </v-icon>         
+                    </template>
+                    <span>Duplicate Property</span>
+                  </v-tooltip>
 
-
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }"> 
-                  <v-icon
-                    @click="openDialogCopy(item.propertyId)"
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }"> 
+                    <v-icon
+                      @click="goToImageGallery(item.propertyId)"
                       v-bind="attrs"
                       v-on="on"
-                  >
-                    mdi-content-copy
-                  </v-icon>         
-                </template>
-                <span>Duplicate Property</span>
-              </v-tooltip>
-
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }"> 
-                <v-icon
-                  @click="goToImageGallery(item.propertyId)"
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  mdi-image-multiple-outline
-                </v-icon>         
-                </template>
-                <span>View property images</span>
-              </v-tooltip>
-
-            </p>
+                    >
+                      mdi-image-multiple-outline
+                    </v-icon>         
+                    </template>
+                    <span>View property images</span>
+                  </v-tooltip>
+              </v-card>
+            </v-card>
           </v-card-actions>
         </v-card>
     </div>
@@ -241,15 +268,18 @@ export default {
     everhostUrl: function(){
       return this.$store.getters.everhostUrl
     },
+    myProperties: function(){
+      return this.$store.getters.myProperties.map( (el) => {
+        if ( !el.homeImage ) {el.homeImage = "https://via.placeholder.com/90/000000/FFFFFF/?text=IMAGE+NOT+SET"}
+        return el
+      })
+    },
     myPropertiesFiltered: function(){
       if ( !this.searchString ) { return this.myProperties }
       return this.myProperties.filter(  (el) => el.searchAble.toLowerCase().includes(this.searchString.toLowerCase()) )
     },
     myPropertiesFilteredSorted: function(){
       return this.myPropertiesFiltered.sort( (a,b) => b.createdAt - a.createdAt )
-    },
-    myProperties: function(){
-      return this.$store.getters.myProperties
     },
     backgrounds: function(){
       return this.$store.getters.backgrounds
