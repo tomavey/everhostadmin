@@ -164,7 +164,7 @@ export default {
         if ( docs.size ) {
           docs.forEach( (doc) => {
             let obj = doc.data()
-            obj.createdAt = this.dateFormat(createdAt)
+            obj.createdAt = this.dateFormat(obj.createdAt)
             obj.DOCID = doc.id
             usersArray.push(obj)
           })
