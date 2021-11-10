@@ -9,7 +9,6 @@
   >
     <v-btn
       text
-      flat
       bottom
       v-if="userIsAuthenticated"
     >{{user.data.email}}</v-btn>

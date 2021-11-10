@@ -2,6 +2,7 @@
   <v-app>
 
     <component-navdrawer-side 
+      :navItems=navItems
       :error=error 
     />
 
@@ -16,21 +17,6 @@
       </v-container>
     </v-main>
 
-    <p>
-    <span
-      class="float-right pointer"
-      @click="toggleShowSetPropertyCodeDialog()"
-      v-if="propertyId"
-      >
-      PropertyId: {{propertyId}}
-    </span>
-    <v-spacer></v-spacer>
-    <span v-if="userIsAuthenticated">
-      {{this.user.data.email}}
-      <span v-if="userIsAdmin" class="float-right">&nbsp;*</span>
-    </span>  
-    </p>
-
     <component-footer-menu></component-footer-menu>
 
   </v-app>
@@ -39,8 +25,8 @@
 <script>
 import ComponentToolbarTop from './components/admin/component-toolbar-top.vue';
 import ComponentNavdrawerSide from './components/admin/component-navdrawer-side.vue';
-import mixins from "@/mixins"
 import ComponentFooterMenu from './components/admin/component-footer-menu.vue';
+import mixins from "@/mixins"
 
 export default {
   components: { ComponentToolbarTop, ComponentNavdrawerSide, ComponentFooterMenu, },
@@ -66,13 +52,13 @@ export default {
         n: 2,
         label: "My Properties",
         routeName: "PropertiesGallery",
-        adminOnly: true
+        adminOnly: false
       }, 
       {
         n: 3,
         label: "Image Gallery",
         routeName: "ImageGallery",
-        adminOnly: false
+        adminOnly: true
       }, 
       {
         n: 4,
