@@ -18,7 +18,7 @@
     app
     temporary
     >
-    <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon @click="toggleDrawer" v-if="userIsAdmin"></v-app-bar-nav-icon>
 
     <v-toolbar-title @click="goToRoute('Welcome')">Everhost Admin Page</v-toolbar-title>
 
@@ -98,7 +98,7 @@ import componentSetPropertyCodeDialog from './component-set-property-code-dialog
 
 export default {
   components: { componentSetPropertyCodeDialog },
-  props: ['NavItems','error'],
+  props: ['error'],
   mixins: [mixins],
   computed: {
     showSetPropertyCodeDialog: function(){

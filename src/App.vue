@@ -2,7 +2,6 @@
   <v-app>
 
     <component-navdrawer-side 
-      :navItems=navItems 
       :error=error 
     />
 
@@ -17,15 +16,22 @@
       </v-container>
     </v-main>
 
-    <p 
+    <p>
+    <span
       class="float-right pointer"
       @click="toggleShowSetPropertyCodeDialog()"
+      v-if="propertyId"
       >
-      PropertryId: {{propertyId}}
+      PropertyId: {{propertyId}}
+    </span>
+    <v-spacer></v-spacer>
+    <span v-if="userIsAuthenticated">
+      {{this.user.data.email}}
       <span v-if="userIsAdmin" class="float-right">&nbsp;*</span>
-      <span v-if="userIsAuthenticated" class="float-right">&nbsp;*</span>
+    </span>  
     </p>
 
+    <component-footer-menu></component-footer-menu>
 
   </v-app>
 </template>
@@ -34,9 +40,10 @@
 import ComponentToolbarTop from './components/admin/component-toolbar-top.vue';
 import ComponentNavdrawerSide from './components/admin/component-navdrawer-side.vue';
 import mixins from "@/mixins"
+import ComponentFooterMenu from './components/admin/component-footer-menu.vue';
 
 export default {
-  components: { ComponentToolbarTop, ComponentNavdrawerSide, },
+  components: { ComponentToolbarTop, ComponentNavdrawerSide, ComponentFooterMenu, },
   mixins: [mixins],
   name: 'App',
 
