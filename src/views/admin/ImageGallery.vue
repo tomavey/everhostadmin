@@ -154,6 +154,7 @@ export default {
   },
   created(){
     this.$store.dispatch("getImages", this.propertyId)
+    this.$store.dispatch("getProperty", this.propertyId)
   }
 
 }

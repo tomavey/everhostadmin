@@ -29,13 +29,14 @@
           >
           <v-card-text 
             class="text-center text-h5 pointer" 
-            @click="goToPropertyInfoDialog(item.propertyId)"
+            @click="goToEverhostProperty(item.propertyId)"
             >
             {{item.name}}
           </v-card-text> 
+
           <v-card-subtitle 
             class="text-center pointer"
-            @click="goToPropertyInfoDialog(item.propertyId)"
+            @click="goToEverhostProperty(item.propertyId)"
             >
               {{item.propertyId}}
           </v-card-subtitle>
@@ -43,7 +44,8 @@
             <v-avatar
               size="100px"
               rounded
-              class="mx-auto"
+              class="mx-auto pointer"
+              @click="goToImageGallery(item.propertyId)"
             >
               <v-img
                 :src=item.homeImage
@@ -56,7 +58,8 @@
             <v-avatar
               size="100px"
               rounded
-              class="mx-auto"
+              class="mx-auto pointer"
+              @click="goToEverhostProperty(item.propertyId)"
             >
               <v-img
                 v-if="item.backgroundColor === 'pink'"
@@ -82,26 +85,73 @@
           </v-card-actions>
           <v-card-actions>  
             <p class="mx-auto">
+
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }"> 
+                  <v-icon
+                    @click="openDialogDelete(item)"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    mdi-delete
+                  </v-icon>
+                </template>
+                <span>Delete Property</span>
+              </v-tooltip>
+
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }"> 
+                  <v-icon
+                    @click="goToPropertyInfoDialog(item.propertyId)"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    mdi-pencil
+                  </v-icon>
+                </template>
+                <span>Edit property</span>
+              </v-tooltip>
+
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }"> 
+                  <v-icon
+                    @click="goToEverhostProperty(item.propertyId)"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    mdi-eye-arrow-right
+                  </v-icon>         
+                </template>
+                <span>Go to public property page</span>
+              </v-tooltip>
+
+
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }"> 
+                  <v-icon
+                    @click="openDialogCopy(item.propertyId)"
+                      v-bind="attrs"
+                      v-on="on"
+                  >
+                    mdi-content-copy
+                  </v-icon>         
+                </template>
+                <span>Duplicate Property</span>
+              </v-tooltip>
+
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }"> 
                 <v-icon
-                  @click="openDialogDelete(item)"
+                  @click="goToImageGallery(item.propertyId)"
+                  v-bind="attrs"
+                  v-on="on"
                 >
-                  mdi-delete
-                </v-icon>
-                <v-icon
-                  @click="goToPropertyInfoDialog(item.propertyId)"
-                >
-                  mdi-pencil
-                </v-icon>
-                <v-icon
-                  @click="goToEverhostProperty(item.propertyId)"
-                >
-                  mdi-eye-arrow-right
+                  mdi-image-multiple-outline
                 </v-icon>         
-                <v-icon
-                  @click="openDialogCopy(item.propertyId)"
-                >
-                  mdi-content-copy
-                </v-icon>         
+                </template>
+                <span>View property images</span>
+              </v-tooltip>
+
             </p>
           </v-card-actions>
         </v-card>
@@ -206,6 +256,10 @@ export default {
     }
   },
   methods: {
+    goToImageGallery(propertyId) {
+      this.$store.commit("setPropertyId",propertyId)  
+      this.goToRoute("ImageGallery")
+    },
     openDialogCopy(property){
       this.propertyToCopy = property
       this.dialogCopy = true
@@ -275,14 +329,16 @@ export default {
         propertyIdsArray.push(el.propertyId)
       })
       this.propertyIds = propertyIdsArray
+    },
+    initView(){
+      this.$store.dispatch("getMyProperties")
+      .then( () => this.buildPropertyIdArray() )
     }
-
   },
   created(){
-    this.$store.dispatch("getMyProperties")
-    .then( () => this.buildPropertyIdArray() )
+    if ( !this.user.data ) { setTimeout(this.initView,100) }
+    else { this.initView() }
   }
-
 }
 </script>
 
