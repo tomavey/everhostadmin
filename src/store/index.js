@@ -225,7 +225,7 @@ export default new Vuex.Store({
       if ( state.host.includes("localhost:") ) { return state.devUrl }
       else { return state.everhostUrl }
     },
-    basicMetaInfo: state => state.basiMetaInfo,
+    basicMetaInfo: state => state.basicMetaInfo,
     backgrounds: state => state.backgrounds,
     basicMetaInfoFieldNamesArray: state => {
       let fieldNamesArray = []
