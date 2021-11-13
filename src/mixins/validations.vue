@@ -22,10 +22,10 @@ export default {
     },
     isPropertyIdUnique: function(){
       let propertyId = this.property.propertyId
-      return !this.propertyIds.includes( propertyId )
+      return !this.property.propertyId.includes( propertyId )
     },
     isPropertyIdNoSpace:function(){
-      return this.propertyId.includes(' ')
+      return this.property.propertyId.includes(' ')
     }
   }
 }
