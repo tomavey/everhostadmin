@@ -20,15 +20,21 @@
           ></v-text-field>
         </template>
         <template v-slot:footer>
-        <p v-if="!isPropertyIdLongEnough">
-          Property code must be more than 7 digits
-        </p>
-        <!-- <p v-if="isPropertyIdUnique">
-          isPropertyIdUnique Property code must be Unique
-        </p> -->
-        <p v-if="isPropertyIdNoSpace">
-          Property code cannot contain spaces
-        </p>
+          <p v-if="isPropertyIdTooShort">
+            Property code must be more than 7 digits
+          </p>
+          <p v-if="!isPropertyIdUnique && !isPropertyIdTooShort">
+            Property code must be unique... {{property.propertyId}} is already taken.
+          </p>
+          <!-- <p v-if="isPropertyIdUnique">
+            isPropertyIdUnique Property code must be Unique
+          </p> -->
+          <p v-if="!isPropertyIdNoSpace">
+            Property code cannot contain spaces
+          </p>
+          <p v-if="inValidMessage" class="purple darken-2 text-center">
+            <span class="white--text">{{inValidMessage}}</span>
+          </p>  
         </template>
       </component-new-property-dialog>
 
@@ -40,11 +46,17 @@
         @closeDialog="closeDialog"
       >
         <template v-slot:default>
-        <v-text-field
-          v-model="property.name"
-          label="Property Name"
-          required
-        ></v-text-field>
+          <v-text-field
+            v-model="property.name"
+            label="Property Name"
+            required
+            :disabled = isPropertyNameTooLong
+          ></v-text-field>
+        </template>
+        <template v-slot:footer>
+          <p v-if="isPropertyNameTooLong">
+            Property name cannot be more than 21 digits.
+          </p>
         </template>
       </component-new-property-dialog>
 
@@ -208,6 +220,14 @@
           ></v-checkbox>
         </v-col>  
       </v-row>
+      <v-row>
+        <v-col
+          cols="12"
+          md="4"
+        >
+          <p v-if="inValidMessage">{{inValidMessage}}</p>
+        </v-col>  
+      </v-row>      
       <v-btn
         class="mr-4"
         color="primary"
@@ -239,27 +259,22 @@ export default {
       fieldsArray: [],
       showDialog: {},
       showSubmit: true,
+      inValidMessage: null,
     }
   },
   computed: {
     propertyIdLength: function() {
       return this.property.propertyId.length
     },
-    isPropertyIdLongEnough: function(){
-      if ( this.property.propertyId.length > 6 ) {
+    isPropertyIdTooShort: function(){
+      if ( this.property.propertyId.length < 7 ) {
         return true
       } else {
         return false
       }   
     },
-    isPropertyIdUnique: function(){
-      let propertyId = this.property.propertyId
-      let propertyIdsArray = this.property.propertyIds
-      if ( propertyIdsArray.includes(propertyId) ) { return false }
-      return true
-    },
     isPropertyIdNoSpace:function(){
-      return this.property.propertyId.includes(' ')
+      return !this.property.propertyId.includes(' ')
     },
     isPropertyNameTooLong: function(){
       if ( this.property.name.length > 21 ) {
@@ -268,6 +283,17 @@ export default {
         return false
       }   
     },
+    isPropertyIdUnique: function(){
+      let propertyId = this.property.propertyId
+      let propertyIdsArray = this.propertyIds
+      console.log(!propertyIdsArray.includes(propertyId))
+      return !propertyIdsArray.includes(propertyId)
+    },
+    isValid: function(){
+      if (
+        !this.isPropertyIdTooShort && this.isPropertyIdUnique && this.isPropertyIdNoSpace && !this.isPropertyNameTooLong
+      ) { return true } else { return false }
+    }
   },
   methods: {
     onValidPropertyIdBlur: function(){
@@ -276,24 +302,32 @@ export default {
       }
     },
     dialogFalse: function(contentName) { 
-      this.showDialog[contentName] = false
-      let nextContentName = this.nextContentName(contentName)
-      this.showDialog[nextContentName] = true 
-      },
+      if ( this.isValid ) {
+        this.showDialog[contentName] = false
+        let nextContentName = this.nextContentName(contentName)
+        this.showDialog[nextContentName] = true 
+      } else {
+        this.inValidMessage = "Please correct your entry before proceeding."
+      }
+    },
     closeDialog: function(nextContentName) {
       this.showDialog[nextContentName] = false 
     },  
     submit: async function() {
-      let obj = this.property
-      let docId = obj.propertyId
-      console.log(obj)
-      await this.$store.dispatch('updateProperty',obj)
-      .catch((err) => console.log(err) )
-      await this.$store.commit("setPropertyId", docId)
-      console.log(`New Property ${docId} was created!`)
-      await this.$store.dispatch('getProperty', docId)
-      this.$store.commit("setPropertyId", docId)
-      await this.goToContentDialog('description')
+      if ( isValid ) {
+        let obj = this.property
+        let docId = obj.propertyId
+        console.log(obj)
+        await this.$store.dispatch('updateProperty',obj)
+        .catch((err) => console.log(err) )
+        await this.$store.commit("setPropertyId", docId)
+        console.log(`New Property ${docId} was created!`)
+        await this.$store.dispatch('getProperty', docId)
+        this.$store.commit("setPropertyId", docId)
+        await this.goToContentDialog('description')
+      } else {
+        this.inValidMessage = "Please correct your entries before proceeding."
+      }
     },
     goToContentDialog: function(contentName){
       this.$router.push({name:'NewPropertyInfoDialog', params: {contentName:'description'}})
