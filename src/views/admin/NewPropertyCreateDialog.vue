@@ -20,13 +20,13 @@
           ></v-text-field>
         </template>
         <template v-slot:footer>
-        <p v-if="!isPropertyIdValid">
+        <p v-if="!isPropertyIdLongEnough">
           Property code must be more than 7 digits
         </p>
-        <p v-if="isPropertyIdValid && !isPropertyIdUnique">
-          Property code must be Unique
-        </p>
-        <p v-if="!isPropertyIdNoSpace">
+        <!-- <p v-if="isPropertyIdUnique">
+          isPropertyIdUnique Property code must be Unique
+        </p> -->
+        <p v-if="isPropertyIdNoSpace">
           Property code cannot contain spaces
         </p>
         </template>
@@ -39,11 +39,13 @@
         @dialogFalse="dialogFalse"
         @closeDialog="closeDialog"
       >
+        <template v-slot:default>
         <v-text-field
           v-model="property.name"
           label="Property Name"
           required
         ></v-text-field>
+        </template>
       </component-new-property-dialog>
 
       <component-new-property-dialog
@@ -240,6 +242,32 @@ export default {
     }
   },
   computed: {
+    propertyIdLength: function() {
+      return this.property.propertyId.length
+    },
+    isPropertyIdLongEnough: function(){
+      if ( this.property.propertyId.length > 6 ) {
+        return true
+      } else {
+        return false
+      }   
+    },
+    isPropertyIdUnique: function(){
+      let propertyId = this.property.propertyId
+      let propertyIdsArray = this.property.propertyIds
+      if ( propertyIdsArray.includes(propertyId) ) { return false }
+      return true
+    },
+    isPropertyIdNoSpace:function(){
+      return this.property.propertyId.includes(' ')
+    },
+    isPropertyNameTooLong: function(){
+      if ( this.property.name.length > 21 ) {
+        return true
+      } else {
+        return false
+      }   
+    },
   },
   methods: {
     onValidPropertyIdBlur: function(){
