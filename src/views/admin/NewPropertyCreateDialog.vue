@@ -314,7 +314,7 @@ export default {
       this.showDialog[nextContentName] = false 
     },  
     submit: async function() {
-      if ( isValid ) {
+      if ( this.isValid ) {
         let obj = this.property
         let docId = obj.propertyId
         console.log(obj)
