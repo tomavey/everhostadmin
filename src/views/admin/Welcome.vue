@@ -7,10 +7,9 @@
     <v-app-bar
       dark
       color="pink"
-      c
     >
       <v-spacer></v-spacer>
-      <v-toolbar-title>Welcome to Everhost!</p></v-toolbar-title>
+      <v-toolbar-title>Welcome to Everhost!</v-toolbar-title>
       <v-spacer></v-spacer>
 
     </v-app-bar>
@@ -55,7 +54,7 @@
         {
           color: '#1F7087',
           routeName: 'NewPropertyCreateDialog',
-          title: 'Create a new property web',
+          title: 'Create new property',
           subtitle: 'Enter all the information your guests will need in an web app for your property.',
           action: "Start Now"
         },
