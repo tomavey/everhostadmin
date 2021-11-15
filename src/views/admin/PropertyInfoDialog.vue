@@ -38,11 +38,11 @@
           >
           <v-checkbox
             v-model="property.airbnb"
-            :label="`AirBnb: ${property.platform.toString()}`"
+            :label="AirBnb"
           ></v-checkbox>
           <v-checkbox
             v-model="property.vrbo"
-            :label="`Verbo: ${property.platform.toString()}`"
+            :label="Verbo"
           ></v-checkbox>
           </v-col>  
         </v-row>
