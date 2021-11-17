@@ -316,7 +316,7 @@ export default new Vuex.Store({
           if ( obj.createdAt ) {
             obj.dateString = Date(obj.createdAt).toString()
           }
-          obj.searchAble = obj.name+obj.propertyId+obj.email
+          obj.searchAble = obj.name+obj.propertyId+obj.email+obj.address
           if ( !obj.backgroundColor ) {
             obj.backgroundColor = "purple"
           }

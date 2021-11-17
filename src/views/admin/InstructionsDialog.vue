@@ -1,8 +1,11 @@
 <template>
 <div>
-  <v-form @submit.prevent="submit">
+  <v-card max-width="800" class="mx-auto" elevation="8">
+  <v-form @submit.prevent="submit"  class="ma-10 white">
     <v-container>
-      <wysiwyg v-model="instruction" />
+        <v-card-action>
+          <wysiwyg v-model="instruction"/>
+        </v-card-action>  
       <v-btn
         class="mr-4"
         color="primary"
@@ -13,6 +16,7 @@
       </v-btn>
     </v-container>
   </v-form>
+  </v-card>
   </div>
 </template>  
 

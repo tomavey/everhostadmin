@@ -1,5 +1,5 @@
 <template>
-<div>
+<v-card max-width="800" class="mx-auto">
   <v-form @submit.prevent="submit">
     <v-container>
       <h2 v-html="instruction" />
@@ -18,9 +18,13 @@
         class="float-right">
         mdi-asterisk
       </v-icon>
-      <wysiwyg v-model="content"/>
+      <v-card max-width="800" class="mx-auto" elevation="8">
+        <v-card-text>
+          <wysiwyg v-model="content"/>
+        </v-card-text>
+      </v-card>
       <v-btn
-        class="mr-4"
+        class="mr-4 mx-auto"
         color="primary"
         type="submit"
         block
@@ -29,7 +33,7 @@
       </v-btn>
     </v-container>
   </v-form>
-  </div>
+  </v-card>
 </template>  
 
 <script>

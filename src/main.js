@@ -16,6 +16,8 @@ Vue.use(wysiwyg, {
     'image': true,
     'table': true,
     'forcePlainTextOnPaste': true,
+    'removeFormat': true,
+    'orderedList': true,
   }
 })
 

@@ -1,5 +1,5 @@
 <template>
-<div>
+<v-card max-width="800" class="mx-auto">
   <v-form @submit.prevent="submit">
     <v-container>
     <v-alert type="warning" v-if="htmlEdit">HTML edit is on - this will not show for normal users</v-alert>
@@ -67,7 +67,9 @@
             </v-col>  
           </v-row>
           <v-row v-if="!htmlEdit">
-            <wysiwyg v-model="property[section.docid]" tabindex="5"/>
+            <v-card elevation="8">
+              <wysiwyg v-model="property[section.docid]" tabindex="5"/>
+            </v-card>
           </v-row>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -94,7 +96,7 @@
           </v-btn>
         </v-col>
       </v-row>
-  </div>
+  </v-card>
 </template>  
 
 <script>
