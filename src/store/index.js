@@ -193,6 +193,42 @@ export default new Vuex.Store({
         label: 'Purple',
         file: '../../assets/img/app-bg-purple.png'
       },
+      dunes: { 
+        label: 'Dunes',
+        file: '../../assets/img/app-bg-dunes.png'
+      },
+      flowers: { 
+        label: 'Flowers',
+        file: '../../assets/img/app-bg-flowers.png'
+      },
+      heart: { 
+        label: 'Heart',
+        file: '../../assets/img/app-bg-heart.png'
+      },
+      hearts: { 
+        label: 'Hearts',
+        file: '../../assets/img/app-bg-hearts.png'
+      },
+      lights: { 
+        label: 'lights',
+        file: '../../assets/img/app-bg-lights.png'
+      },
+      mountains: { 
+        label: 'Mountains',
+        file: '../../assets/img/app-bg-mountains.png'
+      },
+      shore: { 
+        label: 'Shore',
+        file: '../../assets/img/app-bg-shore.png'
+      },
+      trail: { 
+        label: 'Trail',
+        file: '../../assets/img/app-bg-trail.png'
+      },
+      alley: { 
+        label: 'Alley',
+        file: '../../assets/img/app-bg-alley.png'
+      },
     }
   },
   getters: {
@@ -320,7 +356,7 @@ export default new Vuex.Store({
           if ( !obj.backgroundColor ) {
             obj.backgroundColor = "purple"
           }
-          obj.backgroundImage = backgrounds[obj.backgroundColor].file
+          obj.backgroundImage = backgrounds[obj.backgroundColor].fileName
           properties.push(obj)
           })
           context.commit("setMyProperties",properties)
