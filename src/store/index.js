@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import firebase from 'firebase'
 import Auth from './auth'
 import ActionsImages from "./actions-images"
+import Images from "./images"
 
 Vue.use(Vuex)
 
@@ -21,7 +22,6 @@ export default new Vuex.Store({
     showSetPropertyCodeDialog: false,
     devMode: false,
     adminDrawer: null,
-    images: [],
     host: window.location.host,
     everhostUrl: "https://everhostio.web.app/",
     devUrl: "http://localhost:5000/",
@@ -233,7 +233,6 @@ export default new Vuex.Store({
       return fieldNamesArray
     },
     devMode: state => state.devMode,
-    images: state => state.images.sort( (a,b) => a.sortOrder - b.sortOrder ),
     cardItems: state => state.cardItems,
     cardItemsRoutesArray: state => {
       let array = []
@@ -294,6 +293,20 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    createUniquePropertyId ( context ) {
+      let randomId = Math.floor(1000000 + Math.random() * 9000000)
+      const propertiesRef = firebase.firestore().collection('properties')
+      propertiesRef.doc(randomId).get()
+      .then( (doc) => {
+        if (doc.exists) {
+          context.dispatch("getUniquePropertyId")
+          console.log("exists")
+        } else {
+          context.commit("setPropertyId", randomId )
+          console.log("unique")
+        }
+      })
+    },
     setContentNameToNext (context) {
       context.state.contentName = context.getters.nextContentName
     },
@@ -419,5 +432,5 @@ export default new Vuex.Store({
       })
     }
   },
-  modules: {Auth,ActionsImages},
+  modules: {Auth,ActionsImages,Images},
 })
