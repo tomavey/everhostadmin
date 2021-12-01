@@ -11,14 +11,14 @@ Vue.config.productionTip = false
 
 Vue.use(wysiwyg, {
   hideModules: {
-    'link': true,
+    'link': false,
     'code': true,
-    'image': true,
+    'image': false,
     'table': true,
     'forcePlainTextOnPaste': true,
     'removeFormat': true,
     'orderedList': true,
-  }
+  },
 })
 
 const firebaseConfig = {
