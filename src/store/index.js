@@ -5,211 +5,72 @@ import firebase from 'firebase'
 import Auth from './auth'
 import ActionsImages from "./actions-images"
 import Images from "./images"
+import Subsections from "./subsections.json"
+import BasicMetaInfo from "./basicMetaInfo.json"
+import Backgrounds from "./backgrounds.json"
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    //property
     propertyId: null,
     property: {},
     propertyTab: "Welcome",
     properties: [],
     myProperties: [],
+
+    //instructions
     instructions: [],
+
+    //switches 
     error: "",
     loading: false,
     showAllProperties: false,
     showSetPropertyCodeDialog: false,
     devMode: false,
     adminDrawer: null,
+
+    //settings
     host: window.location.host,
     everhostUrl: "https://everhostio.web.app/",
     devUrl: "http://localhost:5000/",
+
+    //forms data
     contentName: null,
     content: "",
-    subSections: [
-      {
-        tabLabel: "Welcome",
-        pageTitle: "Welcome",
-        docid: "description"
-      },
-      {
-        tabLabel: "Check-in/Out",
-        pageTitle: "Check-in / Out",
-        docid: "checkin"
-      },
-      {
-        tabLabel: "Parking",
-        pageTitle: "Parking",
-        docid: "parking"
-      },
-      {
-        tabLabel: "How To",
-        pageTitle: "How To",
-        docid: "howto"
-      },
-      {
-        tabLabel: "Amenities",
-        pageTitle: "Amenities",
-        docid: "amenities"
-      },
-      {
-        tabLabel: "Images",
-        pageTitle: "Images",
-        docid: "images",
-        routeName: "Images"
-      },
-    ],
-    cardItems: [
-      {
-        title: "Property Info",
-        icon: "mdi-home-circle",
-        iconColor: "#FFBF00",
-        icon: "property-info.svg",
-        actionIcon: "mdi-information",
-        link: "PropertyInfo",
-      },
-      // {
-      //   title: "House Rules",
-      //   icon: "mdi-shield-home",
-      //   iconColor: "#27AE62",
-      //   actionIcon: "mdi-information",
-      //   link: "HouseRules",
-      // },
-      {
-        title: "Area Guide",
-        icon: "mdi-table-chair",
-        iconColor: "#FE8D91",
-        icon: "area-guide.svg",
-        actionIcon: "mdi-information",
-        link: "AreaGuide",
-      },
-      {
-        title: "Nearby",
-        icon: "mdi-map-marker-circle",
-        iconColor: "#6E38DD",
-        icon: "nearby.svg",
-        actionIcon: "mdi-information",
-        link: "Nearby",
-      },
-      {
-        title: "Deals",
-        icon: "mdi-ticket-account",
-        iconColor: "#EF5645",
-        icon: "deals.svg",
-        actionIcon: "mdi-information",
-        link: "Deals",
-      },
-      {
-        title: "Weather",
-        icon: "mdi-weather-cloudy",
-        iconColor: "#6E38DD",
-        icon: "weather.svg",
-        actionIcon: "mdi-information",
-        link: "Weather"
-      }
-    ],
-  basicMetaInfo: 
-    [
-      {
-        fieldName: "propertyId",
-        label: "Property Code",
-        validMinLength: 3,
-        validType: "string",
-        validRegex: "",
-        editable: false,
-      },
-      {
-        fieldName: "name",
-        label: "Name",
-        validMinLength: 10,
-        validType: "string",
-        validRegex: "",
-        editable: true,
-      },
-      {
-        fieldName: "address",
-        label: "Address",
-        validMinLength: 10,
-        validType: "string",
-        validRegex: "",
-        editable: true,
-      },
-      {
-        fieldName: "telephone",
-        label: "Telephone",
-        validMinLength: 3,
-        validType: "string",
-        validRegex: "",
-        editable: true,
-      },
-      {
-        fieldName: "platform",
-        label: "Platform",
-        validMinLength: 3,
-        validType: "string",
-        validRegex: "",
-        editable: false,
-      },
-      {
-        fieldName: "airbnb",
-        label: "Airbnb",
-        validMinLength: 5,
-        validType: "binary",
-        validRegex: "",
-        editable: true,
-      },
-      {
-        fieldName: "vrbo",
-        label: "Vrbo",
-        validMinLength: 5,
-        validType: "binary",
-        validRegex: "",
-        editable: true,
-      },
-      {
-        fieldName: "backgroundColor",
-        label: "Background Color",
-        validMinLength: 5,
-        validType: "string",
-        validRegex: "",
-        editable: true,
-      },
-    ],
-    backgrounds: {
-      teal: { 
-        label: 'Teal',
-        file: '../../assets/img/app-bg-teal.png'
-      },
-      blue: { 
-        label: 'Blue',
-        file: '../../assets/img/app-bg-blue.png'
-      },
-      pink: { 
-        label: 'Pink',
-        file: '../../assets/img/app-bg-pink.png'
-      },
-      purple: { 
-        label: 'Purple',
-        file: '../../assets/img/app-bg-purple.png'
-      },
-    }
+    subSections: Subsections,
+    basicMetaInfo: BasicMetaInfo,
+    backgrounds: Backgrounds,
   },
+
   getters: {
+    //property
     property: state => state.property,
     propertyId: state => state.propertyId,
     propertyTab: state => state.propertyTab,
     properties: state => state.properties,
     myProperties: state => state.myProperties,
+
+    //instructions
     instructions: state => state.instructions,
     instruction: state => docId => {
       state.instructions.filter( (el) => el.docId === docId )
     },
+
+    //switches
     adminDrawer: state => state.adminDrawer,
     error: state => state.error,
     showSetPropertyCodeDialog: state => state.showSetPropertyCodeDialog,
     loading: state => state.loading,
+
+    //forms data
     subSections: state => state.subSections,
+    subSectionsRoutesArray: state => {
+      let array = []
+      state.subSections.forEach( (el) => array.push(el.docid) )
+      return array
+    },
     contentName: function(state,getters){
       if ( !state.contentName ) { return getters.firstContentName }
       else { return state.contentName }
@@ -221,10 +82,6 @@ export default new Vuex.Store({
       if ( i === namesArray.length ) { return "propertieslist" }
       return namesArray[i + 1] 
     },
-    everhostUrl: state => {
-      if ( state.host.includes("localhost:") ) { return state.devUrl }
-      else { return state.everhostUrl }
-    },
     basicMetaInfo: state => state.basicMetaInfo,
     backgrounds: state => state.backgrounds,
     basicMetaInfoFieldNamesArray: state => {
@@ -232,26 +89,18 @@ export default new Vuex.Store({
       state.basicMetaInfo.forEach( (el) => fieldNamesArray.push(el.fieldName) )
       return fieldNamesArray
     },
+
+    //settings
+    everhostUrl: state => {
+      if ( state.host.includes("localhost:") ) { return state.devUrl }
+      else { return state.everhostUrl }
+    },
     devMode: state => state.devMode,
-    cardItems: state => state.cardItems,
-    cardItemsRoutesArray: state => {
-      let array = []
-      state.cardItems.forEach( (el) => array.push(el.link) )
-      return array
-    },
-    subSectionsRoutesArray: state => {
-      let array = []
-      state.subSections.forEach( (el) => array.push(el.docid) )
-      return array
-    }
+
   },
+
   mutations: {
-    setContent (state, payload) {
-      state.content = payload
-    },
-    setContentName (state, payload) {
-      state.contentName = payload
-    },
+    //property
     setPropertyId (state,payload) {
       state.propertyId = payload
     },
@@ -267,12 +116,26 @@ export default new Vuex.Store({
     setMyProperties (state,payload) {
       state.myProperties = payload
     },
+
+    //instructions
     setInstructions (state,payload) {
       state.instructions = payload
     },
+
+    //forms
+    setContent (state, payload) {
+      state.content = payload
+    },
+    setContentName (state, payload) {
+      state.contentName = payload
+    },
+
+    //images
     setImages (state,payload) {
       state.images = payload
     },
+
+    //switches
     setError (state,payload) {
       state.error = payload
     },
@@ -295,7 +158,10 @@ export default new Vuex.Store({
       state.error = ""
     }
   },
+
   actions: {
+
+    //property
     createUniquePropertyId ( context ) {
       let randomId = Math.floor(1000000 + Math.random() * 9000000)
       const propertiesRef = firebase.firestore().collection('properties')
@@ -309,9 +175,6 @@ export default new Vuex.Store({
           console.log("unique")
         }
       })
-    },
-    setContentNameToNext (context) {
-      context.state.contentName = context.getters.nextContentName
     },
     getProperty(context){
       const propertiesRef = firebase.firestore().collection('properties')
@@ -342,20 +205,6 @@ export default new Vuex.Store({
           context.commit("setMyProperties",properties)
         }
       )
-    },
-    getInstructions(context){
-      const instructionsRef = firebase.firestore().collection('instructions')
-      instructionsRef.get()
-      .then( (docs) => {
-        let instructions = []
-        docs.forEach( ( doc ) => {
-          let obj = {}
-          obj.docId = doc.id
-          obj.content = doc.data().content
-          instructions.push(obj)
-        })
-        this.commit('setInstructions',instructions)
-       } )
     },
     subscribeToProperties(context){
       const properties = []
@@ -399,6 +248,40 @@ export default new Vuex.Store({
       })
       .catch( (err) => console.log(err) )
     },
+    updateProperty(context,payload){
+      let obj = payload
+      let docId = obj.docId || obj.propertyId
+      obj.updatedAt = Date.now()
+      const propertiesRef = firebase.firestore().collection('properties')
+      propertiesRef.doc(docId).set(obj, {merge: true})
+      .then( () => {
+        console.log(`Updated ${docId}`)
+        context.dispatch('getMyProperties')
+      })
+    },
+
+    //forms
+    setContentNameToNext (context) {
+      context.state.contentName = context.getters.nextContentName
+    },
+
+    //instructions
+    getInstructions(context){
+      const instructionsRef = firebase.firestore().collection('instructions')
+      instructionsRef.get()
+      .then( (docs) => {
+        let instructions = []
+        docs.forEach( ( doc ) => {
+          let obj = {}
+          obj.docId = doc.id
+          obj.content = doc.data().content
+          instructions.push(obj)
+        })
+        this.commit('setInstructions',instructions)
+       } )
+    },
+
+    //images
     copyPropertyImages(context,payload){
       let {propertyId, newPropertyId} = payload
       console.log(propertyId,newPropertyId)
@@ -423,17 +306,6 @@ export default new Vuex.Store({
       })
       .catch( (err) => console.log(err) )
     },
-    updateProperty(context,payload){
-      let obj = payload
-      let docId = obj.docId || obj.propertyId
-      obj.updatedAt = Date.now()
-      const propertiesRef = firebase.firestore().collection('properties')
-      propertiesRef.doc(docId).set(obj, {merge: true})
-      .then( () => {
-        console.log(`Updated ${docId}`)
-        context.dispatch('getMyProperties')
-      })
-    }
   },
   modules: {Auth,ActionsImages,Images},
 })
