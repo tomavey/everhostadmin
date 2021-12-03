@@ -101,9 +101,10 @@ export default {
   props: ['error'],
   mixins: [mixins],
   computed: {
-    showSetPropertyCodeDialog: function(){
-      return this.$store.getters.showSetPropertyCodeDialog
-    }
+    showSetPropertyCodeDialog: {
+      get(){ return this.$store.getters.showSetPropertyCodeDialog },
+      set(value) { this.$store.commit('setShowPropertyCodeDialog', value)}
+    },
   }, 
   methods: {
     toggleDrawer(){ this.$store.commit("toggleAdminDrawer") },

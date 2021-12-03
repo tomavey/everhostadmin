@@ -285,6 +285,9 @@ export default new Vuex.Store({
     toggleShowSetPropertyCodeDialog ( state ) {
       state.showSetPropertyCodeDialog = !state.showSetPropertyCodeDialog
     },
+    setShowPropertyCodeDialog ( state, payload ) {
+      state.showSetPropertyCodeDialog = payload
+    },
     setAdminDrawer ( state, payload ) {
       state.adminDrawer = payload
     },

@@ -11,7 +11,7 @@
     </v-text-field>
 
     <v-row dense wrap>
-      <v-btn @click="addNew"  v-if="!loading">Add a new image</v-btn>
+      <v-btn @click="showDialog = true"  v-if="!loading">Add a new image</v-btn>
       <v-progress-linear :indeterminate="true" v-else></v-progress-linear>
     </v-row>
     <div class="gridContainer">
@@ -28,20 +28,29 @@
 
     </div>
 
+    <v-dialog
+      v-model="showDialog"
+    >
+      <component-image-dialog ></component-image-dialog>
+    </v-dialog>
+
     </v-container>  
   </v-app>
 </template>
 
 <script>
 import mixins from '@/mixins/'
+import componentImageDialog from '../../components/admin/component-image-dialog.vue'
 
 export default {
+  components: { componentImageDialog },
   mixins: [mixins],
   data() {
     return {
       message: "Images",
       searchString: "",
       useThumbNail: false,
+      showDialog: false
     }
   },
   methods: {
@@ -72,9 +81,10 @@ export default {
     images: function(){
       return this.$store.getters.images
     },
+    property: function() { return this.$store.getters.property }
   },
   created() {
-    this.$store.dispatch('getImages')
+    this.$store.dispatch('Images/getImages', this.property )
   }
 }
 </script>

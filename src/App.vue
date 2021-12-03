@@ -61,15 +61,15 @@ export default {
         adminOnly: true
       }, 
       {
-        n: 4,
-        label: "Users",
-        routeName: "Users",
+        n: 3,
+        label: "Images",
+        routeName: "Images",
         adminOnly: true
       }, 
       {
         n: 4,
-        label: "Set Property Code",
-        routeName: "SetPropertyCodeDialog",
+        label: "Users",
+        routeName: "Users",
         adminOnly: true
       }, 
     ],
