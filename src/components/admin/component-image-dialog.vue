@@ -1,17 +1,22 @@
 <template>
-<v-app>
-  <v-container>
-    {{image}}
-  <v-form v-model="valid">
+  <v-card class="container">
+    <v-btn 
+      icon
+      @click="closeDialog"
+      class="float-right"
+      >
+      <v-icon>mdi-close-outline</v-icon>
+    </v-btn>
+  <v-form>
     <v-text-field
       v-model="image.description" 
       label="Image Description"
-      required
     ></v-text-field>
 
     <v-text-field
       v-model="image.tags"
       label="Tags"
+      v-if="showTagsField"
     ></v-text-field>
     
     <v-row dense>
@@ -26,7 +31,8 @@
           type="file" 
           style="display:none" 
           ref="fileInput"
-          @change="onFilePicked">
+          @change="onFilePicked"
+          >
       </v-flex>
 
     </v-row>
@@ -48,18 +54,17 @@
         color="success"
         large
         block
-        :disabled="!valid"
+        :disabled=!valid
         @click="submit"
       >
-      Submit your image!
+      Upload your image!
       <v-icon right dark>mdi-location-center</v-icon>
       </v-btn>
       </v-flex>
     </v-row>    
 
   </v-form>
-  </v-container>
-</v-app>  
+  </v-card>
 </template>
 
 <script>
@@ -71,13 +76,15 @@
   export default {
     mixins: [mixins],
     data: () => ({
-      // cohort: '',
-      image: {
-      },
-      imageButtonText: 'Select a file from your device to upload.',
-      valid: false
+      image: {},
+      imageButtonText: 'Select an image from your device to upload.',
+      showTagsField: false
     }),
     computed: {
+      valid: function(){
+        if ( this.image.description !== '' && this.image.fileName ) { return true }
+        return false
+      }
     },
     methods: {
       //clicks the hidden file input type="file" 
@@ -92,19 +99,19 @@
         // console.log("files: ",files)
         //is the file size is reasonable size, put the file name in this.resource
         if ( files[0].size < 150000000 ) {
-          this.resource.fileName = files[0].name
+          this.image.fileName = files[0].name
           // console.log("this.resource.fileName: ",this.resource.fileName)
           //I think this makes sure there is a . in the filename
-          if (this.resource.fileName.lastIndexOf('.') <= 0) {
-            alert('Select a valid file')
+          if (this.image.fileName.lastIndexOf('.') <= 0) {
+            alert('Select a valid image')
           }
           const fileReader = new FileReader()
           fileReader.addEventListener('load', () => {
-            this.resource.fileUrl = fileReader.result
+            this.image.fileUrl = fileReader.result
           })
           // console.log(files[0])
           fileReader.readAsDataURL(files[0])
-          this.resource.file = files[0]
+          this.image.file = files[0]
           // console.log("this.resource:", this.resource)
         } else {
           alert('This file size too large: ' + files[0].size/1024/1024 + "MB" + "  - consider submitting a link instead")
@@ -124,23 +131,14 @@
           'datetime': Date.now(),
           'reverseDatetime': -Date.now()
         }
-        let newResource = {...this.resource, ...userData, ...createdAt}
-        console.log("this.resource: ", this.resource)
-        console.log("newResource: ", newResource)
-        this.$store.dispatch('updateIdeas', newResource)
+        let imageObj = {...this.image, ...userData, ...createdAt}
+        console.log("imageObj : ", imageObj)
+        this.$store.dispatch('storeImage', imageObj)
+        .then( () => this.$store.dispatch("getImages") )
         .then( () => {
-          this.$store.dispatch('updateFromFirestore', 'courses')
-        })
-        .then( () => {
-          if ( this.resource.collection === "resources") {
-            this.$router.push('/resources/' + this.resource.cohort)
-          } else {
-            this.$store.commit("setError", true)
-            this.$store.dispatch('updateFromFirestore', 'images')
-            this.$router.push('/images/')
-          }
-          // this.$router.push({path: `/${newResource.collection}`, params: {searchString: newResource.cohort}})
-        })
+          console.log("dispatch ran")
+          this.closeDialog()
+         } )
       },
       buildImageObj: function(){
         let imageObj = {}
@@ -148,6 +146,9 @@
         imageObj.tags = ""
         imageObj.fileName = null
         this.image = imageObj
+      },
+      closeDialog: function(){
+        this.$emit("closeDialog")
       }
     },
     created () {
@@ -155,5 +156,8 @@
     }  
   }
 </script>
+
+<style scoped>
+</style>
 
 

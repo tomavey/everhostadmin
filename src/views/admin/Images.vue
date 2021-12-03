@@ -23,15 +23,32 @@
           class="img"          
         >
         </v-img>
-        <v-icon class="pointer" @click="deleteImageRecord(image)">mdi-trash-can</v-icon>
+        <!-- icon/button to delete image -->
+        <v-tooltip left>
+          <template v-slot:activator="{ on, attrs }">
+            <v-avatar
+              size="30"
+              @click="deleteImageDocument(image)"
+              class="pointer"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon color="black" >mdi-delete</v-icon>
+            </v-avatar>
+          </template>
+          <span>Delete Image</span>
+        </v-tooltip>
       </div>
 
     </div>
 
     <v-dialog
       v-model="showDialog"
+      max-width="600px"
+      transition="dialog-bottom-transition"
+      persistent
     >
-      <component-image-dialog ></component-image-dialog>
+      <component-image-dialog @closeDialog="showDialog = false"></component-image-dialog>
     </v-dialog>
 
     </v-container>  
@@ -54,11 +71,11 @@ export default {
     }
   },
   methods: {
-    deleteImageRecord: function(DOCID){
+    deleteImageDocument: function(DOCID){
       let r = confirm("Are you sure")
       if ( r ) {
-        this.$store.dispatch("deleteImageRecord",DOCID)
-        .then( this.$store.dispatch('updateFromFirestore', 'images') )
+        this.$store.dispatch("deleteImageDocument",DOCID)
+        .then( this.$store.dispatch('getImages') )
       }
     },
     getThumbnail: function(image){
@@ -91,6 +108,10 @@ export default {
 </script>
 
 <style scoped>
+  .dialog {
+    width:400px;
+  }
+
   .gridContainer {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
