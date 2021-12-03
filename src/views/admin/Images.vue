@@ -83,8 +83,9 @@ export default {
     },
     property: function() { return this.$store.getters.property }
   },
-  created() {
-    this.$store.dispatch('Images/getImages', this.property )
+  async created() {
+    await this.$store.dispatch('getProperty')
+    await this.$store.dispatch('getImages')
   }
 }
 </script>

@@ -1,7 +1,6 @@
 import firebase from 'firebase'
 
 export default{
-  namespaced: true,
   state: {
     images: [],
   },
@@ -14,11 +13,12 @@ export default{
     },
   },
   actions: {
-    getImages ( context, property ) {
-      console.log("Property: ", property)
+    getImages ( context ) {
+      let propertyId = context.rootGetters.propertyId
+      console.log("Property Id: ", propertyId)
       let imagesArray = []
       let propertiesRef = firebase.firestore().collection('properties')
-      let imagesRef = propertiesRef.doc(property.propertyId).collection("images")
+      let imagesRef = propertiesRef.doc(propertyId).collection("images")
       imagesRef.get()
       .then( (docs) => {
         if ( docs.size ) {

@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 // import axios from 'axios'
 import firebase from 'firebase'
 import Auth from './auth'
-import ActionsImages from "./actions-images"
+// import ActionsImages from "./actions-images"
 import Images from "./images"
 import Subsections from "./subsections.json"
 import BasicMetaInfo from "./basicMetaInfo.json"
@@ -47,7 +47,11 @@ export default new Vuex.Store({
   getters: {
     //property
     property: state => state.property,
-    propertyId: state => state.propertyId,
+    propertyId: state => {
+      if ( state.propertyId ) { return state.propertyId }
+      if ( localStorage.getItem("EHPropertyId") ) { return localStorage.getItem("EHPropertyId") }
+      return null
+    },
     propertyTab: state => state.propertyTab,
     properties: state => state.properties,
     myProperties: state => state.myProperties,
@@ -307,5 +311,5 @@ export default new Vuex.Store({
       .catch( (err) => console.log(err) )
     },
   },
-  modules: {Auth,ActionsImages,Images},
+  modules: {Auth,Images},
 })

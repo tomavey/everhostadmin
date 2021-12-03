@@ -42,7 +42,8 @@ export default {
   },
   methods: {
     submit: function(){
-      this.$store.commit("setPropertyId",this.propertyId)
+      this.$store.commit("setPropertyId", this.propertyId)
+      localStorage.setItem("EHPropertyId", this.propertyId)
       this.$store.commit("toggleShowSetPropertyCodeDialog")
       this.goToRoute("ImageGallery")
     }
