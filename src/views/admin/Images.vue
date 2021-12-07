@@ -16,14 +16,15 @@
     </v-row>
     <div class="gridContainer">
       <div class="gridItem" v-for="(image, index) in images" :key=index>
-            <a :href="image.src" target="_new">{{image.src}}</a>
+        <a :href="image.fileUrl" target="_new">{{image.description}}</a>
         <v-img 
-          :src='getThumbnail(image)'
-          max-width="100"
+          :src='image.fileUrl'
+          max-width="200"
           class="img"          
         >
         </v-img>
         <!-- icon/button to delete image -->
+
         <v-tooltip left>
           <template v-slot:activator="{ on, attrs }">
             <v-avatar
@@ -127,12 +128,12 @@ export default {
   
   .gridItem {
     padding:10px 5px;
-    color: white;
     border: 2px solid grey;
     border-radius: 10px;
     box-shadow: 3px 3px 5px grey;
     overflow: hidden;
     text-align: center;
+    max-width: 200px;
   }
   
   .pointer {

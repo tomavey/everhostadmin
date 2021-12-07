@@ -1,5 +1,6 @@
 <template>
   <v-card class="container">
+    <!-- {{image}} -->
     <v-btn 
       icon
       @click="closeDialog"
@@ -42,8 +43,11 @@
       <v-flex xs12>
         <p>File Selected: {{ image.fileName }}</p>
       </v-flex>
-
-    </v-row>
+      <v-img
+        v-if="image.base64"
+        :src=image.base64
+        ></v-img>
+      </v-row>
 
     <p>&nbsp;</p>
 
@@ -84,6 +88,9 @@
       valid: function(){
         if ( this.image.description !== '' && this.image.fileName ) { return true }
         return false
+      },
+      propertyId: function(){
+        return this.$store.getters.propertyId
       }
     },
     methods: {
@@ -107,12 +114,12 @@
           }
           const fileReader = new FileReader()
           fileReader.addEventListener('load', () => {
-            this.image.fileUrl = fileReader.result
+            this.image.base64 = fileReader.result
           })
           // console.log(files[0])
           fileReader.readAsDataURL(files[0])
           this.image.file = files[0]
-          // console.log("this.resource:", this.resource)
+          console.log("this.image:", this.image)
         } else {
           alert('This file size too large: ' + files[0].size/1024/1024 + "MB" + "  - consider submitting a link instead")
         }
@@ -131,28 +138,34 @@
           'datetime': Date.now(),
           'reverseDatetime': -Date.now()
         }
-        let imageObj = {...this.image, ...userData, ...createdAt}
+        let propertyInfo = {
+          propertyId: this.propertyId
+        }
+        let imageObj = {...this.image, ...userData, ...createdAt, ...propertyInfo}
         console.log("imageObj : ", imageObj)
         this.$store.dispatch('storeImage', imageObj)
-        .then( () => this.$store.dispatch("getImages") )
         .then( () => {
-          console.log("dispatch ran")
+          this.$store.dispatch('getImages')
+          this.buildEmptyImageObj()
           this.closeDialog()
          } )
       },
-      buildImageObj: function(){
-        let imageObj = {}
-        imageObj.description = ""
-        imageObj.tags = ""
-        imageObj.fileName = null
-        this.image = imageObj
-      },
       closeDialog: function(){
         this.$emit("closeDialog")
+      },
+      buildEmptyImageObj: function(){
+        this.image = {
+          description: "",
+          tags: "",
+          fileName: "",
+          fileUrl: "",
+          file: null,
+          base64: null
+        }
       }
     },
     created () {
-      this.buildImageObj()
+      this.buildEmptyImageObj()
     }  
   }
 </script>
