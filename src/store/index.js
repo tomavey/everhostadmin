@@ -186,12 +186,14 @@ export default new Vuex.Store({
       propertiesRef.doc(propertyId).get()
       .then( (doc) => this.commit('setProperty', doc.data()) )
     },
-    getMyProperties(context){
-      const uid = context.getters.user.data.uid
-      const propertiesRef = firebase.firestore().collection('properties')
+    getProperties(context, uid){
+      if ( !uid ) {
+        let propertiesRef = firebase.firestore().collection('properties')
+      }
+      let propertiesRef = firebase.firestore().collection('properties').where("uid", "==", uid)
       const backgrounds = context.getters.backgrounds
-      console.log(backgrounds)
-      propertiesRef.where("uid", "==", uid).get()
+      console.log("backgrounds- ",backgrounds)
+      propertiesRef.get()
       .then( (docs) => {
         let properties = []
         docs.forEach( (doc) => {
@@ -203,7 +205,7 @@ export default new Vuex.Store({
           if ( !obj.backgroundColor ) {
             obj.backgroundColor = "purple"
           }
-          obj.backgroundImage = backgrounds[obj.backgroundColor].file
+          obj.backgroundImage = backgrounds.filter( el => el.name === obj.backgroundColor )[0]
           properties.push(obj)
           })
           context.commit("setMyProperties",properties)
@@ -224,11 +226,13 @@ export default new Vuex.Store({
           properties.push(obj)  
         })
       })
+      context.commit("setProperties", [])
       context.commit("setProperties",properties)  
     },
     deleteProperty(context,payload){
       const propertiesRef = firebase.firestore().collection('properties')
       propertiesRef.doc(payload).delete()
+      .then( context.dispatch("getProperties") )
       .then( () => console.log("deleted ", payload))
       .catch( (err) => console.log(err) )
     },

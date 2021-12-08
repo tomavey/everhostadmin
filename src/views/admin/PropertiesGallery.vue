@@ -361,7 +361,7 @@ export default {
       this.propertyIds = propertyIdsArray
     },
     initView(){
-      this.$store.dispatch("getMyProperties")
+      this.$store.dispatch("getProperties", this.user.data.uid)
       .then( () => this.buildPropertyIdArray() )
     }
   },
