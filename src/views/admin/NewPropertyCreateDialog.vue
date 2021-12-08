@@ -244,12 +244,12 @@
 
 <script>
 import mixins from '@/mixins'
-import validations from '@/mixins/validations'
+// import validations from '@/mixins/validations'
 import componentNewPropertyDialog from '../../components/admin/component-new-property-dialog.vue'
 
 export default {
   components: { componentNewPropertyDialog },
-  mixins: [mixins,validations],
+  mixins: [mixins],
   data() {
     return {
       pageTitle: "welcome to property dialog",
@@ -404,6 +404,7 @@ export default {
     this.addPropertySectionsToObj()
     this.buildPropertyIdArray()
     this.$store.commit("setContentName",this.$store.getters.firstContentName)
+    this.$store.dispatch("createUniquePropertyId")
   }
 
 }

@@ -13,6 +13,13 @@
       v-if="userIsAuthenticated"
     >{{user.data.email}}</v-btn>
 
+    <v-btn
+      text
+      bottom
+      v-if="userIsAuthenticated"
+      @click = "showSetPropertyIdDialog()"
+    >Property Id: {{propertyId}}</v-btn>
+
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
         <v-icon 
@@ -98,7 +105,12 @@ export default {
       ],
     }
   },
-  computed:{
+  methods: {
+    showSetPropertyIdDialog: function() {
+      this.$store.commit("setShowPropertyCodeDialog",true)
+    }
+  },  
+  computed: {
     propertyId: function(){
       return this.$store.getters.propertyId
     }

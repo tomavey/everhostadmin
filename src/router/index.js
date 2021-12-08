@@ -95,6 +95,14 @@ const routes = [
     },
   },
   {
+    path: "/images",
+    name: "Images",
+    component: () => import(/* webpackChunkName: "images" */ '../views/admin/Images.vue'),
+    meta: {
+      requiresAuth: true
+    },
+  },
+  {
     path: "/imagegallery",
     name: "ImageGallery",
     component: () => import(/* webpackChunkName: "imagegallery" */ '../views/admin/ImageGallery.vue'),
