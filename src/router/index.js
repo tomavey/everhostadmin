@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Welcome from '../views/admin/Welcome.vue'
+import PropertiesGallery from '../views/admin/PropertiesGallery.vue'
 import store from '../store'
 
 Vue.use(VueRouter)
@@ -8,8 +9,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Welcome',
-    component: Welcome,
+    name: 'PropertiesGallery',
+    component: PropertiesGallery,
     meta: {
       requiresAuth: false
     },
@@ -49,7 +50,8 @@ const routes = [
   {
     path: "/propertiesgallery/",
     name: "PropertiesGallery",
-    component: () => import(/* webpackChunkName: "propertiesgallery" */ '../views/admin/PropertiesGallery.vue'),
+    component: PropertiesGallery,
+    // component: () => import(/* webpackChunkName: "propertiesgallery" */ '../views/admin/PropertiesGallery.vue'),
     meta: {
       requiresAuth: true
     },

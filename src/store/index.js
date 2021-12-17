@@ -8,6 +8,7 @@ import Images from "./images"
 import Subsections from "./subsections.json"
 import BasicMetaInfo from "./basicMetaInfo.json"
 import Backgrounds from "./backgrounds.json"
+import DefaultProperty from "./default.json"
 
 Vue.use(Vuex)
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     propertyTab: "Welcome",
     properties: [],
     myProperties: [],
+    defaultProperty: DefaultProperty,
 
     //instructions
     instructions: [],
@@ -55,6 +57,7 @@ export default new Vuex.Store({
     propertyTab: state => state.propertyTab,
     properties: state => state.properties,
     myProperties: state => state.myProperties,
+    defaultProperty: state => state.defaultProperty,
 
     //instructions
     instructions: state => state.instructions,
@@ -120,6 +123,9 @@ export default new Vuex.Store({
     setMyProperties (state,payload) {
       state.myProperties = payload
     },
+    setDefaultProperty (state,payload) {
+      state.defaultProperty = payload
+    },
 
     //instructions
     setInstructions (state,payload) {
@@ -166,6 +172,23 @@ export default new Vuex.Store({
   actions: {
 
     //property
+    createDefaultProperty(context){
+      const defaultProperty = context.getters.defaultProperty
+      const propertiesRef = firebase.firestore().collection('properties')
+      const defaultId = "default12821"
+      propertiesRef.propertyId = defaultId
+      propertiesRef.doc(defaultId).set(defaultProperty)
+      .then( console.log("default property created") )
+      .catch( (err) => console.log(err) )
+    },
+    makeNewProperty(context){
+      console.log("oncall")
+      const addProperty = firebase.functions().httpsCallable('makeNewProperty')
+      addProperty(context.getters.user.data.uid)
+      .then( (res) => {
+        console.log("res ", res)
+      })
+    },
     createUniquePropertyId ( context ) {
       let randomId = Math.floor(1000000 + Math.random() * 9000000)
       const propertiesRef = firebase.firestore().collection('properties')
@@ -208,6 +231,7 @@ export default new Vuex.Store({
           obj.backgroundImage = backgrounds.filter( el => el.name === obj.backgroundColor )[0]
           properties.push(obj)
           })
+          console.log(properties)
           context.commit("setMyProperties",properties)
         }
       )
@@ -230,9 +254,10 @@ export default new Vuex.Store({
       context.commit("setProperties",properties)  
     },
     deleteProperty(context,payload){
+      let propertyId = payload.toString()
       const propertiesRef = firebase.firestore().collection('properties')
-      propertiesRef.doc(payload).delete()
-      .then( context.dispatch("getProperties") )
+      propertiesRef.doc(propertyId).delete()
+      .then( context.dispatch("getProperties", context.getters.user.data.uid) )
       .then( () => console.log("deleted ", payload))
       .catch( (err) => console.log(err) )
     },
@@ -250,7 +275,7 @@ export default new Vuex.Store({
         propertiesRef.doc(newPropertyId).set(obj)
         .then ( () => {
           console.log( `Copied ${propertyId} to ${newPropertyId}`)
-          context.dispatch("getMyProperties")
+          context.dispatch("getProperties", context.getters.user.data.uid)
         })
         .catch( (err) => console.log(err) )
       })
