@@ -24,6 +24,13 @@
         </v-list-item>
 
       </div>
+        <v-list-item 
+          v-if="userIsAdmin"         
+          class="d-block text-center mx-auto mb-9"
+          @click="createDefaultProperty"
+        >
+          Create Default Property
+        </v-list-item>
       <div v-if="userIsAuthenticated">
         <v-list-item 
           v-if="userIsAdmin"         
@@ -70,6 +77,9 @@ export default {
     }
   },
   methods: {
+    createDefaultProperty: function(){
+      this.$store.dispatch('createDefaultProperty')
+    },
     showNavItem: function(n){
       if ( this.userIsAdmin ) { return true }
       if ( !n.adminOnly && this.userIsAuthenticated ) { return true }

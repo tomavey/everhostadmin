@@ -2,6 +2,13 @@
   <v-container>
     <v-row>
       <v-col cols="12">
+        <v-btn
+          block
+          color="primary"
+          @click="makeNewProperty"
+        >
+          Create A New Property
+        </v-btn>  
       </v-col>
     </v-row>
     <v-row>
@@ -142,10 +149,12 @@
                   </v-tooltip>
               </v-card>
             </v-card>
+            
             <v-card
               class="d-flex justify-center mb-6 mx-auto"
               flat
               tile
+              v-if=false
             >  
               <v-card
                 class="pa-0"
@@ -242,7 +251,6 @@ export default {
       searchString: null,
       dialogDelete: false,
       dialogCopy: false,
-      propertyIds: [],
       propertyToDelete: {},
       propertyToCopy: {},
       copyImages: false,
@@ -286,6 +294,10 @@ export default {
     }
   },
   methods: {
+    makeNewProperty(){
+      this.$store.dispatch("makeNewProperty")
+      .then( this.getProperties() )
+    },
     goToImageGallery(propertyId) {
       this.$store.commit("setPropertyId",propertyId)  
       this.goToRoute("ImageGallery")
@@ -317,6 +329,7 @@ export default {
     },
     goToEverhostProperty: function (code) {
       let newUrl = `${this.everhostUrl}${code}`
+      console.log(newUrl)
       window.open(newUrl)
     },
     goToPropertyInfoDialog: function(propertyId){
@@ -352,23 +365,16 @@ export default {
     clearSearchString() {
       this.searchString = ""
     },
-    buildPropertyIdArray: function(){
-      let propertyIdsArray = []
-      let propertiesArray = this.$store.getters.properties
-      propertiesArray.forEach( (el) => {
-        propertyIdsArray.push(el.propertyId)
-      })
-      this.propertyIds = propertyIdsArray
-    },
-    initView(){
+    getProperties(){
       this.$store.dispatch("getProperties", this.user.data.uid)
-      .then( () => this.buildPropertyIdArray() )
     }
   },
-  created(){
-    if ( !this.user.data ) { setTimeout(this.initView,100) }
-    else { this.initView() }
-  }
+  watch: {
+    userIsAuthenticated: function(){
+      this.getProperties()
+    }
+  },
+  created(){}
 }
 </script>
 
