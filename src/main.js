@@ -34,18 +34,6 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-
-firebase.getCurrentUser = () => {
-  return new Promise((resolve, reject) => {
-      const unsubscribe = firebase.auth().onAuthStateChanged(user => {
-          unsubscribe();
-          resolve(user);
-      }, reject);
-  })
-};
-
-let isAuthenticated = firebase.auth().currentUser
-
 const app = new Vue({
   router,
   store,
@@ -54,8 +42,6 @@ const app = new Vue({
   render: h => h(App)
 })
 
-firebase.auth().onAuthStateChanged(user => {
-  console.log("onAuthStateChanged: ", user)
-  store.dispatch("fetchUser", user)
-  .then( app.$mount('#app') )
-});
+app.$mount('#app') 
+
+
