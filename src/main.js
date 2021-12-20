@@ -6,6 +6,10 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import wysiwyg from 'vue-wysiwyg'
+import ehcPage from '@/components/ehc-page.vue'
+
+Vue.component('ehc-page', ehcPage)
+
 
 Vue.config.productionTip = false
 

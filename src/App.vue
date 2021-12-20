@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <ehc-login>
-
+    <ehc-app-toolbar></ehc-app-toolbar>
 
     <v-main>
       <v-container>
@@ -16,10 +16,11 @@
 <script>
 import ehcAppToolbar from './components/ehc-app-toolbar.vue';
 import ehcLogin from './components/ehc-login.vue';
+import EhcAppToolbar from './components/ehc-app-toolbar.vue';
 
 
 export default {
-  components: { ehcAppToolbar, ehcLogin},
+  components: { ehcAppToolbar, ehcLogin, EhcAppToolbar },
   mixins: [],
   name: 'App',
 

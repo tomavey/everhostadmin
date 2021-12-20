@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-dialog 
-            v-model="loggedOut"
+            v-model="loginDialog"
             persistent
             max-width="400" 
         >
@@ -30,9 +30,9 @@
         </v-dialog>
 
 
-        <tempalate v-if="loggedIn">
+        <template v-if="!loginDialog">
             <slot></slot>
-        </tempalate>
+        </template>
     </div>
 
 </template>
@@ -48,15 +48,15 @@ export default {
             email: null,
             password: null
         },
-        loggedIn: false,
     }
   },
   computed: {
-        loggedOut: function() {
-            return !this.loggedIn
-        },
-        user: function () {
-            return this.$store.getters.user
+        loginDialog: function() {
+            if (this.user==null) {
+                return true
+            } else {
+                return false
+            }
         },
   },
   methods: {

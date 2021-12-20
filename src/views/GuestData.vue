@@ -1,3 +1,5 @@
 <template>
-    <h1>guest Data</h1>
+    <ehc-page>
+    <h1>TODO: Guest Data</h1>
+    </ehc-page>
 </template>

@@ -32,17 +32,28 @@ export default {
         console.log(error.message)
       })
     },
+    logout ({commit}) {
+      console.log("logout")
+      commit('setLoading', true)
+      firebase.auth().signOut()
+      commit('setLoading', false)
+    },
     async monitorAuth({commit}) {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
-          console.log("auth State Changed", user)
+          console.log("auth State Changed", user.email)
           // User is signed in, see docs for a list of available properties
           // https://firebase.google.com/docs/reference/js/firebase.User
-          commit('setUser', user)
+          commit('setUser', {
+            uid: user.uid,
+            displayName: user.displayName,
+            email: user.email
+          })
           // ...
         } else {
           // User is signed out
           // ...
+          commit('setUser', null)
         }
       });
     }
