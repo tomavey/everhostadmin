@@ -1,7 +1,7 @@
 // https://firebase.google.com/docs/auth/web/manage-users
 
 import firebase from 'firebase'
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+// import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 
 export default {
@@ -33,8 +33,7 @@ export default {
       })
     },
     async monitorAuth({commit}) {
-      const auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
+      firebase.auth().onAuthStateChanged(user => {
         if (user) {
           console.log("auth State Changed", user)
           // User is signed in, see docs for a list of available properties
@@ -49,4 +48,8 @@ export default {
     }
   }
 }
+
+
+
+
 
