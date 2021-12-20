@@ -6,6 +6,8 @@ export default {
         authLoading: false
     }
   },
+  created() {
+  },
   methods:{
       login: function(credentials) {
           console.log("login", credentials)

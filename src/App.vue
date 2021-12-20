@@ -33,6 +33,7 @@ export default {
   computed: {
   },
   created() {
+    this.$store.dispatch("monitorAuth")
     console.log("app created")
   }  
 };
