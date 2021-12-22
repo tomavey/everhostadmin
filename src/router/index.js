@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import PropertiesGallery from '../views/PropertiesGallery.vue'
 import GuestData from '../views/GuestData.vue'
+import MyAccount from '../views/MyAccount.vue'
+
 
 import store from '../store'
 
@@ -28,6 +30,10 @@ const routes = [
   {
     path: "/guestdata",
     component: GuestData,
+  },
+  {
+    path: "/myaccount",
+    component: MyAccount,
   },
 ]
 
