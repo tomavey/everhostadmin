@@ -1,6 +1,6 @@
 <template>
     <ehc-page>
-        <h1>TODO Property Gallery</h1>
+        <h1>TODO Property Galery</h1>
     </ehc-page>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
     <v-toolbar flat dense class="px-0 mx-0" :src="require('@/assets/img/app-bg-purple.png')" dark>
-         <v-toolbar-title>
+        <v-toolbar-title>
             <v-img src="@/assets/Everhost-Logo_Green-Circle_300x73.png" contain height="50px" width="190px" class="ma-0 pa-0"></v-img>
         </v-toolbar-title>
        
