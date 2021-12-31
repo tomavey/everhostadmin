@@ -1,4 +1,5 @@
 <script>
+import moment from 'moment'
 
 export default {
   data () {
@@ -7,8 +8,12 @@ export default {
     }
   },
   methods: {    
-
-   },
+    formatDate: function (value,format = "dateAndTime") {
+      let formatString = 'MMMM Do YYYY, h:mm:ss a'
+      if ( format === "dateOnly") { formatString = 'MM/D/YY'}
+      return moment(value).format(formatString)
+    },
+  },
   computed: {
 
   }

@@ -1,7 +1,7 @@
 <template>
-    <v-toolbar flat dense class="px-0 mx-0" :src="require('@/assets/img/app-bg-purple.png')" dark>
+    <v-toolbar flat dense class="px-0 mx-0" color="primary" dark>
         <v-toolbar-title>
-            <v-img src="@/assets/Everhost-Logo_Green-Circle_300x73.png" contain height="50px" width="190px" class="ma-0 pa-0"></v-img>
+            <v-img src="@/assets/Everhost_Logo_Red Brown_273x73.png" contain height="50px" width="190px" class="ma-0 pa-0"></v-img>
         </v-toolbar-title>
        
         <v-divider vertical inset></v-divider>
@@ -29,13 +29,13 @@
         <v-divider vertical inset></v-divider>
         <v-tooltip bottom >
             <template v-slot:activator="{ on, attrs }">
-            <v-btn plain small fab v-on="on" v-bind="attrs" @click="clickTest"><v-icon>mdi-lifebuoy</v-icon></v-btn>
+            <v-btn plain small fab v-on="on" v-bind="attrs" @click="openSupport"><v-icon>mdi-lifebuoy</v-icon></v-btn>
             </template>
             <span>Support</span>
         </v-tooltip>
         <v-tooltip bottom >
             <template v-slot:activator="{ on, attrs }">
-            <v-btn plain small fab v-on="on" v-bind="attrs" @click="logout()"><v-icon>mdi-logout</v-icon></v-btn>
+            <v-btn plain small fab v-on="on" v-bind="attrs" @click="$store.dispatch('logout')"><v-icon>mdi-logout</v-icon></v-btn>
             </template>
             <span>Logout</span>
         </v-tooltip>
@@ -57,13 +57,13 @@ export default {
         tab: null,
         searching:false,
         menu: [
-            {label: "Property Galery", route: "/", icon: "mdi-home-city"},
+            {label: "Properties", route: "/", icon: "mdi-home-city"},
             {label: "My Account", route: "/myaccount", icon:"mdi-account"},
         ],
     }),
     methods: {
-        clickTest() {
-            console.log("test click")
+        openSupport() {
+            console.log("TODO")
         }
     }
 

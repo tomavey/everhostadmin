@@ -1,14 +1,13 @@
 <template>
   <v-app>
     <ehc-login>
-    <ehc-app-toolbar></ehc-app-toolbar>
+        <ehc-app-toolbar></ehc-app-toolbar>
 
-    <v-main>
-      <v-container>
-        <router-view :key="$route.fullPath" />
-      </v-container>
-    </v-main>
-
+        <v-main>
+          <v-container class="mx-0" width="100%" fluid>
+            <router-view :key="$route.fullPath" />
+          </v-container>
+        </v-main>
     </ehc-login>
   </v-app>
 </template>
@@ -19,8 +18,9 @@ import ehcLogin from './components/ehc-login.vue';
 import EhcAppToolbar from './components/ehc-app-toolbar.vue';
 
 
+
 export default {
-  components: { ehcAppToolbar, ehcLogin, EhcAppToolbar },
+  components: { ehcAppToolbar, ehcLogin, EhcAppToolbar},
   mixins: [],
   name: 'App',
 
@@ -32,6 +32,7 @@ export default {
   methods: {
   },
   computed: {
+
   },
   created() {
     this.$store.dispatch("monitorAuth")

@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import axios from 'axios'
 import firebase from 'firebase'
 import Auth from './auth'
-// import ActionsImages from "./actions-images"
+import Tenant from './tenant'
+import Properties from './properties'
+
 
 
 Vue.use(Vuex)
@@ -21,5 +22,5 @@ export default new Vuex.Store({
   actions: {
 
   },
-  modules: {Auth},
+  modules: {Auth, Tenant, Properties},
 })

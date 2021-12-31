@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import PropertiesGallery from '../views/PropertiesGallery.vue'
+import Properties from '../views/Properties.vue'
 import GuestData from '../views/GuestData.vue'
 import MyAccount from '../views/MyAccount.vue'
 
@@ -12,8 +12,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'PropertiesGallery',
-    component: PropertiesGallery,
+    name: 'Properties',
+    component: Properties,
     meta: {
       requiresAuth: false
     },

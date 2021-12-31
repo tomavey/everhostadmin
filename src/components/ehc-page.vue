@@ -5,7 +5,7 @@
     <div >
         <v-scroll-y-reverse-transition  hide-on-leave>    
             <v-container 
-                class="pa-0" 
+                class="pa-0 " 
                 v-if="triggerTransition" fluid>
                 <slot></slot>
             </v-container>

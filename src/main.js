@@ -7,8 +7,15 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import wysiwyg from 'vue-wysiwyg'
 import ehcPage from '@/components/ehc-page.vue'
+import ehcForm from '@/components/ehc-form.vue'
+import ehcDialog from '@/components/ehc-dialog.vue'
+
+
 
 Vue.component('ehc-page', ehcPage)
+Vue.component('ehc-form', ehcForm)
+Vue.component('ehc-dialog', ehcDialog)
+
 
 
 Vue.config.productionTip = false

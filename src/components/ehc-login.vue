@@ -1,55 +1,78 @@
 <template>
     <div>
         <v-fade-transition leave-absolute>
-        <v-container fluid v-model="loginDialog" class="ma-0 pa-0" v-if="loginDialog">
+        <v-container fluid  class="ma-0 pa-0" v-if="!showApp">
             <v-row align="center">
-                <v-col cols=4 >
-                    <v-img class="bgFixed"  height="100vh" src="https://picsum.photos/1000" transition="scroll-x-transition" ></v-img>
+                <v-col cols=4 class="pb-0">
+                    <v-slide-x-reverse-transition>
+                        <v-img 
+                            v-if="!showApp"
+                            class="bgFixed pa-0 ma-0"  
+                            height="100vh" 
+                            :src="require('@/assets/img/loginPagePics/' + pic.fileName)" 
+                            :position="pic.position" 
+                        ></v-img>
+                    </v-slide-x-reverse-transition>
                 </v-col>
                 <v-col cols=7>
-                    <v-card flat max-width="400px" class="mx-auto" >
-                        <v-card-title><h1>Welcome Back</h1></v-card-title>
-                        <v-card-subtitle>Please enter your credentials to log in</v-card-subtitle>
-                        <v-card-text class="pb-0">
-                            <v-text-field 
-                                v-model="credentials.email"
-                                
-                                outlined
-                                label="e-mail" 
-                                ></v-text-field>
-                            <v-text-field 
-                                
-                                outlined
-                                v-model="credentials.password"
-                                label="Password" 
-                                type="password"
-                                class="ma-0"
-                                ></v-text-field>  
-                        </v-card-text>
-                        <v-card-actions class="pt-0">
-                            <v-btn 
-                                plain 
-                                color="primary" 
-                                class="mr-5" 
-                                @click="show=!show"
-                                large ><strong>Forgot password</strong></v-btn>
-                            <v-spacer></v-spacer>
-                            <v-btn 
-                                color="primary" 
-                                dark 
-                                class="ma-0 pa-0" 
-                                @click="login(credentials)" 
-                                large>
-                                <strong>Login</strong></v-btn>
-                        </v-card-actions>
-                    </v-card>
+                    <v-fade-transition :leave-absolute="true">
+                        <v-card max-width="400px" flat class="mx-auto d-flex justify-center mb-6" >
+                            <v-progress-circular
+                                v-if="loading"
+                                class="mx-auto"
+                                indeterminate
+                                color="primary"
+                                :size="100"
+                                :width="7"
+                                ></v-progress-circular>
+                        </v-card>
+                    </v-fade-transition>
+                    <v-slide-y-transition :leave-absolute="true">
+                        <ehc-new-tenant-prompt v-if="newTenantPrompt" flat max-width="400px" class="mx-auto" ></ehc-new-tenant-prompt>
+                    </v-slide-y-transition>
+
+                    <v-slide-y-transition :leave-absolute="true">
+                        <v-card flat max-width="400px" class="mx-auto" v-if="loginDialog">
+                            <v-card-title><h1>Welcome Back</h1></v-card-title>
+                            <v-card-subtitle>Please enter your credentials to log in</v-card-subtitle>
+                            <v-card-text class="pb-0">
+                                <v-text-field 
+                                    v-model="credentials.email"
+                                    outlined
+                                    label="e-mail" 
+                                    ></v-text-field>
+                                <v-text-field 
+                                    outlined
+                                    v-model="credentials.password"
+                                    label="Password" 
+                                    type="password"
+                                    class="ma-0"
+                                    ></v-text-field>  
+                            </v-card-text>
+                            <v-card-actions class="pt-0">
+                                <v-btn 
+                                    plain 
+                                    color="primary" 
+                                    class="mr-5" 
+                                    large ><strong>Forgot password</strong></v-btn>
+                                <v-spacer></v-spacer>
+                                <v-btn 
+                                    color="primary" 
+                                    dark 
+                                    class="ma-0 pa-0" 
+                                    @click="login(credentials)" 
+                                    large>
+                                    <strong>Login</strong></v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-slide-y-transition>
                 </v-col>
             </v-row>
         </v-container>
         </v-fade-transition>
 
 
-        <template v-if="!loginDialog">
+        <template v-if="showApp">
             <slot></slot>
         </template>
     </div>
@@ -57,36 +80,78 @@
 </template>
 
 <script>
+import EhcNewTenantPrompt from '@/components/ehc-new-tenant-prompt.vue';
 import auth from "@/mixins/auth.vue"
 export default {
   props: {
       value: Boolean
   },
+  components: {EhcNewTenantPrompt},
   mixins: [auth],
   data () {
     return {
-        show: true,
         alwaysFalse: false,
         credentials: {
             email: null,
             password: null
         },
+        picOptions: [
+            {fileName: "shutterstock_62211796.jpg", position: "bottom -5rem left -30rem"},
+            {fileName: "shutterstock_557019241.jpg", position: "top 0px left -48rem"},
+            {fileName: "shutterstock_1141204517.jpg", position: "bottom 0px left -7rem"},
+        ]
     }
   },
   watch: {
-
+    loggedIn(val) {
+        if (val) {
+            this.$store.dispatch('getTenant')
+        }
+    }
   },
   computed: {
-        loginDialog: function() {
-            if (this.user==null) {
-                return true
-            } else {
-                return false
-            }
-        },
+    loading() {
+        let status = this.tenantStatus
+        if (this.loggedIn == true && status.loading == true) {return false}
+    },
+    newTenantPrompt() {
+        let status = this.tenantStatus
+        if (status.checked == true && status.found == false && status.loading == false) {return true}
+        return false
+    },
+    tenantStatus() {
+        return this.$store.getters.tenantStatus
+    },
+    checkedForTenant() {
+        return this.$store.getters.checkedForTenant
+    },
+    pic() {
+        let max = this.picOptions.length;
+        let index = Math.floor(Math.random() * max)
+        return this.picOptions[index]
+    },
+    showApp() {
+        let status = this.tenantStatus
+        if (this.loggedIn == true && status.found == true ) {
+            return true
+        } else {
+            return false
+        }
+    },
+    loginDialog: function() {
+        return !this.loggedIn
+    },
   },
   methods: {
-
+    login: function(credentials) {
+        console.log("login", credentials)
+        this.$store.dispatch('signInWithEmailAndPassword', credentials).then(res=>{
+            console.log("logged in", res)
+        })
+    },
+    logout: function() {
+        this.$store.dispatch('logout')
+    },
   }
 }
 </script>
