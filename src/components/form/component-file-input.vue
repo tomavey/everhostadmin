@@ -1,7 +1,7 @@
 <template>
   <v-file-input
     v-model="files"
-    color="deep-purple accent-4"
+    :color="color" 
     counter
     :label="props.label"   
     :multiple="props.multiple" 
@@ -13,7 +13,7 @@
     <template v-slot:selection="{ index, text }">
       <v-chip
         v-if="index < 2"
-        color="deep-purple accent-4"
+        :color="color" 
         dark
         label
         small
@@ -35,7 +35,7 @@
 
   export default {
     mixins: [],
-    props: ['props', 'value'],
+    props: ['props', 'value', 'color'],
     data: () => ({
         files: []
     }),

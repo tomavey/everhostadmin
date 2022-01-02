@@ -1,5 +1,5 @@
 <template>
-    <v-card class="pa-0" max-width="18rem">
+    <v-card class="pa-0 black2--text" max-width="18rem">
         <v-img :src="property.avatarImg" height="13rem"></v-img>
         {{property.address}} {{property.city}}, {{property.state}}
         <v-card-title class="text-h6">{{property.name}}</v-card-title>

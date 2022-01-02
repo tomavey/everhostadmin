@@ -6,6 +6,8 @@
         <v-main height="100%">
             <router-view :key="$route.fullPath" />
         </v-main>
+        <ehc-feedback></ehc-feedback>
+
     </ehc-login>
   </v-app>
 </template>
@@ -14,11 +16,12 @@
 import ehcAppToolbar from './components/ehc-app-toolbar.vue';
 import ehcLogin from './components/ehc-login.vue';
 import EhcAppToolbar from './components/ehc-app-toolbar.vue';
+import EhcFeedback from './components/ehc-feedback.vue';
 
 
 
 export default {
-  components: { ehcAppToolbar, ehcLogin, EhcAppToolbar},
+  components: { ehcAppToolbar, ehcLogin, EhcAppToolbar, EhcFeedback },
   mixins: [],
   name: 'App',
 

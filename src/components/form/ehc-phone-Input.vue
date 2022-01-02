@@ -1,5 +1,6 @@
 <!-- 
     TODO: It currently only masks and validates if required, make it validate that the number is the proper length. 
+    // uses vue-the-mask https://vuejs-tips.github.io/vue-the-mask/ for masking
  -->
 
 <template>
@@ -8,6 +9,7 @@
                     type="tel"
                     masked="false"
                     outlined 
+                    :color="color" 
                     v-bind="props" 
                     v-model="phoneNumber" 
                     @blur="$emit('blur', dePhoneMask(phoneNumber))"
@@ -19,7 +21,7 @@
 
   export default {
     mixins: [],
-    props: ['props', 'value'],
+    props: ['props', 'value', 'color'],
     data: () => ({
         phoneNumber: ""
     }),

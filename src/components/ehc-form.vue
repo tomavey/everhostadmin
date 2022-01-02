@@ -45,8 +45,10 @@
             <template v-for="(field, fieldIndex) in meta">
                 <v-row :key="fieldIndex">
                     <v-text-field   v-if="field.type == 'text'" 
+                                    :color="color"
                                     :rules="inputRules(field)"
                                     outlined 
+                                    :dense = dense
                                     v-bind="field" 
                                     v-model="data[field.key]" 
                                     @blur="$emit('blur', {key: field.key, value: data[field.key]})"
@@ -54,7 +56,9 @@
                                     </v-text-field>
                     <v-text-field   v-else-if="field.type == 'email'" 
                                     :rules="emailRules(field)"
+                                    :color="color"
                                     outlined 
+                                    :dense = dense
                                     v-bind="field" 
                                     v-model="data[field.key]" 
                                     @blur="$emit('blur', {key: field.key, value: data[field.key]})"
@@ -62,34 +66,42 @@
                                     </v-text-field>                                    
                     <ehc-phone-input   
                                     v-else-if="field.type == 'phoneNumber'"  
-                                    :props="field" 
+                                    :props="field"
+                                    :color="color" 
+                                    :dense = dense
                                     v-model="data[field.key]" 
                                     @demaskedOut="data[field.key] = $event"
                                     @blur="$emit('blur', {key: field.key, value: data[field.key]})"
                                     @change="$emit('change', {key: field.key, value: data[field.key]})">
                                     </ehc-phone-input>
                     <v-textarea   v-else-if="field.type == 'textArea'" 
-                                    outlined 
+                                    outlined
+                                    :color="color" 
                                     :rules="inputRules(field)"
                                     v-bind="field" 
                                     v-model="data[field.key]" 
                                     @blur="$emit('blur', {key: field.key, value: data[field.key]})"
                                     @change="$emit('change', {key: field.key, value: data[field.key]})">
                                     </v-textarea>
-                    <component-file-input   v-else-if="field.type == 'fileInput'" 
+                    <component-file-input   
+                                            :color="color" 
+                                            v-else-if="field.type == 'fileInput'" 
                                             v-model="data[field.key]" 
                                             :props="field"></component-file-input>
                     <v-select
                         v-else-if="field.type === 'select'"
                         v-model="data[field.key]"
+                        :color="color"
                         :items="field.options"
                         :label="field.label"
                         outlined
+                        :dense = dense
                         :rules="inputRules(field)"
                         @change="$emit('change', {key: field.key, value: data[field.key]})">
                     ></v-select>                                            
                     <v-switch
-                        dense
+                        :dense = dense
+                        :color="color"
                         v-bind="field"
                         v-else-if="field.type === 'switch'"
                         v-model="data[field.key]"
@@ -98,7 +110,8 @@
                         @change="$emit('change', {key: field.key, value: data[field.key]})">
                     ></v-switch>                    
                     <v-btn
-                        color = 'primary' 
+                        color = 'button'
+                        dark 
                         block
                         v-else-if="field.type === 'submit'"
                         @click="$emit('submit')"
@@ -106,8 +119,9 @@
                         {{field.label}}
                     </v-btn> 
                     <v-btn
-                        color = 'primary' 
+                        color = 'button' 
                         block
+                        dark
                         v-else-if="field.type === 'button'"
                         v-bind="field"
                         @click="$emit(field.emitOnClick)"
@@ -135,7 +149,9 @@
         props: {
             meta: Array,
             value: Object,
-            shakeInvalid: {type: Boolean, default: false}
+            shakeInvalid: {type: Boolean, default: false},
+            dense: {type: Boolean, default: false},
+            color: {type: String, default: "black2"},
         },
         components: {
             ComponentFileInput,

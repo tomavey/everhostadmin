@@ -11,18 +11,27 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    appSite: "http://localhost:5002/",
-    loading: false
+    appSite: "http://localhost:5000/",
+    loading: false,
+    feedback: {
+      show: false,
+    }
   },
   getters: {
     appSite: state=> state.appSite,
     loading: state=> state.loading,
+    feedback: state=> state.feedback,
   },
   mutations: {
     setLoading (state,payload) {
       console.log("setLoading", payload)
       state.loading = payload
-  },
+    },
+    setFeedback (state,payload) {
+      for (var key in payload) { //change only the settings that were input everything else keep the same
+        state.feedback[key] = payload[key]
+      }
+    },
   },
   actions: {
 

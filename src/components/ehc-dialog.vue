@@ -1,14 +1,14 @@
 <template>
       <v-dialog v-model="show" v-bind="$attrs">
         <v-card>
-            <v-toolbar dense color="primary" flat dark>
-                <v-toolbar-title >
+            <v-toolbar dense color="primary" flat >
+                <v-toolbar-title class="black2--text">
                     <strong>
                     {{title}}
                     </strong>
                 </v-toolbar-title>
             </v-toolbar>
-            <v-card-text class="pt-1 pb-1">
+            <v-card-text class="pt-1 pb-1 black2--text">
                 <slot></slot>
             </v-card-text>
             <v-card-actions>

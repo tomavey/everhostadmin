@@ -9,13 +9,20 @@ import wysiwyg from 'vue-wysiwyg'
 import ehcPage from '@/components/ehc-page.vue'
 import ehcForm from '@/components/ehc-form.vue'
 import ehcDialog from '@/components/ehc-dialog.vue'
+import ehcDrawer from '@/components/ehc-drawer.vue'
+import VueTheMask from 'vue-the-mask'
+
+
 
 
 
 Vue.component('ehc-page', ehcPage)
 Vue.component('ehc-form', ehcForm)
 Vue.component('ehc-dialog', ehcDialog)
+Vue.component('ehc-drawer', ehcDrawer)
 
+
+Vue.use(VueTheMask)
 
 
 Vue.config.productionTip = false

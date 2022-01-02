@@ -16,7 +16,7 @@
             </v-btn>
             <v-btn
                 rounded
-                color="primary"
+                color="button"
                 dark
                 large
                 @click="addProperty()" 
@@ -46,7 +46,7 @@
             <h3>you have reached the maximum number of properties available</h3>
             <template v-slot:actions>
                 <v-spacer></v-spacer>
-                <v-btn plain color="primary" @click="maxPropsDialog = false">
+                <v-btn plain color="button" @click="maxPropsDialog = false">
                     <strong>OK</strong>
                 </v-btn>
             </template>

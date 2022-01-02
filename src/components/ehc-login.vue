@@ -52,12 +52,12 @@
                             <v-card-actions class="pt-0">
                                 <v-btn 
                                     plain 
-                                    color="primary" 
+                                    color="button" 
                                     class="mr-5" 
                                     large ><strong>Forgot password</strong></v-btn>
                                 <v-spacer></v-spacer>
                                 <v-btn 
-                                    color="primary" 
+                                    color="button" 
                                     dark 
                                     class="ma-0 pa-0" 
                                     @click="login(credentials)" 

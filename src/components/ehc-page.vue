@@ -5,7 +5,7 @@
     <v-container fill-height fluid class="ma-0 pa-0">
         <v-scroll-y-reverse-transition  hide-on-leave>    
             <v-container 
-                class="pa-0 " 
+                class="pt-0 pb-0 px-3" 
                 v-if="triggerTransition" 
                 fluid 
                 fill-height
