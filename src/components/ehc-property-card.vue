@@ -32,7 +32,7 @@ import uniMixin from '@/mixins/index.vue'
 export default {
     mixins: [uniMixin],
     components: {},
-    name: 'property card',
+    name: 'ehc-property-card',
     props: ['property'],
     data: () => ({
     }),

@@ -23,9 +23,10 @@ export default {
     makeNewProperty(context){
         // console.log("oncall")
         let uid = context.getters.user.uid
+        let orgID = context.getters.orgID
         // console.log('makeNewProperty', uid)
         const addProperty = firebase.functions().httpsCallable('makeNewProperty')
-        addProperty(uid)
+        addProperty(uid, orgID)
         .then( (res) => {
             context.dispatch('getProperties')
             console.log("makeNewProperty ",res)
