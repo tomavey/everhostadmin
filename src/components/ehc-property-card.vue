@@ -6,7 +6,8 @@
         <v-spacer/>
         <v-card-actions class="d-flex justify-center">
         <v-btn text class="text-caption">Created: {{formatDate(property.createdAt,"dateOnly")}}</v-btn>
-        <v-btn class="mx-0" small icon @click="goToProperty(property.propertyId)"><v-icon small color="green darken-2">mdi-pencil</v-icon></v-btn>
+<!-- edit -->
+        <v-btn class="mx-0" small icon @click="goToProperty()"><v-icon small color="green darken-2">mdi-pencil</v-icon></v-btn>
         <v-btn class="mx-0" v-if="!property.publishedAt" small icon @click="publishProperty({propertyId: property.propertyId, publishedAt: true})">
             <v-icon small color="grey darken-2">mdi-publish</v-icon>
         </v-btn>
@@ -36,11 +37,13 @@ export default {
     data: () => ({
     }),
     computed: {
-        prop() {return this.property}
+        prop() {return this.property},
+        appSite() {return this.$store.getters.getAppSite}
     },
     methods: {
         goToProperty() {
-            console.log("goToProperty TODO")
+            window.open(this.appSite + this.prop.propertyId,
+                    "", "width=375, height=812");
         },
         copyProperty() {
             console.log("copyProperty TODO")

@@ -28,7 +28,7 @@
                         </v-card>
                     </v-fade-transition>
                     <v-slide-y-transition :leave-absolute="true">
-                        <ehc-new-tenant-prompt v-if="newTenantPrompt" flat max-width="400px" class="mx-auto" ></ehc-new-tenant-prompt>
+                        <ehc-new-org-prompt v-if="newOrgPrompt" flat max-width="400px" class="mx-auto" ></ehc-new-org-prompt>
                     </v-slide-y-transition>
 
                     <v-slide-y-transition :leave-absolute="true">
@@ -80,13 +80,13 @@
 </template>
 
 <script>
-import EhcNewTenantPrompt from '@/components/ehc-new-tenant-prompt.vue';
+import EhcNewOrgPrompt from '@/components/ehc-new-org-prompt.vue';
 import auth from "@/mixins/auth.vue"
 export default {
   props: {
       value: Boolean
   },
-  components: {EhcNewTenantPrompt},
+  components: {EhcNewOrgPrompt},
   mixins: [auth],
   data () {
     return {
@@ -105,25 +105,22 @@ export default {
   watch: {
     loggedIn(val) {
         if (val) {
-            this.$store.dispatch('getTenant')
+            this.$store.dispatch('getOrg')
         }
     }
   },
   computed: {
     loading() {
-        let status = this.tenantStatus
+        let status = this.orgStatus
         if (this.loggedIn == true && status.loading == true) {return false}
     },
-    newTenantPrompt() {
-        let status = this.tenantStatus
+    newOrgPrompt() {
+        let status = this.orgStatus
         if (status.checked == true && status.found == false && status.loading == false) {return true}
         return false
     },
-    tenantStatus() {
-        return this.$store.getters.tenantStatus
-    },
-    checkedForTenant() {
-        return this.$store.getters.checkedForTenant
+    orgStatus() {
+        return this.$store.getters.orgStatus
     },
     pic() {
         let max = this.picOptions.length;
@@ -131,7 +128,7 @@ export default {
         return this.picOptions[index]
     },
     showApp() {
-        let status = this.tenantStatus
+        let status = this.orgStatus
         if (this.loggedIn == true && status.found == true ) {
             return true
         } else {

@@ -14,7 +14,7 @@
     components: { },
     props: [],
     mixins: [],
-    name: 'new tenant prompt',
+    name: 'new-org-prompt',
 
     data: () => ({
         form: [
@@ -31,8 +31,8 @@
         submit() {
             console.log("trying to submit")
             if (this.valid) {
-                console.log("make a tenant with this info", this.formData)
-                this.$store.dispatch("makeTenant", this.formData)
+                console.log("make a organization with this info", this.formData)
+                this.$store.dispatch("makeOrg", this.formData)
             } else {
                 console.log("input invalid")
                 this.shake = true
