@@ -107,6 +107,9 @@ export default {
         if (val) {
             this.$store.dispatch('getOrg')
         }
+    },
+    showApp(val) {
+        this.$emit("input", val)
     }
   },
   computed: {

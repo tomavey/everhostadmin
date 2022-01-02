@@ -21,6 +21,7 @@
                 large
                 @click="addProperty()" 
                 class='mx-1 elevation-0'
+                :loading="addLoading"
             >
                 <v-icon class="mr-1 ml-0">mdi-plus</v-icon>
                 add property
@@ -41,6 +42,15 @@
                 </v-col>
             </v-row>
         </v-container>
+        <ehc-dialog max-width="300" v-model="maxPropsDialog" title="Max Properties Reached">
+            <h3>you have reached the maximum number of properties available</h3>
+            <template v-slot:actions>
+                <v-spacer></v-spacer>
+                <v-btn plain color="primary" @click="maxPropsDialog = false">
+                    <strong>OK</strong>
+                </v-btn>
+            </template>
+        </ehc-dialog>
     </ehc-page>
 </template>
 
@@ -55,17 +65,38 @@ export default {
     name: 'properties',
 
     data: () => ({
-
+        maxProperties: 3,
+        maxPropsDialog: false,
+        addLoading: false
     }),
+    watch: {
+        loading(val) {
+            this.$store.commit('setLoading', val)
+        }
+    },
     computed: {
+        loading() {
+            return this.$store.getters.propertiesStatus.loading
+        },
         properties() {
             return this.$store.getters.properties
         }
     },
     methods: {
         addProperty() {
-            console.log("addProperty button pushed")
-            this.$store.dispatch('makeNewProperty')
+            if (this.properties.length < 3) {
+                this.addLoading=true
+                console.log("addProperty button pushed")
+                this.$store.commit("setLoading", true)
+                this.$store.dispatch('makeNewProperty').then(res => {
+                    this.$store.dispatch("getProperties").then(res => {
+                        this.$store.commit("setLoading", false)
+                        this.addLoading=false
+                    })
+                })
+            } else {
+                this.maxPropsDialog = true
+            }
         },
         searchSettings() {
             console.log("TODO")

@@ -3,10 +3,8 @@
     <ehc-login>
         <ehc-app-toolbar></ehc-app-toolbar>
 
-        <v-main>
-          <v-container class="mx-0" width="100%" fluid>
+        <v-main height="100%">
             <router-view :key="$route.fullPath" />
-          </v-container>
         </v-main>
     </ehc-login>
   </v-app>

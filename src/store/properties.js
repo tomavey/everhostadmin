@@ -4,41 +4,57 @@ import firebase from 'firebase'
 export default {
   state: {
     properties: [],
-    propertiesLoading: false,
+    propertiesStatus: {
+      loading: false,
+    }
   },
   getters: {    
     properties: state=> state.properties,
-    propertiesLoading: state=> state.propertiesLoading,
+    propertiesStatus: state=> state.propertiesStatus,
 
   },
   mutations: {
     setProperties (state,payload) {
         state.properties = payload
     },
-    setPropertiesLoading (state,payload) {
-        state.propertiesLoading = payload
+    setPropertiesStatus (state,payload) {
+      for (var key in payload) { //change only the settings that were input everything else keep the same
+        state.propertiesStatus[key] = payload[key]
+      }
     },
   },
   actions: {
     makeNewProperty(context){
+      return new Promise((resolve, reject) => {
+        context.commit('setPropertiesStatus', {loading: true})
         // console.log("oncall")
         let uid = context.getters.user.uid
-        let orgID = context.getters.orgID
+        // let orgID = context.getters.orgID
         // console.log('makeNewProperty', uid)
         const addProperty = firebase.functions().httpsCallable('makeNewProperty')
-        addProperty(uid, orgID)
-        .then( (res) => {
-            context.dispatch('getProperties')
+        addProperty(uid)
+        .then(res => {
+            context.commit('setPropertiesStatus', {loading: false})
             console.log("makeNewProperty ",res)
+            resolve(res)
+        }).catch(err => {
+            context.commit('setPropertiesStatus', {loading: false})
+            reject(err)
         })
+      })
     },
     getProperties(context){
-        context.commit("setPropertiesLoading", true)
+      return new Promise((resolve, reject) => {
+
+        context.commit("setPropertiesStatus", {loading: true})  
         let tenantID = context.getters.tenantID
         const userId = context.getters.user.uid
         // console.log(userId)
         const propertiesRef = firebase.firestore().collection('properties')
-        propertiesRef.where("uid", "==", userId).get()
+        propertiesRef
+        .where("uid", "==", userId)
+        .where("deletedAt", "==", null)
+        .get()
         .then( (docs) => {
           // console.log(docs.size)
           let properties = []
@@ -48,8 +64,31 @@ export default {
           })
           console.log("got the properties ", properties)
           context.commit("setProperties",properties)
-          context.commit("setPropertiesLoading", false)  
+          context.commit("setPropertiesStatus", {loading: false})  
+          resolve(docs)
+        }).catch(err => {
+          reject(err)
         })
+      })
     },
-  },
+    markPropertyDeletedAt(context,propertyId){
+      return new Promise((resolve, reject) => {
+        context.commit("setPropertiesStatus", {loading: true})  
+        console.log("markPropertyDeletedAt", propertyId)
+        let obj = {}
+        obj.deletedAt = Date.now()
+        // console.log('markPropertyDeletedAt',obj)
+        const propertyRef = firebase.firestore().collection('properties').doc(propertyId)
+        propertyRef.set(obj, { merge:true })
+        .then(res => {
+          console.log("marked as deleted")
+          context.commit("setPropertiesStatus", {loading: false})  
+          resolve(res)
+        }).catch(err => {
+          console.log(err)
+          reject(err)
+        })  
+      })
+    }
+  }
 }

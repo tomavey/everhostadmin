@@ -8,9 +8,12 @@
                     </strong>
                 </v-toolbar-title>
             </v-toolbar>
-            <v-card-text>
+            <v-card-text class="pt-1 pb-1">
                 <slot></slot>
             </v-card-text>
+            <v-card-actions>
+                <slot name="actions"></slot>
+            </v-card-actions>
         </v-card>
       </v-dialog>
 </template>

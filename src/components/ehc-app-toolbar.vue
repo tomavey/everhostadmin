@@ -39,6 +39,15 @@
             </template>
             <span>Logout</span>
         </v-tooltip>
+        <v-progress-linear
+            :active="loading"
+            :indeterminate="loading"
+            absolute
+            bottom
+            color="green"
+            height="7"
+            striped
+      ></v-progress-linear>
     </v-toolbar>
 </template>
 
@@ -64,6 +73,11 @@ export default {
     methods: {
         openSupport() {
             console.log("TODO")
+        }
+    },
+    computed: {
+        loading() {
+            return this.$store.getters.loading
         }
     }
 

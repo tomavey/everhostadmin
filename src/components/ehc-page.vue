@@ -2,15 +2,19 @@
 
 <template>
 <!-- this should wrap every page, it handles the transition in and spacing of the page -->
-    <div >
+    <v-container fill-height fluid class="ma-0 pa-0">
         <v-scroll-y-reverse-transition  hide-on-leave>    
             <v-container 
                 class="pa-0 " 
-                v-if="triggerTransition" fluid>
+                v-if="triggerTransition" 
+                fluid 
+                fill-height
+                >
+                
                 <slot></slot>
             </v-container>
         </v-scroll-y-reverse-transition>
-    </div>
+    </v-container>
 </template>
 
 <script>

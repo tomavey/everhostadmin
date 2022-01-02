@@ -9,7 +9,7 @@ export default new Vuetify({
         options: { customProperties: true },
         themes: {
             light: {
-                primary: '#d44c6b',
+                primary: '#1D3557',
                 secondary: "#5887fa",
                 black2: '#1D3557',
                 red: '#FF1F1F',

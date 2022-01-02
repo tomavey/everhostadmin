@@ -11,14 +11,18 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    appSite: "http://localhost:5002/"
+    appSite: "http://localhost:5002/",
+    loading: false
   },
   getters: {
-    getAppSite: state=> state.appSite,
-
+    appSite: state=> state.appSite,
+    loading: state=> state.loading,
   },
   mutations: {
-
+    setLoading (state,payload) {
+      console.log("setLoading", payload)
+      state.loading = payload
+  },
   },
   actions: {
 
