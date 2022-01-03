@@ -189,6 +189,7 @@ export default new Vuex.Store({
         console.log("res ", res)
       })
     },
+    //probably can remove this
     createUniquePropertyId ( context ) {
       let randomId = Math.floor(1000000 + Math.random() * 9000000)
       const propertiesRef = firebase.firestore().collection('properties')

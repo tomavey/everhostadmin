@@ -131,7 +131,7 @@ const routes = [
   {
     path: '*',
     name: 'wild',
-    component: Welcome,
+    component: PropertiesGallery,
     meta: {
       requiresAuth: false
     },
@@ -145,17 +145,27 @@ const router = new VueRouter({
   routes
 })
 
+// router.beforeEach( (to, from, next) => {
+//   const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
+//   console.log("requiresAuth",requiresAuth)
+//   const currentUser = store.getters.user
+//   console.log('currentUser',currentUser)
+
+//   if (requiresAuth && !currentUser) next({ path: '/signin'})
+//   else if (!requiresAuth && currentUser) next()
+//   else if (!requiresAuth && !currentUser) next()
+//   else next()
+// })
+
 router.beforeEach( (to, from, next) => {
-  const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
-  console.log("requiresAuth",requiresAuth)
   const currentUser = store.getters.user
   console.log('currentUser',currentUser)
-
-  if (requiresAuth && !currentUser) next({ path: '/signin'})
-  else if (!requiresAuth && currentUser) next()
-  else if (!requiresAuth && !currentUser) next()
+  console.log('currentUser', !currentUser )
+  console.log(to.name)
+  if (!currentUser) next({ path: '/signin'})
   else next()
 })
+
 
 //Tried all these authguards - some did not register authentication soon enough
 // router.beforeEach( (to, from, next) => {

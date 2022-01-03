@@ -104,10 +104,12 @@ export default {
         email: this.email,
         password: this.password
       }
+      console.log(payload)
       this.$store.dispatch("signInWithEmailAndPassword", payload)
       .then(() => {
         this.$store.commit('clearError')
-        this.goToRoute("Admin")
+        console.log("?")
+        this.goToRoute("PropertiesGallery")
         }
       )
       .catch( error => {

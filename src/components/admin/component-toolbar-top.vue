@@ -20,7 +20,7 @@
     >
     <v-app-bar-nav-icon @click="toggleDrawer" v-if="userIsAdmin"></v-app-bar-nav-icon>
 
-    <v-toolbar-title @click="goToRoute('Welcome')">Everhost Admin Page</v-toolbar-title>
+    <v-toolbar-title @click="goToRoute('PropertiesGallery')">Everhost Admin Page</v-toolbar-title>
 
 
     <v-alert
