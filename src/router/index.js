@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Welcome from '../views/admin/Welcome.vue'
-import PropertiesGallery from '../views/admin/PropertiesGallery.vue'
+import Properties from '../views/Properties.vue'
+import GuestData from '../views/GuestData.vue'
+import MyAccount from '../views/MyAccount.vue'
+
+
 import store from '../store'
 
 Vue.use(VueRouter)
@@ -9,20 +12,13 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'PropertiesGallery',
-    component: PropertiesGallery,
+    name: 'Properties',
+    component: Properties,
     meta: {
       requiresAuth: false
     },
   },  
-  {
-    path: '/signin',
-    name: 'Signin',
-    component: () => import(/* webpackChunkName: "signin" */ '../views/auth/Signin.vue'),
-    meta: {
-      requiresAuth: false
-    },
-  },
+
   // {
   //   path: "/welcome",
   //   name: "Welcome",
@@ -32,111 +28,13 @@ const routes = [
   //   },
   // },
   {
-    path: "/newproperty",
-    name: "NewProperty",
-    component: () => import(/* webpackChunkName: "newproperty" */ '../views/admin/NewProperty.vue'),
-    meta: {
-      requiresAuth: true
-    },
+    path: "/guestdata",
+    component: GuestData,
   },
   {
-    path: "/propertieslist",
-    name: "PropertiesList",
-    component: () => import(/* webpackChunkName: "propertieslist" */ '../views/admin/PropertiesList.vue'),
-    meta: {
-      requiresAuth: true
-    },
+    path: "/myaccount",
+    component: MyAccount,
   },
-  {
-    path: "/propertiesgallery/",
-    name: "PropertiesGallery",
-    component: PropertiesGallery,
-    // component: () => import(/* webpackChunkName: "propertiesgallery" */ '../views/admin/PropertiesGallery.vue'),
-    meta: {
-      requiresAuth: true
-    },
-  },
-  {
-    path: "/newpropertyinfodialog/",
-    name: "NewPropertyInfoDialog",
-    component: () => import(/* webpackChunkName: "newpropertyinfodialog" */ '../views/admin/NewPropertyInfoDialog.vue'),
-    meta: {
-      requiresAuth: true
-    },
-  },
-  {
-    path: "/propertyinfodialog/:contentName",
-    name: "PropertyInfoDialog",
-    component: () => import(/* webpackChunkName: "propertyinfodialog" */ '../views/admin/PropertyInfoDialog.vue'),
-    meta: {
-      requiresAuth: true
-    },
-  },
-  {
-    path: "/newpropertycreatedialog",
-    name: "NewPropertyCreateDialog",
-    component: () => import(/* webpackChunkName: "newpropertycreatedialog" */ '../views/admin/NewPropertyCreateDialog.vue'),
-    meta: {
-      requiresAuth: true
-    },
-  },
-  {
-    path: "/setpropertycodedialog",
-    name: "SetPropertyCodeDialog",
-    component: () => import(/* webpackChunkName: "setpropertycodedialog" */ '../views/admin/SetPropertyCodeDialog.vue'),
-    meta: {
-      requiresAuth: true
-    },
-  },
-  {
-    path: "/instructionsdialog/:contentName",
-    name: "InstructionsDialog",
-    component: () => import(/* webpackChunkName: "instructionsdialog" */ '../views/admin/InstructionsDialog.vue'),
-    meta: {
-      requiresAuth: true
-    },
-  },
-  {
-    path: "/images",
-    name: "Images",
-    component: () => import(/* webpackChunkName: "images" */ '../views/admin/Images.vue'),
-    meta: {
-      requiresAuth: true
-    },
-  },
-  {
-    path: "/imagegallery",
-    name: "ImageGallery",
-    component: () => import(/* webpackChunkName: "imagegallery" */ '../views/admin/ImageGallery.vue'),
-    meta: {
-      requiresAuth: true
-    },
-  },
-  {
-    path: "/imagegallerydialog",
-    name: "ImageGalleryDialog",
-    component: () => import(/* webpackChunkName: "imagegallerydialog" */ '../views/admin/ImageGalleryDialog.vue'),
-    meta: {
-      requiresAuth: true
-    },
-  },
-  {
-    path: "/users",
-    name: "Users",
-    component: () => import(/* webpackChunkName: "users" */ '../views/admin/Users.vue'),
-    meta: {
-      requiresAuth: true
-    },
-  },
-  {
-    path: '*',
-    name: 'wild',
-    component: PropertiesGallery,
-    meta: {
-      requiresAuth: false
-    },
-  },  
-
 ]
 
 const router = new VueRouter({

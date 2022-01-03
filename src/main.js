@@ -6,6 +6,24 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import wysiwyg from 'vue-wysiwyg'
+import ehcPage from '@/components/ehc-page.vue'
+import ehcForm from '@/components/ehc-form.vue'
+import ehcDialog from '@/components/ehc-dialog.vue'
+import ehcDrawer from '@/components/ehc-drawer.vue'
+import VueTheMask from 'vue-the-mask'
+
+
+
+
+
+Vue.component('ehc-page', ehcPage)
+Vue.component('ehc-form', ehcForm)
+Vue.component('ehc-dialog', ehcDialog)
+Vue.component('ehc-drawer', ehcDrawer)
+
+
+Vue.use(VueTheMask)
+
 
 Vue.config.productionTip = false
 
@@ -34,18 +52,6 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-
-firebase.getCurrentUser = () => {
-  return new Promise((resolve, reject) => {
-      const unsubscribe = firebase.auth().onAuthStateChanged(user => {
-          unsubscribe();
-          resolve(user);
-      }, reject);
-  })
-};
-
-let isAuthenticated = firebase.auth().currentUser
-
 const app = new Vue({
   router,
   store,
@@ -54,8 +60,6 @@ const app = new Vue({
   render: h => h(App)
 })
 
-firebase.auth().onAuthStateChanged(user => {
-  console.log("onAuthStateChanged: ", user)
-  store.dispatch("fetchUser", user)
-  .then( app.$mount('#app') )
-});
+app.$mount('#app') 
+
+

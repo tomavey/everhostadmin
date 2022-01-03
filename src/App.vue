@@ -1,139 +1,83 @@
 <template>
   <v-app>
+    <ehc-login>
+        <ehc-app-toolbar></ehc-app-toolbar>
 
-    <component-navdrawer-side 
-      :navItems=navItems
-      :error=error 
-    />
+        <v-main height="100%">
+            <router-view :key="$route.fullPath" />
+        </v-main>
+        <ehc-feedback></ehc-feedback>
 
-    <component-toolbar-top 
-      @toggleDrawer="toggleDrawer()" 
-      :error=error 
-      />
-
-    <v-main>
-      <v-container>
-        <router-view :key="$route.fullPath" />
-      </v-container>
-    </v-main>
-
-    <component-footer-menu></component-footer-menu>
-
+    </ehc-login>
   </v-app>
 </template>
 
 <script>
-import ComponentToolbarTop from './components/admin/component-toolbar-top.vue';
-import ComponentNavdrawerSide from './components/admin/component-navdrawer-side.vue';
-import ComponentFooterMenu from './components/admin/component-footer-menu.vue';
-import mixins from "@/mixins"
+import ehcAppToolbar from './components/ehc-app-toolbar.vue';
+import ehcLogin from './components/ehc-login.vue';
+import EhcAppToolbar from './components/ehc-app-toolbar.vue';
+import EhcFeedback from './components/ehc-feedback.vue';
+
+
 
 export default {
-  components: { ComponentToolbarTop, ComponentNavdrawerSide, ComponentFooterMenu, },
-  mixins: [mixins],
+  components: { ehcAppToolbar, ehcLogin, EhcAppToolbar, EhcFeedback },
+  mixins: [],
   name: 'App',
 
   data: () => ({
-    drawer: null,
-    navItems: [
-      {
-        n: 1,
-        label: "New Property",
-        routeName: "NewPropertyCreateDialog",
-        adminOnly: false
-      }, 
-      {
-        n: 2,
-        label: "All Properties",
-        routeName: "PropertiesList",
-        adminOnly: true
-      }, 
-      {
-        n: 2,
-        label: "My Properties",
-        routeName: "PropertiesGallery",
-        adminOnly: false
-      }, 
-      {
-        n: 3,
-        label: "Image Gallery",
-        routeName: "ImageGallery",
-        adminOnly: true
-      }, 
-      {
-        n: 3,
-        label: "Images",
-        routeName: "Images",
-        adminOnly: true
-      }, 
-      {
-        n: 4,
-        label: "Users",
-        routeName: "Users",
-        adminOnly: true
-      }, 
-    ],
+    
   }),
   watch: {
   },
   methods: {
   },
   computed: {
-    error: function(){ return this.$store.getters.error },
-    propertyId: function() { return this.$store.getters.propertyId }
+
   },
   created() {
-    this.$store.dispatch('getInstructions')
-    this.$store.dispatch('subscribeToProperties')
+    this.$store.dispatch("monitorAuth")
+    console.log("app created")
   }  
 };
 </script>
 
 <style>
-@import "~vue-wysiwyg/dist/vueWysiwyg.css";
-.pointer {
-  cursor: pointer;
-}
-
-body,
-.v-application,
-.v-application .text-md-body-1{
-  font-family:"Circular Std"!important;
-}
-
-.v-application .v-card__subtitle, .v-application .v-card__text, .v-application .v-card__title {
-	padding: 20px;
-}
-.v-application .v-card__text{
-  font-size:1rem;
-  line-height:1.5;
-}
-
-.v-sheet.v-card {
-	border-radius: 16px!important;
-}
 
 @font-face {
-    font-family: 'Circular Std Book';
-    src: url('assets/fonts/CircularStd-Book.woff2') format('woff2');
+    font-family: 'Sailec Black';
+    src: url('~@/assets/fonts/Sailec Black.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
-    font-display: swap;
 }
-
 @font-face {
-    font-family: 'Circular Std';
-    src: url('assets/fonts/CircularStd-Bold.woff2') format('woff2');
+    font-family: 'Sailec';
+    src: url('~@/assets/fonts/Sailec Bold.woff2') format('woff2');
     font-weight: bold;
     font-style: normal;
-    font-display: swap;
 }
-
 @font-face {
-    font-family: 'Circular Std';
-    src: url('assets/fonts/CircularStd-Medium.woff2') format('woff2');
-    font-weight: 500;
+    font-family: 'Sailec';
+    src: url('~@/assets/fonts/Sailec Regular.woff2') format('woff2');
+    font-weight: normal;
     font-style: normal;
-    font-display: swap;
+}
+@font-face {
+    font-family: 'Sailec Medium';
+    src: url('~@/assets/fonts/Sailec Medium.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Sailec Light';
+    src: url('~@/assets/fonts/Sailec Light.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Sailec';
+    src: url('~@/assets/fonts/Sailec Thin.woff2') format('woff2');
+    font-weight: normal;
+    font-style: italic;
 }
 </style>
