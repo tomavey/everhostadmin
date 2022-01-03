@@ -11,9 +11,10 @@
         <v-btn class="mx-0" v-if="!property.publishedAt" small icon @click="publishProperty({propertyId: property.propertyId, publishedAt: true})">
             <v-icon small color="grey darken-2">mdi-publish</v-icon>
         </v-btn>
-        <v-btn class="mx-0" v-else small icon @click="publishProperty({propertyId: property.propertyId, publishedAt: false})"><v-icon small color="grey darken-2">mdi-publish-off</v-icon></v-btn>
-        <v-btn class="mx-0" small icon @click="copyProperty(property.propertyId)"><v-icon small color="blue darken-2">mdi-content-copy</v-icon></v-btn>
-        <v-btn class="mx-0" small icon @click="copyLink(property)"><v-icon small color="yellow darken-2">mdi-link</v-icon></v-btn>
+        <v-btn class="mx-0" v-else small :loading="publisLoading" icon @click="publishProperty({propertyId: property.propertyId, publishedAt: false})"><v-icon small color="grey darken-2">mdi-publish-off</v-icon></v-btn>
+<!-- TODO copy -->
+        <!-- <v-btn class="mx-0" small icon @click="copyProperty(property.propertyId)"><v-icon small color="blue darken-2">mdi-content-copy</v-icon></v-btn> -->
+        <v-btn class="mx-0" small icon @click="copyLink()"><v-icon small color="yellow darken-2">mdi-link</v-icon></v-btn>
         <v-btn class="mx-1" small icon @click="deleteConfirm.show = true"><v-icon small color="red darken-2">mdi-trash-can-outline</v-icon></v-btn>
         </v-card-actions>
         <v-card-text>PropertyId: {{property.propertyId}}<br/>
@@ -36,6 +37,13 @@
                 </v-btn>
             </template>
         </ehc-dialog>
+        <ehc-dialog v-model="message.show" :title="message.title" width="300">
+            {{message.message}}
+            <template v-slot:actions>
+                <v-spacer></v-spacer>
+                <v-btn @click="message.show=false" color="button" dark><strong>ok</strong></v-btn>
+            </template>
+        </ehc-dialog>
     </v-card>
 </template>
 
@@ -51,6 +59,11 @@ export default {
     name: 'ehc-property-card',
     props: ['property'],
     data: () => ({
+        message: {
+            show: false,
+
+        },
+        publisLoading: false,
         deleteConfirm: {
             show: false,
             loading: false
@@ -66,15 +79,22 @@ export default {
     },
     methods: {
         goToProperty() {
-            const url = this.appSite + this.prop.propertyId + "/signin"
+            const url = this.appSite + "login/" + this.prop.propertyId
             console.log("opening property URL", url)
             window.open(url,"", "width=390, height=812");
         },
         copyProperty() {
             console.log("copyProperty TODO")
         },
-        copyLink() {
-            console.log("copyLink TODO")
+        copyLink: function(){
+            const property = this.property
+            let link = `${this.$store.getters.appSite}${property.propertyId}`
+            navigator.clipboard.writeText(link)
+            this.message= {
+                show: true,
+                title: "Link Copied",
+                message: "the link to this property has been copied to your clipboard"
+            }
         },
         deleteProperty() {
             console.log("delete property button pushed")
@@ -89,8 +109,18 @@ export default {
             })
             
         },
-        publishProperty() {
-            console.log("publishProperty TODO")
+        publishProperty: async function(publishObj){
+            this.publishLoading =  true
+            this.$store.dispatch("markPropertyPublishedAt", publishObj).then(() => {
+                this.$store.dispatch("getProperties").then(() => {
+                    this.publishLoading =  false
+                    this.message= {
+                        show: true,
+                        title: "Property Published",
+                        message: "your property has been published"
+                    }
+                })
+            })
         }
     },
     watch: {

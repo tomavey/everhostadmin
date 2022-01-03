@@ -78,7 +78,7 @@ export default {
         searching:false,
         menu: [
             {label: "Properties", route: "/", icon: "mdi-home-city"},
-            {label: "My Account", route: "/myaccount", icon:"mdi-account"}, 
+            // {label: "My Account", route: "/myaccount", icon:"mdi-account"}, TODO
         ],
     }),
     methods: {

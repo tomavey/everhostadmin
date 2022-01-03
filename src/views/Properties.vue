@@ -6,14 +6,14 @@
             </v-toolbar-title>
             
             <v-spacer></v-spacer>
-            <v-btn  
+            <!-- TODO <v-btn  
                 fab 
                 small 
                 class="mx-2 elevation-0"  
                 color="Gray1"
                 @click="searchSettings">
                 <v-icon>mdi-tune-vertical-variant</v-icon>
-            </v-btn>
+            </v-btn> -->
             <v-btn
                 rounded
                 color="button"
