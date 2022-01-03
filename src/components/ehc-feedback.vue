@@ -8,7 +8,13 @@
             :dense="true"
             />
         <template v-slot:actions>
-            <v-btn width="100%" >test</v-btn>
+            <v-btn 
+                width="100%" 
+                color="button" 
+                dark 
+                @click="submit()"
+                :loading="loading"
+                ><strong>{{buttonText}}</strong></v-btn>
         </template>
     </ehc-drawer>
 </template>
@@ -23,22 +29,22 @@ export default {
     name: 'ehc-feedback',
     data: () => ({
         show: false,
+        loading: false,
+        buttonText: "Submit",
         isValid: false,
         shakeInvalid: false,
-        formData: {},
+        formData: {
+            upload:[]
+        },
         meta: [
             {type: "text",          label: "name",                      key: "name"},
             {type: "email",         label: "email",                     key: "email"},
-            {type: "subheader",     label: "subheader text"},
-            {type: "fileInput",     label: "upload screenshot(s)",      key: "upload",          multiple:true},
-            {type: "phoneNumber",   label: "Phone Number",              key: "phoneNumber"},
-            {type: "button",        label: "submit",                    key: "submit",          emitOnClick: "submit"},
-            {type: "switch",        label: "switch me",                 key: "isSwitched",      required: true, errorMessage: "you must switch"}, //by default it just says "required" but errorMessage overrides that message
-            {type: "select",        label: "select one",                options: ["first opt", "second opt"], required: true, errorMessage: "you must select something"}            
+            {type: "textArea",      label: "Description of issue",      key: "description"},
+            // {type: "fileInput",     label: "upload screenshot(s)",      key: "upload",          multiple:true},        
         ],
     }),
     mounted() {
-        formData.email = this.$store.getters.user.email
+        this.formData.email = this.$store.getters.user.email
     },
     computed: {
         showFeedback: {
@@ -60,6 +66,20 @@ export default {
             if (val != this.value) {
                 this.$emit('input', val)
             }
+        }
+    },
+    methods: {
+        submit() {
+            const delay = ms => new Promise(res => setTimeout(res, ms));
+            let that = this
+            this.loading=true
+            this.$store.dispatch("submitFeedback", this.formData).then(async() =>{
+                that.loading=false;
+                that.buttonText = "Thank you!";
+                await delay(1000);
+                that.showFeedback= false
+                that.formData= {upload:[]}
+            })
         }
     }
 }

@@ -34,7 +34,16 @@ export default new Vuex.Store({
     },
   },
   actions: {
-
+    submitFeedback(context, feedback){
+      return new Promise((resolve, reject) => {
+        var docRef = firebase.firestore().collection("feedbacks");
+        feedback.uid = context.getters.user.uid
+        feedback.uemail = context.getters.user.email
+        docRef.add(feedback).then((ret) => {
+          resolve(ret)
+        })
+      })
+    }
   },
   modules: {Auth, Org, Properties},
 })

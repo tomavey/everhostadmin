@@ -13,6 +13,9 @@ export default {
       if ( format === "dateOnly") { formatString = 'MM/D/YY'}
       return moment(value).format(formatString)
     },
+    dateFormat: function(value,format){
+      return this.formatDate(value,format)
+    },
   },
   computed: {
 

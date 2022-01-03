@@ -89,6 +89,23 @@ export default {
           reject(err)
         })  
       })
-    }
+    },
+    markPropertyPublishedAt(content,payload){
+      return new Promise((resolve, reject) => {
+        // console.log("payld",payload)
+        let propertyId = payload.propertyId
+        let obj = {}
+        if ( payload.publishedAt ) { obj.publishedAt = Date.now() } else { obj.publishedAt = null }
+        const propertyRef = firebase.firestore().collection('properties').doc(propertyId)
+        propertyRef.set(obj, { merge:true })
+        .then( (res) => {
+          console.log(`${propertyId} marked published ${payload.publishedAt}` )
+          resolve(res)
+        }).catch( (err) => {
+          console.log(err)
+          reject(err)
+        })  
+      })
+    },
   }
 }
