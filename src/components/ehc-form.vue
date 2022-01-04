@@ -31,6 +31,8 @@
                 }
             }
         </script>
+
+        FIXME: currently when chrome autofills the form it overlaps the labels. figure out how to fix that. 
  -->
 
 
@@ -44,7 +46,8 @@
             <slot></slot>
             <template v-for="(field, fieldIndex) in meta">
                 <v-row :key="fieldIndex">
-                    <v-text-field   v-if="field.type == 'text'" 
+                    <v-text-field   ref='input'
+                                    v-if="field.type == 'text'" 
                                     :color="color"
                                     :rules="inputRules(field)"
                                     outlined 
@@ -63,7 +66,17 @@
                                     v-model="data[field.key]" 
                                     @blur="$emit('blur', {key: field.key, value: data[field.key]})"
                                     @change="$emit('change', {key: field.key, value: data[field.key]})">
-                                    </v-text-field>                                    
+                                    </v-text-field>   
+                    <v-text-field   v-else-if="field.type == 'password'" 
+                                    :rules="inputRules(field)"
+                                    :color="color"
+                                    :dense = dense
+                                    outlined 
+                                    v-bind="field" 
+                                    v-model="data[field.key]" 
+                                    @blur="$emit('blur', {key: field.key, value: data[field.key]})"
+                                    @change="$emit('change', {key: field.key, value: data[field.key]})">
+                                    </v-text-field>                                                                           
                     <ehc-phone-input   
                                     v-else-if="field.type == 'phoneNumber'"  
                                     :props="field"
@@ -119,7 +132,7 @@
                         {{field.label}}
                     </v-btn> 
                     <v-btn
-                        color = 'button' 
+                        :color="(field.color) ? field.color : color"
                         block
                         dark
                         v-else-if="field.type === 'button'"
@@ -163,7 +176,10 @@
         }),
         created () {
             this.data = this.value
-        },  
+        },
+        async mounted() {
+ 
+        },          
         watch: {
             shakeInvalid() {
                 this.$refs.ehcForm.validate()

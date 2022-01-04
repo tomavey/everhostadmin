@@ -36,27 +36,17 @@
                             <v-card-title><h1>Welcome Back</h1></v-card-title>
                             <v-card-subtitle>Please enter your credentials to log in</v-card-subtitle>
                             <v-card-text class="pb-0">
-                                <v-text-field 
-                                    v-model="credentials.email"
-                                    outlined
-                                    label="e-mail" 
-                                    ></v-text-field>
-                                <v-text-field 
-                                    outlined
-                                    v-model="credentials.password"
-                                    label="Password" 
-                                    type="password"
-                                    class="ma-0"
-                                    ></v-text-field>  
+                                <ehc-form :meta="loginForm" v-model="credentials"></ehc-form>
                             </v-card-text>
-                            <v-card-actions class="pt-0">
-                                <v-btn 
+                            <v-card-actions class="pt-0 px-4">
+                            <!-- <v-btn 
                                     plain 
                                     color="button" 
                                     class="mr-5" 
-                                    large ><strong>Forgot password</strong></v-btn>
+                                    large ><strong>Forgot password</strong></v-btn> -->
                                 <v-spacer></v-spacer>
                                 <v-btn 
+                                    width="40%"
                                     color="button" 
                                     dark 
                                     class="ma-0 pa-0" 
@@ -95,6 +85,10 @@ export default {
             email: null,
             password: null
         },
+        loginForm: [
+            {type: "email",     label: "Email",     key: 'email',     required: true},
+            {type: "password",  label: "password",  key: 'password',  required: true}
+        ],
         picOptions: [
             {fileName: "shutterstock_62211796.jpg", position: "bottom -5rem left -30rem"},
             {fileName: "shutterstock_557019241.jpg", position: "top 0px left -48rem"},

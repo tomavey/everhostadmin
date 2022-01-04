@@ -76,7 +76,7 @@ export default {
             this.$store.dispatch("submitFeedback", this.formData).then(async() =>{
                 that.loading=false;
                 that.buttonText = "Thank you!";
-                await delay(1000);
+                await delay(500);
                 that.showFeedback= false
                 that.formData= {upload:[]}
             })
