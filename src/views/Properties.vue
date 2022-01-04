@@ -79,9 +79,12 @@ export default {
             return this.$store.getters.propertiesStatus.loading
         },
         properties() {
-            return this.$store.getters.properties
-        }
-    },
+            return this.$store.getters.properties.sort( (a,b) => {
+                if ( a.createdAt < b.createdAt ) {return 1}
+                else { return -1 }
+            })
+        },
+    },    
     methods: {
         addProperty() {
             if (this.properties.length < 3) {
