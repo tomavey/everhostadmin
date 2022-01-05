@@ -17,12 +17,14 @@ import ehcAppToolbar from './components/ehc-app-toolbar.vue';
 import ehcLogin from './components/ehc-login.vue';
 import EhcAppToolbar from './components/ehc-app-toolbar.vue';
 import EhcFeedback from './components/ehc-feedback.vue';
+import updateMixin from '@/mixins/updateMixin.js';
+
 
 
 
 export default {
   components: { ehcAppToolbar, ehcLogin, EhcAppToolbar, EhcFeedback },
-  mixins: [],
+  mixins: [updateMixin],
   name: 'App',
 
   data: () => ({
