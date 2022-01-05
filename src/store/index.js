@@ -4,6 +4,7 @@ import firebase from 'firebase'
 import Auth from './auth'
 import Org from './org'
 import Properties from './properties'
+import GuestData from './guestdata'
 
 
 
@@ -45,5 +46,5 @@ export default new Vuex.Store({
       })
     }
   },
-  modules: {Auth, Org, Properties},
+  modules: {Auth, Org, Properties, GuestData},
 })

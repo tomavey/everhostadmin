@@ -15,7 +15,7 @@ const routes = [
     name: 'Properties',
     component: Properties,
     meta: {
-      requiresAuth: false
+      requiresAuth: true
     },
   },  
 
@@ -29,7 +29,11 @@ const routes = [
   // },
   {
     path: "/guestdata",
+    name: "GuestData",
     component: GuestData,
+    meta: {
+      requiresAuth: false
+    },
   },
   {
     path: "/myaccount",
@@ -57,10 +61,11 @@ const router = new VueRouter({
 
 router.beforeEach( (to, from, next) => {
   const currentUser = store.getters.user
+  const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
   console.log('currentUser',currentUser)
   console.log('currentUser', !currentUser )
   console.log(to.name)
-  if (!currentUser) next({ path: '/signin'})
+  if (!currentUser && requiresAuth) next({ path: '/signin'})
   else next()
 })
 

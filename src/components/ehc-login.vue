@@ -148,6 +148,7 @@ export default {
         this.$store.dispatch('signInWithEmailAndPassword', credentials).then(res=>{
             console.log("logged in", res)
         })
+    
     },
     logout: function() {
         this.$store.dispatch('logout')
