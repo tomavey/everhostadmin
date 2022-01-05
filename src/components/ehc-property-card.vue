@@ -37,12 +37,29 @@
                 </v-btn>
             </template>
         </ehc-dialog>
-        <ehc-dialog v-model="message.show" :title="message.title" width="300">
+        <ehc-dialog v-model="linkDialog" title="Link Copied" width="350">
+            Link to {{property.name}} guide has been copied to your clipboard <br/><br/>
+            
+            <strong>{{link}}</strong>
+            
+            <qrcode-vue  :value="link" :size="300" level="H"></qrcode-vue>
+            <template v-slot:actions>
+                <v-spacer></v-spacer>
+                <v-btn color="button" dark @click="linkDialog = false">ok</v-btn>
+            </template>
+        </ehc-dialog>
+        <ehc-dialog v-model="message.show" :title="message.title" :width="message.width ? message.width : '300'">
             {{message.message}}
+            <br/><br/>
+            <qrcode-vue v-if="message.qrCode" :value="message.qrCode" :size="300" level="H"></qrcode-vue>
             <template v-slot:actions>
                 <v-spacer></v-spacer>
                 <v-btn @click="message.show=false" color="button" dark><strong>ok</strong></v-btn>
             </template>
+        </ehc-dialog>
+
+        <ehc-dialog>
+            
         </ehc-dialog>
     </v-card>
 </template>
@@ -51,11 +68,13 @@
 <script>
 
 import uniMixin from '@/mixins/index.vue'
+import QrcodeVue from 'qrcode.vue'
+
 
 
 export default {
     mixins: [uniMixin],
-    components: {},
+    components: {QrcodeVue},
     name: 'ehc-property-card',
     props: ['property'],
     data: () => ({
@@ -63,6 +82,7 @@ export default {
             show: false,
 
         },
+        linkDialog: false,
         publisLoading: false,
         deleteConfirm: {
             show: false,
@@ -73,6 +93,7 @@ export default {
         loading(val) {this.$store.commit('setLoading', val)}
     },
     computed: {
+        link() {return `${this.$store.getters.appSite}${this.property.propertyId}`},
         prop() {return this.property},
         appSite() {return this.$store.getters.appSite},
         loading() {return this.$store.getters.propertiesStatus.loading},
@@ -87,14 +108,8 @@ export default {
             console.log("copyProperty TODO")
         },
         copyLink: function(){
-            const property = this.property
-            let link = `${this.$store.getters.appSite}${property.propertyId}`
-            navigator.clipboard.writeText(link)
-            this.message= {
-                show: true,
-                title: "Link Copied",
-                message: "the link to this property has been copied to your clipboard"
-            }
+            navigator.clipboard.writeText(this.link)
+            this.linkDialog = true
         },
         deleteProperty() {
             console.log("delete property button pushed")
@@ -115,6 +130,7 @@ export default {
                 this.$store.dispatch("getProperties").then(() => {
                     this.publishLoading =  false
                     this.message= {
+                        width: 300,
                         show: true,
                         title: "Property Published",
                         message: "your property has been published"

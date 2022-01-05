@@ -96,11 +96,11 @@
                                     @blur="$emit('blur', {key: field.key, value: data[field.key]})"
                                     @change="$emit('change', {key: field.key, value: data[field.key]})">
                                     </v-textarea>
-                    <component-file-input   
+                    <ehc-file-input   
                                             :color="color" 
                                             v-else-if="field.type == 'fileInput'" 
                                             v-model="data[field.key]" 
-                                            :props="field"></component-file-input>
+                                            :props="field"></ehc-file-input>
                     <v-select
                         v-else-if="field.type === 'select'"
                         v-model="data[field.key]"
@@ -153,7 +153,7 @@
 </template>
 
 <script>
-    import ComponentFileInput from '../components/form/component-file-input.vue'
+    import EhcFileInput from '../components/form/ehc-file-input.vue'
     import EhcPhoneInput from '@/components/form/ehc-phone-Input.vue'
 
 
@@ -167,7 +167,7 @@
             color: {type: String, default: "black2"},
         },
         components: {
-            ComponentFileInput,
+            EhcFileInput,
             EhcPhoneInput
         },
         data: () => ({
