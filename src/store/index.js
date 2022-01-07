@@ -26,7 +26,7 @@ export default new Vuex.Store({
   },
   mutations: {
     setLoading (state,payload) {
-      console.log("setLoading", payload)
+      // console.log("setLoading", payload)
       state.loading = payload
     },
     setFeedback (state,payload) {

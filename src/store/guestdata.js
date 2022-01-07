@@ -5,7 +5,7 @@ export default {
     guests: []
   },
   getters: {
-    guests: state => state.guests
+    guests: state => state.guests,
   },
   mutations: {
     setGuests (state,payload) {
@@ -13,8 +13,10 @@ export default {
     },
   },
   actions: {
-    getGuests: function(context){
-      const guestDataRef = firebase.firestore().collection("guests").get()
+    getGuests: function(context,uid){
+      console.log("uid ", uid)
+      const guestDataRef = firebase.firestore().collection("guests")
+      .where("uid", "==", uid).get()
       .then( (docs) => {
         let guests = []
         docs.forEach(doc => {

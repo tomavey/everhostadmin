@@ -1,6 +1,6 @@
 <template>
     <ehc-page>
-    <v-card>
+    <v-card class="mx-auto">
         <v-card-title>{{pageTitle}}</v-card-title>
         <v-card-title>
             <v-text-field
@@ -23,7 +23,10 @@
 </template>
 
 <script>
+import auth from "@/mixins/auth.vue"
+
 export default {
+    mixins: [auth],
     data() {
         return {
             pageTitle: "Guest Data",
@@ -50,12 +53,34 @@ export default {
                     value: 'email',
                     filterable: true,
                 },
-                                {
+                {
                     text: 'Phone',
                     align: 'start',
                     sortable: false,
                     value: 'phone',
                 },
+                {
+                    text: 'City',
+                    align: 'start',
+                    sortable: true,
+                    value: 'propertyCity',
+                    filterable: true,
+                },
+                {
+                    text: 'State',
+                    align: 'start',
+                    sortable: true,
+                    value: 'propertyState',
+                    filterable: true,
+                },
+                {
+                    text: 'Property',
+                    align: 'start',
+                    sortable: true,
+                    value: 'propertyName',
+                    filterable: true,
+                },
+
             ]
         }
     },
@@ -65,7 +90,7 @@ export default {
         }
     },
     created(){
-        this.$store.dispatch('getGuests')
+        this.$store.dispatch('getGuests',this.$store.getters.user.uid)
         .then( console.log("guests") )
     }
 }
