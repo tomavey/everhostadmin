@@ -10,6 +10,8 @@ import ehcPage from '@/components/ehc-page.vue'
 import ehcForm from '@/components/ehc-form.vue'
 import ehcDialog from '@/components/ehc-dialog.vue'
 import ehcDrawer from '@/components/ehc-drawer.vue'
+import ehcButton from '@/components/ehc-button.vue'
+
 import VueTheMask from 'vue-the-mask'
 
 
@@ -20,6 +22,8 @@ Vue.component('ehc-page', ehcPage)
 Vue.component('ehc-form', ehcForm)
 Vue.component('ehc-dialog', ehcDialog)
 Vue.component('ehc-drawer', ehcDrawer)
+Vue.component('ehc-btn', ehcButton)
+
 
   
 Vue.use(VueTheMask)

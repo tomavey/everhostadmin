@@ -72,12 +72,14 @@
 <script>
 import EhcNewOrgPrompt from '@/components/ehc-new-org-prompt.vue';
 import auth from "@/mixins/auth.vue"
+import api from "@/mixins/api.vue"
+
 export default {
   props: {
       value: Boolean
   },
   components: {EhcNewOrgPrompt},
-  mixins: [auth],
+  mixins: [auth, api],
   data () {
     return {
         alwaysFalse: false,
@@ -97,8 +99,12 @@ export default {
     }
   },
   watch: {
-    loggedIn(val) {
+    async loggedIn(val) {
         if (val) {
+            this.apiGetUser(this.user.uid).then((user) => {
+                console.log("got the userarino ", user)
+                this.$store.commit('setUser', user)
+            })
             this.$store.dispatch('getOrg')
         }
     },

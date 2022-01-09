@@ -57,10 +57,6 @@
                 <v-btn @click="message.show=false" color="button" dark><strong>ok</strong></v-btn>
             </template>
         </ehc-dialog>
-
-        <ehc-dialog>
-            
-        </ehc-dialog>
     </v-card>
 </template>
 
