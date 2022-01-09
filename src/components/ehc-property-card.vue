@@ -39,6 +39,7 @@
         </ehc-dialog>
         <ehc-dialog v-model="linkDialog" title="Link Copied" width="350">
             Link to {{property.name}} guide has been copied to your clipboard <br/><br/>
+            <p class="text-h5 text-center" v-if="!property.publishedAt">This property has not been published yet.</p>
             
             <strong>{{link}}</strong>
             
