@@ -182,6 +182,7 @@ export default {
     },
 	methods: {
         readURL(file) {
+            console.log("readURL", file)
             // START: preview original
             // you can remove this section if you don't like to preview original image
             if (!file.type.match(/image.*/)) {
@@ -197,6 +198,7 @@ export default {
             // START: preview resized
             resizeImage({ file: file, maxSize: 150 }).then((resizedImage) => {
                 this.resizedImg = URL.createObjectURL(resizedImage);
+                console.log("resizedImg", this.resizedImg)
             }).catch((err) => {
                 console.error(err);
             });
