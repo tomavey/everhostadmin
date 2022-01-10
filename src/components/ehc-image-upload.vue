@@ -17,27 +17,6 @@ https://stackoverflow.com/questions/53708278/how-to-resize-the-image-in-vue
 
     <ehc-dialog v-model="show" :title="title" width="500" close :loading="loading">
 
-
-        <v-file-input
-          accept="image/png, image/jpeg, image/bmp"
-          placeholder="Pick an Image"
-          prepend-icon="mdi-camera"
-          label="Avatar"
-          @change="readURL"
-        ></v-file-input>
-      <v-container v-if="originalImg">
-        <v-row justify="space-around">
-          <v-col cols="5">
-            <div class="subheading">Original Image</div>
-            <img :src="originalImg"/>
-          </v-col>
-          <v-col cols="5">
-            <div class="subheading">Resized Image</div>
-            <img :src="resizedImg"/>
-          </v-col>
-        </v-row>
-      </v-container>
-
         <ehc-btn plain @click="$refs.file.click()">
            + Upload a new photo
         </ehc-btn>
@@ -48,6 +27,10 @@ https://stackoverflow.com/questions/53708278/how-to-resize-the-image-in-vue
             ref="cropper"
             class="upload-example-cropper"
             :src="image.src"
+            :canvas="{
+                height: 100,
+                width: 100
+            }"
         />
 
 
@@ -91,59 +74,6 @@ function getMimeType(file, fallback = null) {
     }
 }
 
-// this is for the resizing of the image 
-const dataURItoBlob = (dataURI) => {
-  const bytes = dataURI.split(',')[0].indexOf('base64') >= 0
-    ? atob(dataURI.split(',')[1])
-    : unescape(dataURI.split(',')[1]);
-  const mime = dataURI.split(',')[0].split(':')[1].split(';')[0];
-  const max = bytes.length;
-  const ia = new Uint8Array(max);
-  for (let i = 0; i < max; i += 1) ia[i] = bytes.charCodeAt(i);
-  return new Blob([ia], { type: mime });
-};
-
-const resizeImage = ({ file, maxSize }) => {
-  const reader = new FileReader();
-  const image = new Image();
-  const canvas = document.createElement('canvas');
-
-  const resize = () => {
-    let { width, height } = image;
-
-    if (width > height) {
-      if (width > maxSize) {
-        height *= maxSize / width;
-        width = maxSize;
-      }
-    } else if (height > maxSize) {
-      width *= maxSize / height;
-      height = maxSize;
-    }
-
-    canvas.width = width;
-    canvas.height = height;
-    canvas.getContext('2d').drawImage(image, 0, 0, width, height);
-
-    const dataUrl = canvas.toDataURL('image/jpeg');
-
-    return dataURItoBlob(dataUrl);
-  };
-
-  return new Promise((ok, no) => {
-    if (!file.type.match(/image.*/)) {
-      no(new Error('Not an image'));
-      return;
-    }
-
-    reader.onload = (readerEvent) => {
-      image.onload = () => ok(resize());
-      image.src = readerEvent.target.result;
-    };
-
-    reader.readAsDataURL(file);
-  });
-};
 
 
 export default {
@@ -181,45 +111,12 @@ export default {
         }
     },
 	methods: {
-        readURL(file) {
-            console.log("readURL", file)
-            // START: preview original
-            // you can remove this section if you don't like to preview original image
-            if (!file.type.match(/image.*/)) {
-                no(new Error('Not an image'));
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = (e) => this.originalImg = e.target.result;
-            reader.readAsDataURL(file); // convert to base64 string
-            // END: preview original
-
-            // START: preview resized
-            resizeImage({ file: file, maxSize: 150 }).then((resizedImage) => {
-                this.resizedImg = URL.createObjectURL(resizedImage);
-                console.log("resizedImg", this.resizedImg)
-            }).catch((err) => {
-                console.error(err);
-            });
-            // END: preview resized
-            },
 		async crop() {
             this.loading=true
             let imageRef = firebase.storage().ref(this.uploadPath)
             console.log("crop")
-			// const { canvas } = this.$refs.cropper.getResult();
-            const { image } = this.$refs.cropper.getResult()
-            var canvas = document.createElement('canvas')
+			const { canvas } = this.$refs.cropper.getResult();
 
-            canvas.width=100
-            canvas.height=100
-            canvas.getContext('2d').drawImage(image, 0, 0, 100, 100);
-
-
-
-
-            console.log("canvas", canvas)
 
 			canvas.toBlob((blob) => {
                 imageRef.put(blob)
