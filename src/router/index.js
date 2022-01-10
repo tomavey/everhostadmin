@@ -2,7 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Properties from '../views/Properties.vue'
 import GuestData from '../views/GuestData.vue'
+import Feedbacks from '../views/Feedbacks.vue'
 import MyAccount from '../views/MyAccount.vue'
+import Firebase from 'firebase'
 
 
 import store from '../store'
@@ -31,6 +33,14 @@ const routes = [
     path: "/guestdata",
     name: "GuestData",
     component: GuestData,
+    meta: {
+      requiresAuth: false
+    },
+  },
+  {
+    path: "/feedbacks",
+    name: "Feedbacks",
+    component: Feedbacks,
     meta: {
       requiresAuth: false
     },
