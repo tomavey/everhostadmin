@@ -105,7 +105,16 @@ export default {
             this.loading=true
             let imageRef = firebase.storage().ref(this.uploadPath)
             console.log("crop")
-			const { canvas } = this.$refs.cropper.getResult();
+			// const { canvas } = this.$refs.cropper.getResult();
+            const { image } = this.$refs.cropper.getResult()
+            var canvas = document.createElement('canvas')
+
+            canvas.width=100
+            canvas.height=100
+            canvas.getContext('2d').drawImage(image, 0, 0, 100, 100);
+
+
+
 
             console.log("canvas", canvas)
 
