@@ -10,7 +10,7 @@ import ehcPage from '@/components/ehc-page.vue'
 import ehcForm from '@/components/ehc-form.vue'
 import ehcDialog from '@/components/ehc-dialog.vue'
 import ehcDrawer from '@/components/ehc-drawer.vue'
-import ehcButton from '@/components/ehc-button.vue'
+import ehcButton from '@/components/ehc-btn.vue'
 
 import VueTheMask from 'vue-the-mask'
 

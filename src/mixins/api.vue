@@ -30,6 +30,16 @@ export default {
 
         return await userRef.update(payload).then((resp) => {
           console.log('apiUpdateUser success!', resp)
+          return true
+        })
+      },
+      async apiUpdateProperty(id, payload) {
+        console.log("apiUpdateProperty", id, payload)
+        const propRef = firebase.firestore().collection('properties').doc(id)
+
+        return await propRed.update(payload).then((resp) => {
+          console.log("apiUpdateProperty success", resp)
+          return true
         })
       } 
   },
