@@ -114,7 +114,11 @@ export default {
     methods: {
         setProfilePic(url) {
             console.log("profile pic set", url)
-            this.apiUpdateUser(this.user.uid,{photoURL: url})
+            this.apiUpdateUser(this.user.uid,{photoURL: url}).then(() => {
+                this.apiGetUser(this.user.uid).then((user) => {
+                    this.$store.commit('setUser', user)
+                })
+            })
         },
         openSupport() {
             console.log("TODO")
