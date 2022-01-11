@@ -5,17 +5,17 @@
         <v-card-title class="text-h6">{{property.name}}</v-card-title>
         <v-spacer/>
         <v-card-actions class="d-flex justify-center">
-        <v-btn text class="text-caption">Created: {{formatDate(property.createdAt,"dateOnly")}}</v-btn>
-<!-- edit -->
-        <v-btn class="mx-0" small icon @click="goToProperty()"><v-icon small color="green darken-2">mdi-pencil</v-icon></v-btn>
-        <v-btn class="mx-0" v-if="!property.publishedAt" small icon @click="publishProperty({propertyId: property.propertyId, publishedAt: true})">
-            <v-icon small color="grey darken-2">mdi-publish</v-icon>
-        </v-btn>
-        <v-btn class="mx-0" v-else small :loading="publisLoading" icon @click="publishProperty({propertyId: property.propertyId, publishedAt: false})"><v-icon small color="grey darken-2">mdi-publish-off</v-icon></v-btn>
-<!-- TODO copy -->
-        <!-- <v-btn class="mx-0" small icon @click="copyProperty(property.propertyId)"><v-icon small color="blue darken-2">mdi-content-copy</v-icon></v-btn> -->
-        <v-btn class="mx-0" small icon @click="copyLink()"><v-icon small color="yellow darken-2">mdi-link</v-icon></v-btn>
-        <v-btn class="mx-1" small icon @click="deleteConfirm.show = true"><v-icon small color="red darken-2">mdi-trash-can-outline</v-icon></v-btn>
+            <v-btn text class="text-caption created">Created: {{formatDate(property.createdAt,"dateOnly")}}</v-btn>
+    <!-- edit -->
+            <v-btn class="mx-0" small icon @click="goToProperty()"><v-icon small color="green darken-2">mdi-pencil</v-icon></v-btn>
+            <v-btn class="mx-0" v-if="!property.publishedAt" small icon @click="publishProperty({propertyId: property.propertyId, publishedAt: true})">
+                <v-icon small color="grey darken-2">mdi-publish</v-icon>
+            </v-btn>
+            <v-btn class="mx-0" v-else small :loading="publisLoading" icon @click="publishProperty({propertyId: property.propertyId, publishedAt: false})"><v-icon small color="grey darken-2">mdi-publish-off</v-icon></v-btn>
+    <!-- TODO copy -->
+            <!-- <v-btn class="mx-0" small icon @click="copyProperty(property.propertyId)"><v-icon small color="blue darken-2">mdi-content-copy</v-icon></v-btn> -->
+            <v-btn class="mx-0" small icon @click="copyLink()"><v-icon small color="yellow darken-2">mdi-link</v-icon></v-btn>
+            <v-btn class="mx-1" small icon @click="deleteConfirm.show = true"><v-icon small color="red darken-2">mdi-trash-can-outline</v-icon></v-btn>
         </v-card-actions>
         <v-card-text>PropertyId: {{property.propertyId}}<br/>
         <span v-if="property.publishedAt">Published: {{dateFormat(property.publishedAt, 'dateOnly')}}</span>
@@ -39,6 +39,7 @@
         </ehc-dialog>
         <ehc-dialog v-model="linkDialog" title="Link Copied" width="350">
             Link to {{property.name}} guide has been copied to your clipboard <br/><br/>
+            <p class="text-h5 text-center" v-if="!property.publishedAt">This property has not been published yet.</p>
             
             <strong>{{link}}</strong>
             
@@ -143,3 +144,20 @@ export default {
 
 }
 </script>
+
+<style scoped>
+
+ div.v-card__actions {
+    border: 2px solid lightgray;
+    border-radius: 10px;
+    padding: 0px;
+    font-size:.6em;
+}
+
+.created {
+    font-size: .8em !important;
+    padding:0px;
+    margin:0px
+}
+
+</style>

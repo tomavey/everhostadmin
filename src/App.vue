@@ -35,7 +35,6 @@ export default {
   methods: {
   },
   computed: {
-
   },
   created() {
     this.$store.dispatch("monitorAuth")

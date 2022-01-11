@@ -5,6 +5,7 @@ import Auth from './auth'
 import Org from './org'
 import Properties from './properties'
 import GuestData from './guestdata'
+import Feedbacks from './feedbacks'
 
 
 
@@ -12,21 +13,26 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    // appSite: "https://everhostio.web.app/",
-    appSite: "http://localhost:5000/",
+    devAppSite: "http://localhost:5000/",
+    prodAppSite: "https://everhostio.web.app/",
     loading: false,
     feedback: {
       show: false,
     }
   },
   getters: {
-    appSite: state=> state.appSite,
+    appSite: state=> { 
+      if (window.location.hostname === "localhost") {
+       return state.devAppSite 
+      }
+      return state.prodAppSite
+    },
     loading: state=> state.loading,
     feedback: state=> state.feedback,
   },
   mutations: {
     setLoading (state,payload) {
-      console.log("setLoading", payload)
+      // console.log("setLoading", payload)
       state.loading = payload
     },
     setFeedback (state,payload) {
@@ -47,5 +53,5 @@ export default new Vuex.Store({
       })
     }
   },
-  modules: {Auth, Org, Properties, GuestData},
+  modules: {Auth, Org, Properties, GuestData, Feedbacks},
 })
