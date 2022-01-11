@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar flat dense class="px-0 mx-0" color="primary">
+    <v-toolbar flat dense class="px-0 mx-0" color="appBar">
         <v-toolbar-title>
             <v-img src="@/assets/Everhost_Logo_Red Brown_273x73.png" contain height="50px" width="190px" class="ma-0 pa-0"></v-img>
         </v-toolbar-title>
@@ -44,12 +44,30 @@
             </template>
             <span>give feedback or report error</span>
         </v-tooltip> 
-        <v-tooltip bottom >
-            <template v-slot:activator="{ on, attrs }">
-            <v-btn plain small fab v-on="on" v-bind="attrs" @click="$store.dispatch('logout')"><v-icon>mdi-logout</v-icon></v-btn>
-            </template>
-            <span>Logout</span>
-        </v-tooltip>
+
+        <v-menu
+            bottom
+            offset-y>
+            <template v-slot:activator="{ attrs, on }">
+                <div v-bind="attrs" v-on="on">
+                <ehc-user-avatar  size="30" :photoURL="user.photoURL"></ehc-user-avatar>
+                </div>
+           </template>
+            <ehc-profile-card @changeProfilePic="picDialog=true"></ehc-profile-card>
+        </v-menu>
+
+        <ehc-image-upload 
+            v-model="picDialog" 
+            title="Upload Profile Image" 
+            :uploadPath="'/profilePictures/'+user.uid"  
+            @upload="setProfilePic($event)" 
+            circle
+            :size="{
+                width: 200,
+                height: 200
+            }"/>
+
+        <!-- <ehc-profile-card></ehc-profile-card> -->
         <v-progress-linear
             :active="loading"
             :indeterminate="loading"
@@ -59,22 +77,31 @@
             height="5"
             striped
       ></v-progress-linear>
+
+
     </v-toolbar>
 </template>
 
 
 <script>
 import EhcProfileCard from './ehc-profile-card.vue';
+import EhcUserAvatar from './ehc-user-avatar.vue';
+import ehcImageUpload from "@/components/ehc-image-upload.vue"
+
+
 import auth from "@/mixins/auth.vue"
+import api from "@/mixins/api.vue"
+
 
 
 export default {
-    components: {EhcProfileCard},
-    mixins: [auth],
+    components: {EhcProfileCard, EhcUserAvatar, ehcImageUpload},
+    mixins: [auth, api],
     name: 'ehcAppToolbar',
 
     data: () => ({
         tab: null,
+        picDialog: false,
         searching:false,
         menu: [
             {label: "Properties", route: "/", icon: "mdi-home-city"},
@@ -82,7 +109,17 @@ export default {
             // {label: "My Account", route: "/myaccount", icon:"mdi-account"}, TODO
         ],
     }),
+    mounted() {
+    },
     methods: {
+        setProfilePic(url) {
+            console.log("profile pic set", url)
+            this.apiUpdateUser(this.user.uid,{photoURL: url}).then(() => {
+                this.apiGetUser(this.user.uid).then((user) => {
+                    this.$store.commit('setUser', user)
+                })
+            })
+        },
         openSupport() {
             console.log("TODO")
         }
@@ -90,7 +127,7 @@ export default {
     computed: {
         loading() {
             return this.$store.getters.loading
-        }
+        },
     }
 
 }

@@ -58,10 +58,6 @@
                 <v-btn @click="message.show=false" color="button" dark><strong>ok</strong></v-btn>
             </template>
         </ehc-dialog>
-
-        <ehc-dialog>
-            
-        </ehc-dialog>
     </v-card>
 </template>
 
@@ -103,7 +99,7 @@ export default {
         goToProperty() {
             const url = this.appSite + "login/" + this.prop.propertyId
             console.log("opening property URL", url)
-            window.open(url,"", "width=390, height=812");
+            window.open(url,"", "width=900, height=812");
         },
         copyProperty() {
             console.log("copyProperty TODO")

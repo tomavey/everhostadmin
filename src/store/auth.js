@@ -7,6 +7,7 @@ import firebase from 'firebase'
 export default {
   state:{
     user: null
+    
   },
   getters: {
     user: state => state.user,
@@ -41,13 +42,11 @@ export default {
     async monitorAuth({commit}) {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
-          console.log("auth State Changed", user.email)
+          console.log("auth State Changed", user)
           // User is signed in, see docs for a list of available properties
           // https://firebase.google.com/docs/reference/js/firebase.User
           commit('setUser', {
             uid: user.uid,
-            displayName: user.displayName,
-            email: user.email
           })
           // ...
         } else {
@@ -56,7 +55,7 @@ export default {
           commit('setUser', null)
         }
       });
-    }
+    },
   }
 }
 

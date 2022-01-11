@@ -21,10 +21,10 @@ export default {
   },
   mutations: {
     setOrg (state, payload) {
-      state.Org = payload
+      state.org = payload
     },  
     setOrgID (state, payload) {
-      state.OrgID = payload
+      state.orgID = payload
     },  
     setOrgStatus (state,payload) {
       for (var key in payload) { //change only the settings that were input everything else keep the same
