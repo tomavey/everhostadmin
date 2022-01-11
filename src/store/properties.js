@@ -71,6 +71,22 @@ export default {
         })
       })
     },
+    subscribeToProperties(context){
+      const properties = []
+      const userId = context.getters.user.uid
+      const propertiesRef = firebase.firestore().collection('properties')
+      propertiesRef
+      .where("uid","==", userId)
+      .where("deletedAt", "==", null)
+      .onSnapshot( (docs) => {
+        docs.forEach( (doc) => {
+          let obj = doc.data()
+          properties.push(obj)  
+        })
+        context.commit("setProperties",[])        
+        context.commit("setProperties",properties)  
+      })
+    },
     markPropertyDeletedAt(context,propertyId){
       return new Promise((resolve, reject) => {
         context.commit("setPropertiesStatus", {loading: true})  

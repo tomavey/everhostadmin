@@ -4,7 +4,7 @@
             <v-toolbar-title flat>
                 Properties
             </v-toolbar-title>
-            
+
             <v-spacer></v-spacer>
             <!-- TODO <v-btn  
                 fab 
@@ -14,6 +14,18 @@
                 @click="searchSettings">
                 <v-icon>mdi-tune-vertical-variant</v-icon>
             </v-btn> -->
+            <v-btn
+                rounded
+                color="button"
+                dark
+                large
+                @click="getProperties()" 
+                class='mx-1 elevation-0'
+                :loading="addLoading"
+            >
+                <v-icon class="mr-1 ml-0">mdi-database-refresh-outline</v-icon>
+                Refresh
+            </v-btn>
             <v-btn
                 rounded
                 color="button"
@@ -56,12 +68,13 @@
 
 
 <script>
+import EhcBtn from '../components/ehc-btn.vue'
 import EhcPropertyCard from '../components/ehc-property-card.vue'
 
 
 
 export default {
-    components: {EhcPropertyCard},
+    components: {EhcPropertyCard, EhcBtn},
     name: 'properties',
 
     data: () => ({
@@ -103,10 +116,13 @@ export default {
         },
         searchSettings() {
             console.log("TODO")
+        },
+        getProperties(){
+            this.$store.dispatch("getProperties")
         }
     },
     created() {
-        this.$store.dispatch("getProperties")
+        this.getProperties()
     }
 
 }
