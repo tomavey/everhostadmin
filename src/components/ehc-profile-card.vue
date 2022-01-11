@@ -22,7 +22,7 @@
                 justify="center"
                 cols="4"
                 class="pl-0 pr-0 ma-0">
-            <ehc-user-avattar size="100"></ehc-user-avattar>
+            <ehc-user-avattar size="100" :photoURL="user.photoURL"></ehc-user-avattar>
           </v-col>
           <v-col cols="1" class="pl-0 pr-0 ma-0">
             <v-divider vertical />

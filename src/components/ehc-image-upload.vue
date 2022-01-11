@@ -1,11 +1,15 @@
 <!-- example 
 https://stackoverflow.com/questions/53708278/how-to-resize-the-image-in-vue
-    <ehc-image-upload
-        v-model="show"
-        title="whatever the title of dialog is"
-        imgPath="path/to/the/filename"
-        @upload="funcDOINGSOMETHING($event)"
-    >
+        <ehc-image-upload 
+            v-model="picDialog" 
+            title="Upload Profile Image" 
+            :uploadPath="'/profilePictures/'+user.uid"  
+            @upload="setProfilePic($event)" 
+            circle
+            :size="{
+                width: 200,
+                height: 200
+            }"/>
 
     opens dialog box to crop and upload image the name passed to it in imgPath
     once uploaded it closes the dialog box and returns 
@@ -27,10 +31,8 @@ https://stackoverflow.com/questions/53708278/how-to-resize-the-image-in-vue
             ref="cropper"
             class="upload-example-cropper"
             :src="image.src"
-            :canvas="{
-                height: 100,
-                width: 100
-            }"
+            :canvas="size"
+            :stencil-component="stencil"
         />
 
 
@@ -48,6 +50,8 @@ https://stackoverflow.com/questions/53708278/how-to-resize-the-image-in-vue
 <script>
 import { CircleStencil, Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
+
+// import 'vue-advanced-cropper/dist/themes/theme.compact.css';
 import firebase from 'firebase'
 
 
@@ -84,12 +88,11 @@ export default {
         value: Boolean,
         title: String,
         uploadPath: {type: String, required: true},
-        size: Object
+        size: Object,
+        circle: Boolean
     },
 	data() {
 		return {
-            originalImg: '',
-            resizedImg: '',
             loading: false,
             show: false,
 			image: {
@@ -98,6 +101,11 @@ export default {
 			}
 		};
 	},
+    computed: {
+        stencil() {
+            return (this.circle) ? "circle-stencil" : "rectangle-stencil"
+        }
+    },
     watch: {
         value(val) {
             if (val != this.show) {
@@ -183,3 +191,9 @@ export default {
 	}
 };
 </script>
+
+
+<style>
+	@import '~vue-advanced-cropper/dist/theme.classic.scss';
+
+</style>

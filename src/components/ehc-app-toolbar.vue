@@ -50,7 +50,7 @@
             offset-y>
             <template v-slot:activator="{ attrs, on }">
                 <div v-bind="attrs" v-on="on">
-                <ehc-user-avatar  size="30"></ehc-user-avatar>
+                <ehc-user-avatar  size="30" :photoURL="user.photoURL"></ehc-user-avatar>
                 </div>
            </template>
             <ehc-profile-card @changeProfilePic="picDialog=true"></ehc-profile-card>
@@ -60,7 +60,12 @@
             v-model="picDialog" 
             title="Upload Profile Image" 
             :uploadPath="'/profilePictures/'+user.uid"  
-            @upload="setProfilePic($event)" />
+            @upload="setProfilePic($event)" 
+            circle
+            :size="{
+                width: 200,
+                height: 200
+            }"/>
 
         <!-- <ehc-profile-card></ehc-profile-card> -->
         <v-progress-linear
@@ -105,7 +110,6 @@ export default {
         ],
     }),
     mounted() {
-        this.picDialog = true
     },
     methods: {
         setProfilePic(url) {
@@ -119,7 +123,7 @@ export default {
     computed: {
         loading() {
             return this.$store.getters.loading
-        }
+        },
     }
 
 }
