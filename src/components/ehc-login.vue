@@ -135,6 +135,7 @@ export default {
     showApp() {
         let status = this.orgStatus
         if (this.loggedIn == true && status.found == true ) {
+            this.loginError=""
             return true
         } else {
             return false

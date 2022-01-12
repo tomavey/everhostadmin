@@ -18,7 +18,8 @@ export default {
     mixins: [api],
     props: {
         userID: String,
-        photoURL: String
+        photoURL: String,
+        label: String
     },
     data() {
         return {
