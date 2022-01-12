@@ -59,7 +59,7 @@
         <ehc-image-upload 
             v-model="picDialog" 
             title="Upload Profile Image" 
-            :uploadPath="'/profilePictures/'+user.uid"  
+            :uploadPath="'/profilePictures/'+user.uid + Date.now()"  
             @upload="setProfilePic($event)" 
             circle
             :size="{

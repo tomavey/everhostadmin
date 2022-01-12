@@ -37,6 +37,7 @@
                             <v-card-subtitle>Please enter your credentials to log in</v-card-subtitle>
                             <v-card-text class="pb-0">
                                 <ehc-form :meta="loginForm" v-model="credentials"></ehc-form>
+                                <span class="error--text mt-0 pt-0" >{{loginError}}</span>
                             </v-card-text>
                             <v-card-actions class="pt-0 px-4">
                             <!-- <v-btn 
@@ -82,6 +83,7 @@ export default {
   mixins: [auth, api],
   data () {
     return {
+        loginError: "",
         alwaysFalse: false,
         credentials: {
             email: null,
@@ -146,8 +148,10 @@ export default {
     login: function(credentials) {
         console.log("login", credentials)
         this.$store.dispatch('signInWithEmailAndPassword', credentials).then(res=>{
-            console.log("logged in", res)
-        })
+                    console.log("logged in")
+                }).catch((err) => {
+                    this.loginError = err.message
+                })
     
     },
     logout: function() {

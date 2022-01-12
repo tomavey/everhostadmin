@@ -28,6 +28,11 @@ export default {
     mounted() {
         this.url = this.photoURL ? this.photoURL : this.apiGetUser(this.userID).uid.photoURL
     },
+    watch: {
+        photoURL(val) {
+            this.url = val
+        },
+    },
     methods: {
 
     }

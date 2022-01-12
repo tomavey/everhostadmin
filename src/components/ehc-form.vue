@@ -37,8 +37,8 @@
 
 
 <template>
-    <div class="outside mb-5">
-        <v-container>
+    <div class="mb-0">
+        <v-container >
             <v-form 
                 v-model="valid"
                 ref="ehcForm"

@@ -25,12 +25,13 @@ export default {
       firebase.auth().signOut()
     },
     async signInWithEmailAndPassword({ commit },payload){
-      firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+      return await firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
       .then( (userCredential) => {
         console.log("signed in ", userCredential.user)
-        return userCredential.user
+        return true
       }).catch( error => {
-        console.log(error.message)
+        console.log("first catch",error)
+        throw error
       })
     },
     logout ({commit}) {
