@@ -8,7 +8,7 @@
                 </v-list-item-title>
                 <v-list-item-subtitle><v-icon small>mdi-google-maps</v-icon>{{property.address}}</v-list-item-subtitle>
             </v-list-item-content>
-            <ehc-user-avatar :photoURL="property.contactInfo.hostPhotoUrl" :label="property.contactInfo.hostName" />
+            <ehc-user-avatar v-if="property.contactInfo.hostPhotoUrl" :photoURL="property.contactInfo.hostPhotoUrl" :label="property.contactInfo.hostName" />
         </v-list-item>
         <v-divider></v-divider>
         <v-list-item >
@@ -159,7 +159,6 @@ export default {
                     loading : false,
                     show: false
                 }
-                this.$store.dispatch("getProperties")
             })
             
         },

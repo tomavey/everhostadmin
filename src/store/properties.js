@@ -25,22 +25,18 @@ export default {
   },
   actions: {
     makeNewProperty(context){
-      return new Promise((resolve, reject) => {
-        context.commit('setPropertiesStatus', {loading: true})
-        // console.log("oncall")
-        let uid = context.getters.user.uid
-        // let orgID = context.getters.orgID
-        // console.log('makeNewProperty', uid)
-        const addProperty = firebase.functions().httpsCallable('makeNewProperty')
-        addProperty(uid)
-        .then(res => {
-            context.commit('setPropertiesStatus', {loading: false})
-            console.log("makeNewProperty ",res)
-            resolve(res)
-        }).catch(err => {
-            context.commit('setPropertiesStatus', {loading: false})
-            reject(err)
-        })
+      context.commit('setPropertiesStatus', {loading: true})
+      let uid = context.getters.user.uid
+      console.log("I'm gonna makeNewProperty", uid)
+      const addProperty = firebase.functions().httpsCallable('makeNewProperty')
+      return addProperty(uid)
+      .then(res => {
+        context.commit('setPropertiesStatus', {loading: false})
+        console.log("madeNewProperty ",res)
+      })
+      .catch( err => {
+        console.log(err)
+        context.commit('setPropertiesStatus', {loading: false})
       })
     },
     getProperties(context){
@@ -72,19 +68,21 @@ export default {
       })
     },
     subscribeToProperties(context){
-      const properties = []
+      let properties = []
       const userId = context.getters.user.uid
       const propertiesRef = firebase.firestore().collection('properties')
       propertiesRef
       .where("uid","==", userId)
       .where("deletedAt", "==", null)
       .onSnapshot( (docs) => {
+        let propertiesArray = []
         docs.forEach( (doc) => {
-          let obj = doc.data()
-          properties.push(obj)  
+            let obj = doc.data()
+            console.log("obj name ",obj.name)
+            propertiesArray = [...propertiesArray, obj]
         })
-        context.commit("setProperties",[])        
-        context.commit("setProperties",properties)  
+        console.log("properties ", propertiesArray)
+        context.commit("setProperties",propertiesArray)  
       })
     },
     markPropertyDeletedAt(context,propertyId){

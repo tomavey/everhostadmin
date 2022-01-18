@@ -19,18 +19,6 @@
                 color="button"
                 dark
                 large
-                @click="getProperties()" 
-                class='mx-1 elevation-0'
-                :loading="addLoading"
-            >
-                <v-icon class="mr-1 ml-0">mdi-database-refresh-outline</v-icon>
-                Refresh
-            </v-btn>
-            <v-btn
-                rounded
-                color="button"
-                dark
-                large
                 @click="addProperty()" 
                 class='mx-1 elevation-0'
                 :loading="addLoading"
@@ -70,6 +58,7 @@
 <script>
 import EhcBtn from '../components/ehc-btn.vue'
 import EhcPropertyCard from '../components/ehc-property-card.vue'
+import firebase from 'firebase'
 
 
 
@@ -80,7 +69,7 @@ export default {
     data: () => ({
         maxProperties: 3,
         maxPropsDialog: false,
-        addLoading: false
+        addLoading: false,
     }),
     watch: {
         loading(val) {
@@ -105,10 +94,8 @@ export default {
                 console.log("addProperty button pushed")
                 this.$store.commit("setLoading", true)
                 this.$store.dispatch('makeNewProperty').then(res => {
-                    this.$store.dispatch("getProperties").then(res => {
-                        this.$store.commit("setLoading", false)
-                        this.addLoading=false
-                    })
+                    this.$store.commit("setLoading", false)
+                    this.addLoading=false
                 })
             } else {
                 this.maxPropsDialog = true
@@ -117,12 +104,9 @@ export default {
         searchSettings() {
             console.log("TODO")
         },
-        getProperties(){
-            this.$store.dispatch("getProperties")
-        }
     },
     created() {
-        this.getProperties()
+        this.$store.dispatch('subscribeToProperties')
     }
 
 }
