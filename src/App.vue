@@ -45,6 +45,16 @@ export default {
 
 <style>
 
+a {
+  color:  rgb(71, 113, 250) !important;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  color: rgb(15, 5, 128) !important;
+}
+
 @font-face {
     font-family: 'Sailec Black';
     src: url('~@/assets/fonts/Sailec Black.woff2') format('woff2');

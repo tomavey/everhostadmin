@@ -22,7 +22,7 @@ https://stackoverflow.com/questions/53708278/how-to-resize-the-image-in-vue
     <ehc-dialog v-model="show" :title="title" width="500" close :loading="loading">
 
         <ehc-btn plain @click="$refs.file.click()">
-           + Upload a new photo
+           {{buttonMessage}}
         </ehc-btn>
         <!-- input is so the button above will work, theres probably a better way to do this -->
         <input type="file" ref="file" @change="loadImage($event)" accept="image/*" v-show="false">
@@ -89,7 +89,8 @@ export default {
         title: String,
         uploadPath: {type: String, required: true},
         size: Object,
-        circle: Boolean
+        circle: Boolean,
+        buttonMessage: {type: String, default: " + Upload a new image"}
     },
 	data() {
 		return {
