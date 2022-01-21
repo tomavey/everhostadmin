@@ -16,7 +16,7 @@ export default {
     getGuests: function(context,uid){
       console.log("uid ", uid)
       const guestDataRef = firebase.firestore().collection("guests")
-      .where("uid", "==", uid).get()
+      .where("propertyUid", "==", uid).get()
       .then( (docs) => {
         let guests = []
         docs.forEach(doc => {
