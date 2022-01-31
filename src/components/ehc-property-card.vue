@@ -3,9 +3,8 @@
         <v-img :src="property.avatarImg" height="13rem"></v-img>
         <v-list-item two-line>
             <v-list-item-content>
-                <v-list-item-title>
+                    {{property.name}} - 
                     {{property.city}}, {{property.state}}
-                </v-list-item-title>
                 <v-list-item-subtitle><v-icon small>mdi-google-maps</v-icon>{{property.address}}</v-list-item-subtitle>
             </v-list-item-content>
             <ehc-user-avatar v-if="property.contactInfo.hostPhotoUrl" :photoURL="property.contactInfo.hostPhotoUrl" :label="property.contactInfo.hostName" />
