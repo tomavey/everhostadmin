@@ -16,21 +16,34 @@
             :items="feedbacks"
             :items-per-page="20"
             :search='search' 
+            :single-expand="singleExpand"
+            :expanded.sync="expanded"
+            show-expand            
             class="elevation-1"
-        ></v-data-table>
+        >
+        <template v-slot:expanded-item="{ headers, item }">
+        <td :colspan="headers.length">
+            {{ item.description }}
+        </td>
+        </template>
+    
+        </v-data-table>
     </v-card>
     </ehc-page>
 </template>
 
 <script>
 import auth from "@/mixins/auth.vue"
+import mixins from '@/mixins'
 
 export default {
-    mixins: [auth],
+    mixins: [auth,mixins],
     data() {
         return {
             pageTitle: "Feedback Data",
             search: '',
+            expanded: [],
+            singleExpand: false,
             headers: [
                 {
                     text: 'Name',
@@ -43,7 +56,7 @@ export default {
                     text: 'Description',
                     align: 'start',
                     sortable: true,
-                    value: 'description',
+                    value: 'shortDescription',
                     filterable: true,
                 },
                 {
@@ -53,12 +66,26 @@ export default {
                     value: 'email',
                     filterable: true,
                 },
+                {
+                    text: 'Created',
+                    align: 'start',
+                    sortable: true,
+                    value: 'createdDate',
+                    filterable: true,
+                },
+
             ]
         }
     },
     computed: {
         feedbacks: function(){
             return this.$store.getters.feedbacks
+            .sort((a,b) => a-b )
+            .map( el => {
+                el.createdDate = this.formatDate(el.createdAt,'dateOnly')
+                el.shortDescription = el.description.slice(0, 25)
+                return el
+            })
         }
     },
     created(){
@@ -67,3 +94,4 @@ export default {
     }
 }
 </script>
+

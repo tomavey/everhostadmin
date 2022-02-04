@@ -6,7 +6,7 @@ import Org from './org'
 import Properties from './properties'
 import GuestData from './guestdata'
 import Feedbacks from './feedbacks'
-
+import Mail from './mail'
 
 
 Vue.use(Vuex)
@@ -47,11 +47,12 @@ export default new Vuex.Store({
         var docRef = firebase.firestore().collection("feedbacks");
         feedback.uid = context.getters.user.uid
         feedback.uemail = context.getters.user.email
+        feedback.createdAt = Date.now()
         docRef.add(feedback).then((ret) => {
           resolve(ret)
         })
       })
     }
   },
-  modules: {Auth, Org, Properties, GuestData, Feedbacks},
+  modules: {Auth, Org, Properties, GuestData, Feedbacks, Mail},
 })

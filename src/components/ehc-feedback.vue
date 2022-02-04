@@ -78,8 +78,21 @@ export default {
                 that.buttonText = "Thank you!";
                 await delay(500);
                 that.showFeedback= false
+                let mailObj = {
+                    to: ['tom@everhost.io','grant@everhost.io'],
+                    subject: "Feedback from an Everhost beta tester",
+                    html: `
+                        <p>Description: ${this.formData.description}</p>
+                        <p>From: ${this.formData.name} - <a href="mailto:${this.formData.email}">${this.formData.email}</a></p>
+                        `
+                }
+                this.sendMail(mailObj)
                 that.formData= {upload:[]}
             })
+        },
+        sendMail(mailObj) {
+            this.$store.dispatch("sendMail",mailObj)
+            .then( console.log("sendMail dispatched", mailObj) )
         }
     }
 }
