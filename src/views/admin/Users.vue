@@ -1,0 +1,70 @@
+<template>
+<v-container>
+<template>
+  <div>
+    <v-data-table
+      :headers="headers"
+      :items="users"
+      item-key="name"
+      class="elevation-1"
+      :search="search"
+    >
+      <template v-slot:top>
+        <v-text-field
+          v-model="search"
+          label="Search"
+          class="mx-4"
+        ></v-text-field>
+      </template>
+    </v-data-table>
+  </div>
+</template>
+</v-container>  
+</template>
+
+<script>
+import mixins from '@/mixins'
+
+export default {
+  mixins: [mixins],
+  data: function() {
+    return {
+      pageTitle: "USERS",
+      search: null,
+    }
+  },
+  computed: {
+    users: function(){
+      return this.$store.getters.users
+      .map( el => {
+        el.createdAtAsString = this.dateFormat(el.createdAt,"dateOnly")
+        el.picLink = `<a href="${el.photoURL}">link</a>`
+        return el
+      })
+      .sort( (a,b) => {
+          if ( a.createdAt < b.createdAt ) {return 1}
+          else { return -1 }
+      })
+    },
+    headers: function(){
+      return [
+          {
+            text: 'Email',
+            align: 'start',
+            sortable: true,
+            value: 'email',
+          },
+          {
+            text: 'User Id',
+            value: 'uid',
+          },
+          { text: 'Created', value: "createdAtAsString", sortable: true },
+        ]
+    }
+  },
+  created(){
+    this.$store.dispatch('getUsers')
+  }
+}
+</script>
+

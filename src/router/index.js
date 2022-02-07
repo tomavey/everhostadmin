@@ -4,6 +4,7 @@ import Properties from '../views/Properties.vue'
 import GuestData from '../views/GuestData.vue'
 import Feedbacks from '../views/Feedbacks.vue'
 import MyAccount from '../views/MyAccount.vue'
+import Users from '../views//admin/Users.vue'
 import Firebase from 'firebase'
 
 
@@ -48,6 +49,10 @@ const routes = [
   {
     path: "/myaccount",
     component: MyAccount,
+  },
+  {
+    path: "/users",
+    component: Users,
   },
 ]
 
