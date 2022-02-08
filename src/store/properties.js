@@ -67,18 +67,25 @@ export default {
         })
       })
     },
-    subscribeToProperties(context){
-      let properties = []
+    subscribeToProperties(context,showAll){
       const userId = context.getters.user.uid
-      const propertiesRef = firebase.firestore().collection('properties')
-      propertiesRef
-      .where("uid","==", userId)
+
+      let propertiesRef = firebase.firestore().collection('properties')
       .where("deletedAt", "==", null)
+      .where("uid","==", userId)
+
+      if ( showAll ) {
+        propertiesRef = firebase.firestore().collection('properties')
+        .where("deletedAt", "==", null)
+      }
+
+      propertiesRef
       .onSnapshot( (docs) => {
         let propertiesArray = []
         docs.forEach( (doc) => {
             let obj = doc.data()
-            console.log("obj name ",obj.name)
+            obj.searchAble = obj.name + obj.city + obj.state + obj.address
+            // console.log("obj name ",obj.name)
             propertiesArray = [...propertiesArray, obj]
         })
         console.log("properties ", propertiesArray)

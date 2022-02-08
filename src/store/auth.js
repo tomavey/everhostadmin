@@ -11,6 +11,12 @@ export default {
   },
   getters: {
     user: state => state.user,
+    isAdmin: state => {
+      if ( !state.user.rights ) { return false }
+      if (state.user.rights.admin) {
+        return true
+      } else { return false }
+    }
   },
   mutations: {
     setUser (state, payload) {
