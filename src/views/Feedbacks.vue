@@ -22,6 +22,10 @@
             item-key="createdAt"
             show-expand            
             class="elevation-1"
+            :footer-props="{
+                showFirstLastPage: true,
+                itemsPerPageOptions: [30,50,100,-1]
+            }"
         >
         <template v-slot:expanded-item="{ headers, item }">
         <td :colspan="headers.length">
