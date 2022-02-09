@@ -97,7 +97,7 @@ export default {
     },    
     methods: {
         addProperty() {
-            if (this.properties.length < 3) {
+            if (this.properties.length < 1000) {
                 this.addLoading=true
                 console.log("addProperty button pushed")
                 this.$store.commit("setLoading", true)
