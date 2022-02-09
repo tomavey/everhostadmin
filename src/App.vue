@@ -3,6 +3,9 @@
     <ehc-login>
         <ehc-app-toolbar></ehc-app-toolbar>
 
+        <ehc-admin-drawer/>
+
+
         <v-main height="100%">
             <router-view :key="$route.fullPath" />
         </v-main>
@@ -18,12 +21,13 @@ import ehcLogin from './components/ehc-login.vue';
 import EhcAppToolbar from './components/ehc-app-toolbar.vue';
 import EhcFeedback from './components/ehc-feedback.vue';
 import updateMixin from '@/mixins/updateMixin.js';
+import EhcAdminDrawer from './components/ehc-admin-drawer.vue';
 
 
 
 
 export default {
-  components: { ehcAppToolbar, ehcLogin, EhcAppToolbar, EhcFeedback },
+  components: { ehcAppToolbar, ehcLogin, EhcAppToolbar, EhcFeedback, EhcAdminDrawer },
   mixins: [updateMixin],
   name: 'App',
 
