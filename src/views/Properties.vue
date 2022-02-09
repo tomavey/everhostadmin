@@ -106,7 +106,7 @@ export default {
         },
     },
     created() {
-        this.$store.dispatch('subscribeToProperties', this.$store.getters.isAdmin)
+        this.$store.dispatch('subscribeToProperties')
     }
 
 }
