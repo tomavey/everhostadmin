@@ -1,6 +1,6 @@
 <template>
     <ehc-page>
-    <v-card class="mx-auto">
+    <v-card class="mx-auto" width="900">
         <v-card-title>{{pageTitle}}</v-card-title>
         <v-card-title>
             <v-text-field
@@ -9,17 +9,23 @@
                 label="Search"
                 single-line
                 hide-details
+                full-width
             ></v-text-field>
         </v-card-title>
         <v-data-table
             :headers="headers"
             :items="feedbacks"
-            :items-per-page="20"
+            :items-per-page="30"
             :search='search' 
             :single-expand="singleExpand"
             :expanded.sync="expanded"
+            item-key="createdAt"
             show-expand            
             class="elevation-1"
+            :footer-props="{
+                showFirstLastPage: true,
+                itemsPerPageOptions: [30,50,100,-1]
+            }"
         >
         <template v-slot:expanded-item="{ headers, item }">
         <td :colspan="headers.length">
@@ -43,7 +49,7 @@ export default {
             pageTitle: "Feedback Data",
             search: '',
             expanded: [],
-            singleExpand: false,
+            singleExpand: true,
             headers: [
                 {
                     text: 'Name',
@@ -73,6 +79,7 @@ export default {
                     value: 'createdDate',
                     filterable: true,
                 },
+                { text: '', value: 'data-table-expand' },
 
             ]
         }
@@ -83,7 +90,9 @@ export default {
             .sort((a,b) => a-b )
             .map( el => {
                 el.createdDate = this.formatDate(el.createdAt,'dateOnly')
-                el.shortDescription = el.description.slice(0, 25)
+                if ( el.description ) {
+                    el.shortDescription = el.description.slice(0,25)
+                }
                 return el
             })
         }

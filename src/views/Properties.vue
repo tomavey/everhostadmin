@@ -1,19 +1,11 @@
 <template>
     <ehc-page>
         <v-toolbar flat>
-            <v-toolbar-title flat>
-                Properties
-            </v-toolbar-title>
-
+            <v-text-field
+                placeholder="Search Properties"
+                v-model="search"
+            ></v-text-field>
             <v-spacer></v-spacer>
-            <!-- TODO <v-btn  
-                fab 
-                small 
-                class="mx-2 elevation-0"  
-                color="Gray1"
-                @click="searchSettings">
-                <v-icon>mdi-tune-vertical-variant</v-icon>
-            </v-btn> -->
             <v-btn
                 rounded
                 color="button"
@@ -59,17 +51,20 @@
 import EhcBtn from '../components/ehc-btn.vue'
 import EhcPropertyCard from '../components/ehc-property-card.vue'
 import firebase from 'firebase'
+import mixins from '@/mixins'
 
 
 
 export default {
     components: {EhcPropertyCard, EhcBtn},
+    mixins: [mixins],
     name: 'properties',
 
     data: () => ({
         maxProperties: 3,
         maxPropsDialog: false,
         addLoading: false,
+        search: null
     }),
     watch: {
         loading(val) {
@@ -81,11 +76,15 @@ export default {
             return this.$store.getters.propertiesStatus.loading
         },
         properties() {
-            return this.$store.getters.properties
+            let properties = this.$store.getters.properties
             .sort( (a,b) => {
                 if ( a.createdAt < b.createdAt ) {return 1}
                 else { return -1 }
             })
+            if ( this.search ) { properties = properties.filter(el => {
+                return el.searchAble.toLowerCase().includes(this.search.toLowerCase())
+            })}
+            return properties
         },
     },    
     methods: {
@@ -107,7 +106,7 @@ export default {
         },
     },
     created() {
-        this.$store.dispatch('subscribeToProperties')
+        this.$store.dispatch('subscribeToProperties', this.$store.getters.isAdmin)
     }
 
 }
