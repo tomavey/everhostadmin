@@ -9,6 +9,9 @@
                     <v-icon>mdi-view-list</v-icon>
                 </v-btn>
             </v-btn-toggle>
+                <v-btn v-if="userIsAdmin" text @click="$router.push( {name: 'Properties', query: {showAll: true}} )" >
+                    <v-icon>mdi-playlist-plus</v-icon>
+                </v-btn>
             <v-spacer></v-spacer>
             <v-text-field
                 placeholder="Search Properties"
@@ -47,6 +50,7 @@
 import EhcBtn from '../components/ehc-btn.vue'
 import firebase from 'firebase'
 import mixins from '@/mixins'
+import auth from '@/mixins/auth'
 import EhcPropertyGallery from '../components/ehc-property-gallery.vue'
 import EhcPropertiesTable from '../components/ehc-properties-table.vue'
 
@@ -54,7 +58,7 @@ import EhcPropertiesTable from '../components/ehc-properties-table.vue'
 
 export default {
     components: {EhcBtn, EhcPropertyGallery, EhcPropertiesTable},
-    mixins: [mixins],
+    mixins: [mixins,auth],
     name: 'properties',
 
     data: () => ({
@@ -115,11 +119,10 @@ export default {
     },
     created() {
         let payload = {}
-        // if ( this.userIsAdmin ) {
-        // this.userIsAdmin is not ready in time - need to fix this!    
+        if ( this.userIsAdmin ) {
             if ( this.$route.query.uid ) { payload.uid = this.$route.query.uid }
             if ( this.$route.query.showAll ) { payload.showAll = true }
-        // }
+        }
         this.$store.dispatch('subscribeToProperties',payload)
     }
 

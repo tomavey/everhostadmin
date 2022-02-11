@@ -16,6 +16,12 @@
                 <v-icon class="mr-1">{{item.icon}}</v-icon>
                 <strong>{{item.label}}</strong>
             </v-tab>    
+            <v-tab
+                v-if = "userIsAdmin"
+                @click="$router.push('/users')">
+                <v-icon class="mr-1">mdi-account-multiple</v-icon>
+                <strong>Users</strong>
+            </v-tab>    
             
         </v-tabs>
         <v-spacer></v-spacer>

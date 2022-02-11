@@ -33,9 +33,10 @@
 
 <script>
 import mixins from '@/mixins'
+import auth from '@/mixins/auth'
 
 export default {
-  mixins: [mixins],
+  mixins: [mixins,auth],
   data: function() {
     return {
       pageTitle: "USERS",
@@ -74,11 +75,12 @@ export default {
             value: 'uid',
           },
           { text: 'Created', value: "createdAtAsString", sortable: true },
-          { text: 'Actions', value: 'actions', sortable: false },
+          { text: 'View These Properties', value: 'actions', sortable: false },
         ]
     }
   },
   created(){
+    if ( !this.userIsAdmin ) { this.$router.push( {name: "Properties"} ) }
     this.$store.dispatch('getUsers')
   }
 }
