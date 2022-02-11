@@ -114,7 +114,13 @@ export default {
         },
     },
     created() {
-        this.$store.dispatch('subscribeToProperties')
+        let payload = {}
+        // if ( this.userIsAdmin ) {
+        // this.userIsAdmin is not ready in time - need to fix this!    
+            if ( this.$route.query.uid ) { payload.uid = this.$route.query.uid }
+            if ( this.$route.query.showAll ) { payload.showAll = true }
+        // }
+        this.$store.dispatch('subscribeToProperties',payload)
     }
 
 }

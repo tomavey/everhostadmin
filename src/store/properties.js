@@ -67,9 +67,11 @@ export default {
         })
       })
     },
-    subscribeToProperties(context,showAll){
-      const userId = context.getters.user.uid
-
+    subscribeToProperties(context,payload){
+      let userId = context.getters.user.uid
+      if ( payload && payload.uid ) { userId = payload.uid }
+      let showAll = false
+      if ( payload && payload.showAll ) { showAll = true }
       let propertiesRef = firebase.firestore().collection('properties')
       .where("deletedAt", "==", null)
       .where("uid","==", userId)

@@ -16,6 +16,15 @@
           class="mx-4"
         ></v-text-field>
       </template>
+      <template v-slot:item.actions="{ item }">
+      <v-icon
+        small
+        class="mr-2"
+        @click="showProperty(item)"
+      >
+        mdi-file-find
+      </v-icon>
+    </template>
     </v-data-table>
   </div>
 </template>
@@ -31,6 +40,12 @@ export default {
     return {
       pageTitle: "USERS",
       search: null,
+    }
+  },
+  methods: {
+    showProperty: function(item){
+      console.log(item)
+      this.$router.push({name: "Properties", query: {uid: item.uid}})
     }
   },
   computed: {
@@ -59,6 +74,7 @@ export default {
             value: 'uid',
           },
           { text: 'Created', value: "createdAtAsString", sortable: true },
+          { text: 'Actions', value: 'actions', sortable: false },
         ]
     }
   },
