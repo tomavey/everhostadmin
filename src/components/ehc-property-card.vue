@@ -27,7 +27,7 @@
                 <v-btn class="mx-0" v-if="!property.publishedAt" small icon @click="publishProperty({propertyId: property.propertyId, publishedAt: true})">
                     <v-icon small color="grey darken-2">mdi-publish</v-icon>
                 </v-btn>
-                <v-btn class="mx-0" v-else small :loading="publisLoading" icon @click="publishProperty({propertyId: property.propertyId, publishedAt: false})"><v-icon small color="grey darken-2">mdi-publish-off</v-icon></v-btn>
+                <v-btn class="mx-0" v-else small :loading="publishLoading" icon @click="publishProperty({propertyId: property.propertyId, publishedAt: false})"><v-icon small color="grey darken-2">mdi-publish-off</v-icon></v-btn>
             </v-list-item-icon>
             <v-list-item-icon class="mx-0">
                 <v-btn class="mx-0" small icon @click="copyLink()"><v-icon small color="yellow darken-2">mdi-link</v-icon></v-btn>
@@ -104,13 +104,14 @@
 <script>
 
 import uniMixin from '@/mixins/index.vue'
+import PropertyActions from '@/mixins/propertyActions'
 import QrcodeVue from 'qrcode.vue'
 import EhcUserAvatar from '@/components/ehc-user-avatar.vue'
 
 
 
 export default {
-    mixins: [uniMixin],
+    mixins: [uniMixin, PropertyActions],
     components: {QrcodeVue, EhcUserAvatar},
     name: 'ehc-property-card',
     props: ['property'],
@@ -120,7 +121,7 @@ export default {
 
         },
         linkDialog: false,
-        publisLoading: false,
+        publishLoading: false,
         deleteConfirm: {
             show: false,
             loading: false

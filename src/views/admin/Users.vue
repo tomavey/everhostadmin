@@ -8,6 +8,10 @@
       item-key="name"
       class="elevation-1"
       :search="search"
+      :footer-props="{
+        showFirstLastPage: true,
+        itemsPerPageOptions: [50,100,150.-1]
+      }"
     >
       <template v-slot:top>
         <v-text-field

@@ -90,7 +90,7 @@ export default {
             // console.log("obj name ",obj.name)
             propertiesArray = [...propertiesArray, obj]
         })
-        console.log("properties ", propertiesArray)
+        // console.log("properties ", propertiesArray)
         context.commit("setProperties",propertiesArray)  
       })
     },
@@ -104,7 +104,7 @@ export default {
         const propertyRef = firebase.firestore().collection('properties').doc(propertyId)
         propertyRef.set(obj, { merge:true })
         .then(res => {
-          console.log("marked as deleted")
+          // console.log("marked as deleted")
           context.commit("setPropertiesStatus", {loading: false})  
           resolve(res)
         }).catch(err => {
