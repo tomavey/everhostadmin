@@ -1,10 +1,8 @@
 <template>
-  <v-app>
+  <v-app id="app">
     <ehc-login>
         <ehc-app-toolbar></ehc-app-toolbar>
-
-        <ehc-admin-drawer/>
-
+        <ehc-admin-drawer v-if="userIsAdmin"/>
 
         <v-main height="100%">
             <router-view :key="$route.fullPath" />
@@ -21,14 +19,12 @@ import ehcLogin from './components/ehc-login.vue';
 import EhcAppToolbar from './components/ehc-app-toolbar.vue';
 import EhcFeedback from './components/ehc-feedback.vue';
 import updateMixin from '@/mixins/updateMixin.js';
-import EhcAdminDrawer from './components/ehc-admin-drawer.vue';
-
-
-
+import EhcAdminDrawer from './components/ehc-admin-drawer.vue'
+import auth from "@/mixins/auth.vue"
 
 export default {
   components: { ehcAppToolbar, ehcLogin, EhcAppToolbar, EhcFeedback, EhcAdminDrawer },
-  mixins: [updateMixin],
+  mixins: [updateMixin,auth],
   name: 'App',
 
   data: () => ({
@@ -39,6 +35,9 @@ export default {
   methods: {
   },
   computed: {
+    user: function(){
+      this.$store.getters.user
+    }
   },
   created() {
     this.$store.dispatch("monitorAuth")
