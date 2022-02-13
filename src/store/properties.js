@@ -6,12 +6,15 @@ export default {
     properties: [],
     propertiesStatus: {
       loading: false,
-    }
+    },
+    uidToShowAdmin: null,
+    showAll: false,
   },
   getters: {    
     properties: state=> state.properties,
     propertiesStatus: state=> state.propertiesStatus,
-
+    uidToShowAdmin: state=> state.uidToShowAdmin,
+    showAll: state=> state.showAll,
   },
   mutations: {
     setProperties (state,payload) {
@@ -21,6 +24,12 @@ export default {
       for (var key in payload) { //change only the settings that were input everything else keep the same
         state.propertiesStatus[key] = payload[key]
       }
+    },
+    setUidToShowAdmin (state,payload) {
+      state.uidToShowAdmin = payload
+    },
+    setShowAll (state,payload) {
+      state.showAll = payload
     },
   },
   actions: {
@@ -67,9 +76,12 @@ export default {
         })
       })
     },
-    subscribeToProperties(context,showAll){
-      const userId = context.getters.user.uid
-
+    subscribeToProperties(context,payload){
+      console.log("subscribeToProperties ", payload)
+      let userId = context.getters.user.uid
+      if ( payload && payload.uid ) { userId = payload.uid }
+      let showAll = false
+      if ( payload && payload.showAll ) { showAll = true }
       let propertiesRef = firebase.firestore().collection('properties')
       .where("deletedAt", "==", null)
       .where("uid","==", userId)
@@ -88,7 +100,7 @@ export default {
             // console.log("obj name ",obj.name)
             propertiesArray = [...propertiesArray, obj]
         })
-        console.log("properties ", propertiesArray)
+        // console.log("properties ", propertiesArray)
         context.commit("setProperties",propertiesArray)  
       })
     },
@@ -102,7 +114,7 @@ export default {
         const propertyRef = firebase.firestore().collection('properties').doc(propertyId)
         propertyRef.set(obj, { merge:true })
         .then(res => {
-          console.log("marked as deleted")
+          // console.log("marked as deleted")
           context.commit("setPropertiesStatus", {loading: false})  
           resolve(res)
         }).catch(err => {

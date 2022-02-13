@@ -1,6 +1,21 @@
 <template>
     <ehc-page>
         <v-toolbar flat>
+            <v-btn-toggle v-model="displayAs" mandatory>
+                <v-btn text value="gallery">
+                    <v-icon>mdi-view-grid</v-icon>
+                </v-btn>
+                <v-btn text value="table">
+                    <v-icon>mdi-view-list</v-icon>
+                </v-btn>
+            </v-btn-toggle>
+                <v-btn v-if="userIsAdmin && !showAll && displayAs === 'table'" text @click="_showAll()" >
+                    <v-icon>mdi-playlist-plus</v-icon>
+                </v-btn>
+                <v-btn v-if="userIsAdmin && showAll && displayAs === 'table'" text @click="_showAll()" >
+                    <v-icon>mdi-playlist-minus</v-icon>
+                </v-btn>
+            <v-spacer></v-spacer>
             <v-text-field
                 placeholder="Search Properties"
                 v-model="search"
@@ -19,21 +34,8 @@
                 add property
             </v-btn>
         </v-toolbar>
-        <v-container fluid>
-            <v-row>
-                <v-col 
-                    cols="12" 
-                    xs="12"
-                    sm="6"
-                    md="4"
-                    lg="3"
-                    xl="2"
-                    v-for="(property, index) in properties" 
-                    :key="index">
-                    <ehc-property-card :property="property"></ehc-property-card>
-                </v-col>
-            </v-row>
-        </v-container>
+        <ehc-properties-gallery v-if="displayAs === 'gallery'" :properties="properties"></ehc-properties-gallery>
+        <ehc-properties-table v-if="displayAs =='table'" :properties="properties"></ehc-properties-table>
         <ehc-dialog max-width="300" v-model="maxPropsDialog" title="Max Properties Reached">
             <h3>you have reached the maximum number of properties available</h3>
             <template v-slot:actions>
@@ -49,22 +51,25 @@
 
 <script>
 import EhcBtn from '../components/ehc-btn.vue'
-import EhcPropertyCard from '../components/ehc-property-card.vue'
 import firebase from 'firebase'
 import mixins from '@/mixins'
+import auth from '@/mixins/auth'
+import EhcPropertiesGallery from '../components/ehc-properties-gallery.vue'
+import EhcPropertiesTable from '../components/ehc-properties-table.vue'
 
 
 
 export default {
-    components: {EhcPropertyCard, EhcBtn},
-    mixins: [mixins],
+    components: {EhcBtn, EhcPropertiesGallery, EhcPropertiesTable},
+    mixins: [mixins,auth],
     name: 'properties',
 
     data: () => ({
         maxProperties: 3,
         maxPropsDialog: false,
         addLoading: false,
-        search: null
+        search: null,
+        displayAs: "gallery",
     }),
     watch: {
         loading(val) {
@@ -72,6 +77,8 @@ export default {
         }
     },
     computed: {
+        showAll() { return this.$store.getters.showAll },
+        uidToShowAdmin() { return this.$store.getters.uidToShowAdmin},
         loading() {
             return this.$store.getters.propertiesStatus.loading
         },
@@ -81,6 +88,16 @@ export default {
                 if ( a.createdAt < b.createdAt ) {return 1}
                 else { return -1 }
             })
+            .map( el => {
+                el.createdAtAsString = this.dateFormat(el.createdAt,'dateOnly')
+                if ( el.publishedAt ) {
+                   el.publishedAtAsString = this.dateFormat(el.publishedAt,'dateOnly')
+                } else {
+                   el.publishedAtAsString = "not published"
+                }
+                return el
+            })
+
             if ( this.search ) { properties = properties.filter(el => {
                 return el.searchAble.toLowerCase().includes(this.search.toLowerCase())
             })}
@@ -89,7 +106,7 @@ export default {
     },    
     methods: {
         addProperty() {
-            if (this.properties.length < 3) {
+            if (this.properties.length < 1000) {
                 this.addLoading=true
                 console.log("addProperty button pushed")
                 this.$store.commit("setLoading", true)
@@ -104,9 +121,22 @@ export default {
         searchSettings() {
             console.log("TODO")
         },
+        _showAll() {
+            this.displayAs = "table"
+            this.$store.commit("setShowAll", !this.showAll) 
+            this.subscribeToProperties(this.showAll)
+        },
+        subscribeToProperties(showAll){
+            let payload = {}
+            if ( this.userIsAdmin ) {
+                if ( this.$store.getters.uidToShowAdmin ) { payload.uid = this.$store.getters.uidToShowAdmin }
+                payload.showAll = showAll
+            }
+            this.$store.dispatch('subscribeToProperties',payload)
+        }
     },
     created() {
-        this.$store.dispatch('subscribeToProperties', this.$store.getters.isAdmin)
+        this.subscribeToProperties(this.showAll)
     }
 
 }

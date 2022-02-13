@@ -42,6 +42,7 @@ export default {
             {type: "textArea",      label: "Description of issue",      key: "description"},
             // {type: "fileInput",     label: "upload screenshot(s)",      key: "upload",          multiple:true},        
         ],
+        sendEmailTo: ['tom@everhost.io','grant@everhost.io','ed@everhost.io'],
     }),
     mounted() {
         this.formData.email = this.$store.getters.user.email
@@ -79,7 +80,7 @@ export default {
                 await delay(500);
                 that.showFeedback= false
                 let mailObj = {
-                    to: ['tom@everhost.io','grant@everhost.io'],
+                    to: this.sendEmailTo,
                     subject: "Feedback from an Everhost beta tester",
                     html: `
                         <p>Description: ${this.formData.description}</p>

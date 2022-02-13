@@ -8,6 +8,10 @@
       item-key="name"
       class="elevation-1"
       :search="search"
+      :footer-props="{
+        showFirstLastPage: true,
+        itemsPerPageOptions: [50,100,150.-1]
+      }"
     >
       <template v-slot:top>
         <v-text-field
@@ -16,6 +20,15 @@
           class="mx-4"
         ></v-text-field>
       </template>
+      <template v-slot:item.actions="{ item }">
+      <v-icon
+        small
+        class="mr-2"
+        @click="showProperty(item)"
+      >
+        mdi-file-find
+      </v-icon>
+    </template>
     </v-data-table>
   </div>
 </template>
@@ -24,13 +37,21 @@
 
 <script>
 import mixins from '@/mixins'
+import auth from '@/mixins/auth'
 
 export default {
-  mixins: [mixins],
+  mixins: [mixins,auth],
   data: function() {
     return {
       pageTitle: "USERS",
       search: null,
+    }
+  },
+  methods: {
+    showProperty: function(item){
+      console.log(item)
+      this.$store.commit('setUidToShowAdmin', item.uid)
+      this.$router.push({name: "Properties"})
     }
   },
   computed: {
@@ -59,10 +80,12 @@ export default {
             value: 'uid',
           },
           { text: 'Created', value: "createdAtAsString", sortable: true },
+          { text: 'View These Properties', value: 'actions', sortable: false },
         ]
     }
   },
   created(){
+    if ( !this.userIsAdmin ) { this.$router.push( {name: "Properties"} ) }
     this.$store.dispatch('getUsers')
   }
 }
