@@ -9,10 +9,10 @@
                     <v-icon>mdi-view-list</v-icon>
                 </v-btn>
             </v-btn-toggle>
-                <v-btn v-if="userIsAdmin && !showAll" text @click="_showAll()" >
+                <v-btn v-if="userIsAdmin && !showAll && displayAs === 'table'" text @click="_showAll()" >
                     <v-icon>mdi-playlist-plus</v-icon>
                 </v-btn>
-                <v-btn v-if="userIsAdmin && showAll" text @click="_showAll()" >
+                <v-btn v-if="userIsAdmin && showAll && displayAs === 'table'" text @click="_showAll()" >
                     <v-icon>mdi-playlist-minus</v-icon>
                 </v-btn>
             <v-spacer></v-spacer>
@@ -70,7 +70,6 @@ export default {
         addLoading: false,
         search: null,
         displayAs: "gallery",
-        showAll: false
     }),
     watch: {
         loading(val) {
@@ -78,6 +77,8 @@ export default {
         }
     },
     computed: {
+        showAll() { return this.$store.getters.showAll },
+        uidToShowAdmin() { return this.$store.getters.uidToShowAdmin},
         loading() {
             return this.$store.getters.propertiesStatus.loading
         },
@@ -122,20 +123,20 @@ export default {
         },
         _showAll() {
             this.displayAs = "table"
-            this.showAll = !this.showAll
+            this.$store.commit("setShowAll", !this.showAll) 
             this.subscribeToProperties(this.showAll)
         },
         subscribeToProperties(showAll){
             let payload = {}
             if ( this.userIsAdmin ) {
-                if ( this.$route.query.uid ) { payload.uid = this.$route.query.uid }
-                if ( showAll ) { payload.showAll = true }
+                if ( this.$store.getters.uidToShowAdmin ) { payload.uid = this.$store.getters.uidToShowAdmin }
+                payload.showAll = showAll
             }
             this.$store.dispatch('subscribeToProperties',payload)
         }
     },
     created() {
-        this.subscribeToProperties("false")
+        this.subscribeToProperties(this.showAll)
     }
 
 }

@@ -50,7 +50,8 @@ export default {
   methods: {
     showProperty: function(item){
       console.log(item)
-      this.$router.push({name: "Properties", query: {uid: item.uid}})
+      this.$store.commit('setUidToShowAdmin', item.uid)
+      this.$router.push({name: "Properties"})
     }
   },
   computed: {
