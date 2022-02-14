@@ -11,13 +11,22 @@
     }"
   >
 
-    <template v-slot:item.actions="{ item }">
+    <template v-slot:item.edit="{ item }">
       <v-icon
         small
         class="mr-2"
         @click="goToProperty(item)"
       >
         mdi-pencil
+      </v-icon>
+    </template>
+    <template v-slot:item.copy="{ item }">
+      <v-icon
+        small
+        class="mr-2"
+        @click="copyProperty(item)"
+      >
+        mdi-content-copy
       </v-icon>
     </template>
 
@@ -40,7 +49,8 @@ export default {
         { text: 'Property Id', value: 'propertyId' },
         { text: 'Published', value: 'publishedAtAsString' },
         { text: 'Created', value: 'createdAtAsString' },
-        { text: 'Actions', value: 'actions', sortable: false },
+        { text: 'Edit', value: 'edit', sortable: false },
+        { text: 'Copy', value: 'copy', sortable: false },
 
       ]
     }
@@ -51,6 +61,9 @@ export default {
         console.log("opening property URL", url)
         window.open(url,"", "width=900, height=812");
     },
+    copyProperty(item){
+      this.$store.dispatch('copyProperty',item)
+    }
   },
   computed: {
     appSite() {return this.$store.getters.appSite},

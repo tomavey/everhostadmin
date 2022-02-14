@@ -123,7 +123,7 @@ export default {
         })  
       })
     },
-    markPropertyPublishedAt(content,payload){
+    markPropertyPublishedAt(context,payload){
       return new Promise((resolve, reject) => {
         // console.log("payld",payload)
         let propertyId = payload.propertyId
@@ -140,5 +140,23 @@ export default {
         })  
       })
     },
+    copyProperty(context,payload){
+      console.log('payload ',payload)
+      context.commit('setPropertiesStatus', {loading: true})
+      let obj = {
+        'propertyId': payload.propertyId
+      }
+      const copyProperty = firebase.functions().httpsCallable('copyProperty')
+      return copyProperty( obj )
+      .then(res => {
+        context.commit('setPropertiesStatus', {loading: false})
+        console.log("copyProperty ",res)
+      })
+      .catch( err => {
+        console.log(err)
+        context.commit('setPropertiesStatus', {loading: false})
+      })
+
+    }
   }
 }
