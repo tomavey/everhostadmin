@@ -2,19 +2,31 @@
     <ehc-page>
         <v-toolbar flat>
             <v-btn-toggle v-model="displayAs" mandatory>
-                <v-btn text value="gallery">
-                    <v-icon>mdi-view-grid</v-icon>
-                </v-btn>
-                <v-btn text value="table">
-                    <v-icon>mdi-view-list</v-icon>
-                </v-btn>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn text value="gallery" v-bind="attrs" v-on="on">
+                        <v-icon>mdi-view-grid</v-icon>
+                    </v-btn>
+                  </template>  
+                <span>gallery view</span>
+                </v-tooltip>
+
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn text value="table" v-bind="attrs" v-on="on">
+                        <v-icon>mdi-view-list</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>list view</span>
+                </v-tooltip>
             </v-btn-toggle>
-                <v-btn v-if="userIsAdmin && !showAll && displayAs === 'table'" text @click="_showAll()" >
+                <v-btn v-if="userIsAdmin && !showAll" text @click="_showAll()" title="show all">
                     <v-icon>mdi-playlist-plus</v-icon>
                 </v-btn>
-                <v-btn v-if="userIsAdmin && showAll && displayAs === 'table'" text @click="_showAll()" >
+                <v-btn v-if="userIsAdmin && showAll" text @click="_showAll()" title="show few">
                     <v-icon>mdi-playlist-minus</v-icon>
                 </v-btn>
+        {{properties.length}}
             <v-spacer></v-spacer>
             <v-text-field
                 placeholder="Search Properties"
