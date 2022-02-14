@@ -1,6 +1,13 @@
 <template>
 <v-container>
 <template>
+  <v-btn @click="showPromote = !showPromote" class="float-right">
+    Promote user to admin
+  </v-btn>
+  <ehc-dialog v-model="showPromote" :title="title" width="500" close>
+    <ehc-form :meta="meta" v-model="formData" @submit="submitPromotion()"></ehc-form>
+  </ehc-dialog>
+
   <div>
     <v-data-table
       :headers="headers"
@@ -45,6 +52,16 @@ export default {
     return {
       pageTitle: "USERS",
       search: null,
+      showPromote: false,
+      formData: {},
+      title: "UserId for new admin",
+      formData: {},
+      meta: [
+          {type: "email",         label: "email",                     key: "email"},
+          {type: "button",        label: "submit",                    key: "submit",          emitOnClick: "submit"},
+      ],
+
+
     }
   },
   methods: {
@@ -52,7 +69,12 @@ export default {
       console.log(item)
       this.$store.commit('setUidToShowAdmin', item.uid)
       this.$router.push({name: "Properties"})
-    }
+    },
+    submitPromotion: function(){
+      let email = this.formData.email
+      this.$store.dispatch('makeAdmin',email)
+      this.showPromote = false
+    } 
   },
   computed: {
     users: function(){
