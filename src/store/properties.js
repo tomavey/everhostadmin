@@ -37,9 +37,11 @@ export default {
       context.commit('setPropertiesStatus', {loading: true})
       let uid = context.getters.user.uid
       let orgid = context.getters.orgID
+      let orgName = context.getters.org.name
       let obj = {
         'uid': uid,
-        'orgid': orgid
+        'orgid': orgid,
+        'orgName': orgName
       }
       console.log("I'm gonna makeNewProperty", obj)
       const addProperty = firebase.functions().httpsCallable('makeNewProperty')
