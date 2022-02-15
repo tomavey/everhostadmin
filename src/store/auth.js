@@ -64,6 +64,12 @@ export default {
         }
       });
     },
+    async makeAdmin(context,uid){
+      let addAdmin  = firebase.functions().httpsCallable('addAdminRoleByUid')
+      let userRef = firebase.firestore().collection("users").doc(uid)
+      await addAdmin({'uid': uid})
+      await userRef.set({rights: {"admin": true}}, {merge:true})
+    }
   }
 }
 
