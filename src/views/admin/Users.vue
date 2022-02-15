@@ -1,5 +1,6 @@
 <template>
 <v-container>
+  <p style="text-align: center; font-weight: bold; font-size: 1.3em">USERS</p>
 <template>
   <v-btn @click="showPromote = !showPromote" class="float-right">
     Promote user to admin

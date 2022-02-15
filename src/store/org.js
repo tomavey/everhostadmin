@@ -12,16 +12,21 @@ export default {
       found: false,
       loading: false
     },
-    orgID: null
+    orgID: null,
+    orgs: [],
   },
   getters: {
     org: state=> state.org,
     orgID: state=> state.orgID,
     orgStatus: state=> state.orgStatus,
+    orgs: state=> state.orgs,
   },
   mutations: {
     setOrg (state, payload) {
       state.org = payload
+    },  
+    setOrgs (state, payload) {
+      state.orgs = payload
     },  
     setOrgID (state, payload) {
       state.orgID = payload
@@ -71,6 +76,20 @@ export default {
       }
       docRef.add(org).then(() => {
         context.dispatch('getOrg')
+      })
+    },
+    async getOrgs(context) {
+      let obj = {}
+      var orgsRef = firebase.firestore().collection("organizations")
+      orgsRef.get()
+      .then( docs => {
+        let orgsArray = []
+        docs.forEach(doc => {
+          obj = doc.data()
+          obj.orgId = doc.id
+          orgsArray.push(obj)
+        })
+        context.commit("setOrgs",orgsArray)
       })
     }
   }

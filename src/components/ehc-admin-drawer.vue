@@ -20,6 +20,12 @@
             </v-list-item-icon>
             <v-list-item-title>Feedback</v-list-item-title>
           </v-list-item>
+          <v-list-item link @click="$router.push('/organizations')">
+            <v-list-item-icon>
+              <v-icon>mdi-group</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Organizations</v-list-item-title>
+          </v-list-item>
         </v-list>
       </v-navigation-drawer>
 </template>

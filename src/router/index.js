@@ -4,7 +4,8 @@ import Properties from '../views/Properties.vue'
 import GuestData from '../views/GuestData.vue'
 import Feedbacks from '../views/Feedbacks.vue'
 import MyAccount from '../views/MyAccount.vue'
-import Users from '../views//admin/Users.vue'
+import Users from '../views/admin/Users.vue'
+import Organizations from '../views/admin/Organizations.vue'
 import Firebase from 'firebase'
 
 
@@ -53,6 +54,10 @@ const routes = [
   {
     path: "/users",
     component: Users,
+  },
+  {
+    path: "/organizations",
+    component: Organizations,
   },
 ]
 
