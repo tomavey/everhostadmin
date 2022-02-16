@@ -44,7 +44,7 @@ export default {
         'orgName': orgName
       }
       console.log("I'm gonna makeNewProperty", obj)
-      const addProperty = firebase.functions().httpsCallable('makeNewProperty')
+      const addProperty = firebase.functions().httpsCallable('makeNewProperty') 
       return addProperty(obj)
       .then(res => {
         context.commit('setPropertiesStatus', {loading: false})
@@ -132,7 +132,7 @@ export default {
     },
     markPropertyPublishedAt(context,payload){
       return new Promise((resolve, reject) => {
-        // console.log("payld",payload)
+        // console.log("payld",payload);return;
         let propertyId = payload.propertyId
         let obj = {}
         if ( payload.publishedAt ) { obj.publishedAt = Date.now() } else { obj.publishedAt = null }
@@ -164,6 +164,7 @@ export default {
         context.commit('setPropertiesStatus', {loading: false})
       })
 
-    }
+    },
+    
   }
 }

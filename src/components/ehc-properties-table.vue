@@ -29,6 +29,15 @@
         mdi-content-copy
       </v-icon>
     </template>
+    <template v-slot:item.publish="{ item }">
+      <v-icon
+        small
+        class="mr-2"
+        @click="publishProperty(item)"
+      >
+        mdi-publish
+      </v-icon>
+    </template>
 
   </v-data-table>
 </v-container>
@@ -51,6 +60,7 @@ export default {
         { text: 'Created', value: 'createdAtAsString' },
         { text: 'Edit', value: 'edit', sortable: false },
         { text: 'Copy', value: 'copy', sortable: false },
+        { text: 'Publish', value: 'publish', sortable: false },
 
       ]
     }
@@ -63,6 +73,11 @@ export default {
     },
     copyProperty(item){
       this.$store.dispatch('copyProperty',item)
+    },
+    publishProperty(item) {
+        this.$store.dispatch("markPropertyPublishedAt", item).then(() => {
+          console.log("published")
+        })
     }
   },
   computed: {
