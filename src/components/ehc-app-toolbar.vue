@@ -1,6 +1,6 @@
 <template>
-    <v-toolbar flat dense class="px-0 mx-0" color="appBar">
-        <v-toolbar-title v-if="userIsAdmin">spacer</v-toolbar-title>
+    <v-app-bar flat dense app         clipped-left class="px-0 mx-0" color="appBar">
+        <!-- <v-toolbar-title v-if="userIsAdmin">spacer</v-toolbar-title> -->
         <v-toolbar-title>
             <v-img src="@/assets/icons/everhost_v3_logo.svg" contain height="50px" width="190px" class="ma-0 pa-0"></v-img>
         </v-toolbar-title>
@@ -81,7 +81,7 @@
       ></v-progress-linear>
 
 
-    </v-toolbar>
+    </v-app-bar>
 </template>
 
 

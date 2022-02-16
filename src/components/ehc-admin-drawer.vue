@@ -2,6 +2,7 @@
       <v-navigation-drawer
         expand-on-hover
         permanent
+        clipped
         app
       >
         <v-list
