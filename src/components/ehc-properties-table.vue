@@ -31,11 +31,20 @@
     </template>
     <template v-slot:item.publish="{ item }">
       <v-icon
+        v-if="!item.publishedAt"
         small
         class="mr-2"
-        @click="publishProperty(item)"
+        @click="publishProperty({propertyId: item.propertyId, publishedAt: true})"
       >
         mdi-publish
+      </v-icon>
+      <v-icon
+        v-else
+        small
+        class="mr-2"
+        @click="publishProperty({propertyId: item.propertyId, publishedAt: false})"
+      >
+        mdi-publish-off
       </v-icon>
     </template>
 
@@ -74,8 +83,8 @@ export default {
     copyProperty(item){
       this.$store.dispatch('copyProperty',item)
     },
-    publishProperty(item) {
-        this.$store.dispatch("markPropertyPublishedAt", item).then(() => {
+    publishProperty(publishObj) {
+        this.$store.dispatch("markPropertyPublishedAt", publishObj).then(() => {
           console.log("published")
         })
     }

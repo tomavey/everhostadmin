@@ -132,14 +132,14 @@ export default {
     },
     markPropertyPublishedAt(context,payload){
       return new Promise((resolve, reject) => {
-        // console.log("payld",payload);return;
+        console.log("payld",payload)
         let propertyId = payload.propertyId
         let obj = {}
         if ( payload.publishedAt ) { obj.publishedAt = Date.now() } else { obj.publishedAt = null }
         const propertyRef = firebase.firestore().collection('properties').doc(propertyId)
         propertyRef.set(obj, { merge:true })
         .then( (res) => {
-          console.log(`${propertyId} marked published ${payload.publishedAt}` )
+          console.log(`${propertyId} marked published ${obj.publishedAt}` )
           resolve(res)
         }).catch( (err) => {
           console.log(err)
