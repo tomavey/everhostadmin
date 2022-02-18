@@ -3,7 +3,7 @@
     "background_color": "#f69435",
     "display": "standalone",
     "scope": "/",
-    "start_url": "everhostio.web.app",
+    "start_url": "manage.everhost.io",
     "name": "Everhost",
     "short_name": "Everhost",
     "description": "Give guests a 5-Star experience by providing all the information needed before their stay.  First property guide is on us and free forever!",
