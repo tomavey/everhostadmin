@@ -15,7 +15,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     devAppSite: "http://localhost:5000/",
-    prodAppSite: "https://everhostio.web.app/",
+    prodAppSite: "https://everhost.io/",
     loading: false,
     feedback: {
       show: false,
