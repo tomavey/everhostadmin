@@ -5,6 +5,7 @@ import GuestData from '../views/GuestData.vue'
 import Feedbacks from '../views/Feedbacks.vue'
 import MyAccount from '../views/MyAccount.vue'
 import Users from '../views/admin/Users.vue'
+import EmailToSend from '../views/admin/EmailToSend.vue'
 import Organizations from '../views/admin/Organizations.vue'
 import Firebase from 'firebase'
 
@@ -58,6 +59,10 @@ const routes = [
   {
     path: "/organizations",
     component: Organizations,
+  },
+  {
+    path: "/emailtosend",
+    component: EmailToSend,
   },
 ]
 

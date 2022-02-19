@@ -4,6 +4,7 @@ import firebase from 'firebase'
 export default {
   state: {
     properties: [],
+    property: {},
     propertiesStatus: {
       loading: false,
     },
@@ -13,12 +14,16 @@ export default {
   getters: {    
     properties: state=> state.properties,
     propertiesStatus: state=> state.propertiesStatus,
+    property: state => state.property,
     uidToShowAdmin: state=> state.uidToShowAdmin,
     showAll: state=> state.showAll,
   },
   mutations: {
     setProperties (state,payload) {
         state.properties = payload
+    },
+    setProperty (state,payload) {
+      state.property = payload
     },
     setPropertiesStatus (state,payload) {
       for (var key in payload) { //change only the settings that were input everything else keep the same
@@ -165,6 +170,18 @@ export default {
       })
 
     },
-    
+    getProperty(context, propertyId){
+      return new Promise((resolve, reject) => {
+        console.log("getting property")
+        const propertiesRef = firebase.firestore().collection('properties')
+        propertiesRef.doc(propertyId).get()
+        .then( (doc) => {
+          let obj = doc.data()
+          console.log("got property", obj)
+          this.commit('setProperty', obj) 
+          resolve(doc)
+        })
+      })
+    },
   }
 }
