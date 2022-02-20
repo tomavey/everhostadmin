@@ -20,21 +20,47 @@
                     <span  v-else>Not Published Yet</span>
                 </v-list-item-subtitle>
             </v-list-item-content>
-            <v-list-item-icon class="mx-0">
-                <v-btn class="mx-0" small icon @click="goToProperty()"><v-icon small color="green darken-2">mdi-pencil</v-icon></v-btn>
-            </v-list-item-icon>
-            <v-list-item-icon class="mx-0">
-                <v-btn class="mx-0" v-if="!property.publishedAt" small icon @click="publishProperty({propertyId: property.propertyId, publishedAt: true})">
-                    <v-icon small color="grey darken-2">mdi-publish</v-icon>
-                </v-btn>
-                <v-btn class="mx-0" v-else small :loading="publishLoading" icon @click="publishProperty({propertyId: property.propertyId, publishedAt: false})"><v-icon small color="grey darken-2">mdi-publish-off</v-icon></v-btn>
-            </v-list-item-icon>
-            <v-list-item-icon class="mx-0">
-                <v-btn class="mx-0" small icon @click="copyLink()"><v-icon small color="yellow darken-2">mdi-link</v-icon></v-btn>
-            </v-list-item-icon>
-            <v-list-item-icon class="mx-0">
-                <v-btn class="mx-0" small icon @click="deleteConfirm.show = true"><v-icon small color="red darken-2">mdi-trash-can-outline</v-icon></v-btn>
-            </v-list-item-icon>
+
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
+                        <v-btn class="mx-0" small icon @click="goToProperty()"><v-icon small color="green darken-2">mdi-pencil</v-icon></v-btn>
+                    </v-list-item-icon>
+                </template>
+                <span>Edit this property</span>
+            </v-tooltip>
+
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-list-item-icon class="mx-0"  v-bind="attrs" v-on="on">
+                        <v-btn class="mx-0" v-if="!property.publishedAt" small icon @click="publishProperty({propertyId: property.propertyId, publishedAt: true})">
+                            <v-icon small color="grey darken-2">mdi-publish</v-icon>
+                        </v-btn>
+                        <v-btn class="mx-0" v-else small :loading="publishLoading" icon @click="publishProperty({propertyId: property.propertyId, publishedAt: false})"><v-icon small color="grey darken-2">mdi-publish-off</v-icon></v-btn>
+                    </v-list-item-icon>
+                </template>
+                <span>Publish this property</span>
+            </v-tooltip>
+
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
+                        <v-btn class="mx-0" small icon @click="copyLink()"><v-icon small color="yellow darken-2">mdi-link</v-icon></v-btn>
+                    </v-list-item-icon>
+                </template>    
+                <span>See a link to this property with QR code</span>
+            </v-tooltip>
+
+
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
+                        <v-btn class="mx-0" small icon @click="deleteConfirm.show = true"><v-icon small color="red darken-2">mdi-trash-can-outline</v-icon></v-btn>
+                    </v-list-item-icon>
+                </template>    
+                <span>Delete this property</span>
+            </v-tooltip>
+
         </v-list-item>
 
         <v-card-subtitle>
@@ -107,12 +133,13 @@ import uniMixin from '@/mixins/index.vue'
 import PropertyActions from '@/mixins/propertyActions'
 import QrcodeVue from 'qrcode.vue'
 import EhcUserAvatar from '@/components/ehc-user-avatar.vue'
+import EhcTooltip from './ehc-tooltip.vue'
 
 
 
 export default {
     mixins: [uniMixin, PropertyActions],
-    components: {QrcodeVue, EhcUserAvatar},
+    components: {QrcodeVue, EhcUserAvatar, EhcTooltip},
     name: 'ehc-property-card',
     props: ['property'],
     data: () => ({
