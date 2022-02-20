@@ -13,29 +13,62 @@
     <v-divider/>
 
     <v-card>
-      <v-card-title>Text</v-card-title>
-      <v-card-text>
-      <p>Hi {{name}},</p>
-
-      <p>Your digital property guide has been created and ready for you to fill in the details.  Please check the email address you provided for more info. and access.  Until then, here is a link to preview your digital guide. </p>
-
-      <p>{{publicLink}}</p>
+      <v-card-title>SMS</v-card-title>
+      <v-card-actions>
+        <v-btn @click="copySMS">Copy SMS Content</v-btn>
+      </v-card-actions>
+      <v-card-text v-html="smsHTML">
       </v-card-text>
 
     </v-card>
     <v-divider/>
     <v-card>
-      <v-card-title>Email</v-card-title>
-      <v-card-text>
-      <p>Subject:  Vacation Rental Digital Property Guide - Everhost Beta</p>
+      <v-card-title>Email to {{email}}</v-card-title>
+      <v-card-actions>
+        <v-btn @click="copyEmail">Copy Email Content</v-btn>
+      </v-card-actions>
+      <v-card-text v-html="emailHTML">
 
-      <p>{{name}}</p>
+
+
+      </v-card-text>
+    </v-card>
+    {{emailHTML}}<br/>
+    {{user}}
+  </v-container>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      message: "Email To Send",
+      propertyId: null,
+      name: null,
+      publicLink: "<PUBLIC LINK>",
+      userName:  null,
+      password: null,
+      from: null,
+      email: null
+    }
+  },
+  computed: {
+    property: function(){
+      return this.$store.getters.property
+    },
+    user: function(){
+      return this.$store.getters.user
+    },
+    emailHTML: function() {
+      return `<p>Subject:  Vacation Rental Digital Property Guide - Everhost Beta</p>
+
+      <p>${this.name}</p>
 
       <p>Thank you again for your patience! Here is your digital property guide.  Now all you need to do is to access the admin area and fill in some more details that are unique to your property and location.</p>
 
       <p>Admin Area:   https://manage.everhost.io<br/>  
-          u: {{userName}}<br/>
-          p: {{password}}<br/>
+          u: ${this.userName}<br/>
+          p: ${this.password}<br/>
        </p>   
 
         <p>* Our digital guides are best viewed on mobile.  When updating your digital guide, we recommend desktop / laptop.</p>
@@ -53,41 +86,37 @@
 
 
         <p>Cheers!<br/>
-        Tom</p>
+        Tom</p>`
+    },
+    smsHTML: function() {
+      return ` <p>Hi ${this.name},</p>
 
+      <p>Your digital property guide has been created and ready for you to fill in the details.  Please check the email address you provided for more info. and access.  Until then, here is a link to preview your digital guide. </p>
 
-
-      </v-card-text>
-    </v-card>
-  </v-container>
-</template>
-
-<script>
-export default {
-  data () {
-    return {
-      message: "Email To Send",
-      propertyId: null,
-      name: null,
-      publicLink: "<PUBLIC LINK>",
-      userName:  null,
-      password: null,
-      from: null,
-    }
-  },
-  computed: {
-    property: function(){
-      return this.$store.getters.property
+      <p>${this.publicLink}</p>`
     }
   },
   methods: {
-    getInfo(){
-      this.$store.dispatch('getProperty', this.propertyId)
-      .then( () => {
+    async getInfo(){
+      await this.$store.dispatch('getProperty', this.propertyId)
+      await this.$store.dispatch('getUser', this.property.uid)
+        this.email = this.user.email
+        this.userName = this.user.email
         this.name = this.property.contactInfo.hostName
         this.publicLink = `http://everhost.io/${this.property.propertyId}`
-      })
+    },
+    copyEmail(){
+      navigator.clipboard.writeText(this.emailHTML)
+      alert("copied")
+    },
+    copySMS(){
+      navigator.clipboard.writeText(this.smsHTML)
+      alert("copied")
     }
+
+  },
+  created(){
+    this.getInfo()
   }
 }
 </script>
