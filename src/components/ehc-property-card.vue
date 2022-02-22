@@ -1,6 +1,6 @@
 <template>
     <v-card class="pa-0 black2--text" max-width="19rem">
-        <v-img :src="property.avatarImg" height="13rem"></v-img>
+        <v-img :src="property.avatarImg" height="13rem" @click="goToProperty()" class="pointer"></v-img>
         <v-list-item two-line>
             <v-list-item-content>
                     {{property.name}} - 

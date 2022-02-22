@@ -58,6 +58,10 @@ a:hover {
   color: rgb(15, 5, 128) !important;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 @font-face {
     font-family: 'Sailec Black';
     src: url('~@/assets/fonts/Sailec Black.woff2') format('woff2');
