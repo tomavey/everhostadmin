@@ -27,6 +27,12 @@
             </v-list-item-icon>
             <v-list-item-title>Organizations</v-list-item-title>
           </v-list-item>
+          <v-list-item link @click="resetPassword">
+            <v-list-item-icon>
+              <v-icon>mdi-group</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Reset Password</v-list-item-title>
+          </v-list-item>
         </v-list>
       </v-navigation-drawer>
 </template>
@@ -36,6 +42,11 @@ export default {
   data() {
     return {
       pageTitle: "Admin Drawer"
+    }
+  },
+  methods: {
+    resetPassword() {
+      this.$store.dispatch('resetPassword')
     }
   }
 }

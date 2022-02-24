@@ -31,6 +31,23 @@ export default {
     logout ({commit}) {
       firebase.auth().signOut()
     },
+    async createUserWithEmailAndPassword(context, payload) {
+      let email = payload.email
+      let password = payload.password
+      await firebase.auth().createUserWithEmailAndPassword(email, password)
+      console.log("created, ",email)
+    },
+    async resetPassword(context){
+      let email = context.getters.user.email
+      console.log("email ", email)
+      return await firebase.auth().sendPasswordResetEmail(email)
+      .then(() => {
+        console.log('reset sent')
+      })
+      .catch((error) => {
+       console.log(error)
+      })
+    },
     async signInWithEmailAndPassword({ commit },payload){
       return await firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
       .then( (userCredential) => {
