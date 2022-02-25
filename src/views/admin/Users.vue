@@ -1,19 +1,24 @@
 <template>
 <v-container>
-  <p style="text-align: center; font-weight: bold; font-size: 1.3em">USERS</p>
-<template>
-  <v-btn @click="showNewUser = !showNewUser" class="float-right">
-    Create a new user
-  </v-btn>
-  <ehc-dialog v-model="showNewUser" title="Enter email and password" width="500" close>
-    <ehc-create-new-user />
-  </ehc-dialog>
-  <v-btn @click="showPromote = !showPromote" class="float-right">
-    Promote user to admin
-  </v-btn>
-  <ehc-dialog v-model="showPromote" :title="title" width="500" close>
-    <ehc-form :meta="meta" v-model="formData" @submit="submitPromotion()"></ehc-form>
-  </ehc-dialog>
+  <v-card>
+    <v-card-text class="text-center text-h4">USERS</v-card-text>
+    <v-card-actions v-if="userIsAdmin">
+      <v-btn @click="showNewUser = !showNewUser" class="float-right">
+        Create a new user
+      </v-btn>
+      <ehc-dialog v-model="showNewUser" :title="title" width="500" close>
+        <ehc-form :meta="newUserMeta" v-model="newUserFormData" @submit="submitNewUser()"></ehc-form>
+      </ehc-dialog>
+
+      <v-btn @click="showPromote = !showPromote" class="float-right">
+        Promote user to admin
+      </v-btn>
+      <ehc-dialog v-model="showPromote" :title="title" width="500" close>
+        <ehc-form :meta="meta" v-model="formData" @submit="submitPromotion()"></ehc-form>
+      </ehc-dialog>
+
+    </v-card-actions>
+  </v-card>
 
   <div>
     <v-data-table
@@ -27,13 +32,18 @@
         itemsPerPageOptions: [50,100,150.-1]
       }"
     >
-      <template v-slot:top>
-        <v-text-field
-          v-model="search"
-          label="Search"
-          class="mx-4"
-        ></v-text-field>
-      </template>
+    <template v-slot:top>
+
+      <v-card>
+      <v-text-field
+        v-model="search"
+        label="Search"
+        class="mx-4"
+      ></v-text-field>
+      </v-card>
+
+
+    </template>
       <template v-slot:item.actions="{ item }">
       <v-icon
         small
@@ -43,19 +53,18 @@
         mdi-file-find
       </v-icon>
     </template>
+
     </v-data-table>
   </div>
-</template>
+
 </v-container>  
 </template>
 
 <script>
 import mixins from '@/mixins'
 import auth from '@/mixins/auth'
-import ehcCreateNewUser from '../../components/admin/ehc-create-new-user.vue'
 
 export default {
-  components: { ehcCreateNewUser },
   mixins: [mixins,auth],
   data: function() {
     return {
@@ -64,14 +73,18 @@ export default {
       showPromote: false,
       showNewUser: false,
       formData: {},
+      newUserFormData: {},
       title: "UserId for new admin",
-      formData: {},
+      newUserFormData: {},
       meta: [
-          {type: "uid",         label: "UserId",                     key: "uid"},
+          {type: "text",         label: "UserId",                     key: "uid"},
           {type: "button",        label: "submit",                    key: "submit",          emitOnClick: "submit"},
       ],
-
-
+      newUserMeta: [
+        {type: "email",         label: "email",                     key: "email"},
+        {type: "password",         label: "password",               key: "password"},
+        {type: "button",        label: "submit",                    key: "submit",          emitOnClick: "submit"},
+      ],
     }
   },
   methods: {
@@ -84,7 +97,15 @@ export default {
       let uid = this.formData.uid
       this.$store.dispatch('makeAdmin',uid)
       this.showPromote = false
-    } 
+    }, 
+    submitNewUser: async function(){
+      let obj = {
+        'email': this.newUserFormData.email,
+        'password': this.newUserFormData.password
+      }
+      await this.$store.dispatch('createUserWithEmailAndPassword',obj)
+      this.showNewUser = false
+    },  
   },
   computed: {
     users: function(){
@@ -118,8 +139,9 @@ export default {
   },
   created(){
     if ( !this.userIsAdmin ) { this.$router.push( {name: "Properties"} ) }
-    this.$store.dispatch('getUsers')
+    this.$store.dispatch('subscribeToUsers')
   }
 }
+
 </script>
 

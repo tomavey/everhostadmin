@@ -31,6 +31,17 @@ export default {
           context.commit('setUsers',usersArray)
         })
     },
+    subscribeToUsers: function(context){
+      const usersRef = firebase.firestore().collection('users')
+      usersRef.onSnapshot( docs => {
+        let usersArray = []
+        docs.forEach( doc => {
+          let user = doc.data()
+          usersArray.push(user)
+        })
+        context.commit('setUsers',usersArray)
+      })
+    },
     getUser: function(context, uid){
       const usersRef = firebase.firestore().collection('users').doc(uid).get()
         .then(doc => {

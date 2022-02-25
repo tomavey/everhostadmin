@@ -34,8 +34,10 @@ export default {
     async createUserWithEmailAndPassword(context, payload) {
       let email = payload.email
       let password = payload.password
-      await firebase.auth().createUserWithEmailAndPassword(email, password)
-      console.log("created, ",email)
+      const createUser = firebase.functions().httpsCallable('createUser');
+      return await createUser({ email, password })
+        .then(console.log)
+        .catch(console.error);
     },
     async resetPassword(context){
       let email = context.getters.user.email
