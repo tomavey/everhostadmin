@@ -80,6 +80,7 @@
             striped
       ></v-progress-linear>
 
+      <ehc-alert></ehc-alert>
 
     </v-app-bar>
 </template>
@@ -89,7 +90,7 @@
 import EhcProfileCard from './ehc-profile-card.vue';
 import EhcUserAvatar from './ehc-user-avatar.vue';
 import ehcImageUpload from "@/components/ehc-image-upload.vue"
-
+import EhcAlert from './ehc-alert.vue';
 
 import auth from "@/mixins/auth.vue"
 import api from "@/mixins/api.vue"
@@ -97,7 +98,7 @@ import api from "@/mixins/api.vue"
 
 
 export default {
-    components: {EhcProfileCard, EhcUserAvatar, ehcImageUpload},
+    components: {EhcProfileCard, EhcUserAvatar, ehcImageUpload, EhcAlert},
     mixins: [auth, api],
     name: 'ehcAppToolbar',
 

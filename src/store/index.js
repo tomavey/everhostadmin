@@ -19,6 +19,10 @@ export default new Vuex.Store({
     loading: false,
     feedback: {
       show: false,
+    },
+    alert: {
+      show: true,
+      message: null,
     }
   },
   getters: {
@@ -30,6 +34,8 @@ export default new Vuex.Store({
     },
     loading: state=> state.loading,
     feedback: state=> state.feedback,
+    showAlert: state => state.alert.show,
+    alertMessage: state => state.alert.message,
   },
   mutations: {
     setLoading (state,payload) {
@@ -41,6 +47,12 @@ export default new Vuex.Store({
         state.feedback[key] = payload[key]
       }
     },
+    setShowAlert (state,payload){
+      state.alert.show = payload
+    },
+    setAlertMessage (state,payload){
+      state.alert.message = payload
+    }
   },
   actions: {
     submitFeedback(context, feedback){

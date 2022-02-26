@@ -40,11 +40,12 @@
                                 <span class="error--text mt-0 pt-0" >{{loginError}}</span>
                             </v-card-text>
                             <v-card-actions class="pt-0 px-4">
-                            <!-- <v-btn 
+                            <v-btn 
+                                    @click="forgotPassword(credentials.email)"
                                     plain 
                                     color="button" 
                                     class="mr-5" 
-                                    large ><strong>Forgot password</strong></v-btn> -->
+                                    large ><strong>Forgot password</strong></v-btn>
                                 <v-spacer></v-spacer>
                                 <v-btn 
                                     width="40%"
@@ -66,6 +67,7 @@
         <template v-if="showApp">
             <slot></slot>
         </template>
+        <ehc-alert></ehc-alert>
     </div>
 
 </template>
@@ -74,12 +76,13 @@
 import EhcNewOrgPrompt from '@/components/ehc-new-org-prompt.vue';
 import auth from "@/mixins/auth.vue"
 import api from "@/mixins/api.vue"
+import EhcAlert from './ehc-alert.vue';
 
 export default {
   props: {
       value: Boolean
   },
-  components: {EhcNewOrgPrompt},
+  components: {EhcNewOrgPrompt,EhcAlert},
   mixins: [auth, api],
   data () {
     return {
@@ -158,7 +161,22 @@ export default {
     logout: function() {
         this.$store.dispatch('logout')
     },
-  }
+    forgotPassword: async function(email){
+        if ( !this.emailIsValid(email) ) { 
+            this.$store.commit("setAlertMessage", "Please fill in your email address.")
+            this.$store.commit('setShowAlert', true)
+            }
+        else {
+            await this.$store.dispatch('resetPassword',email)
+            this.$store.commit("setAlertMessage", `A reset link has been sent to ${email}.  Be sure to check your junk mail`)
+            this.$store.commit('setShowAlert', true)
+        }    
+    },
+    emailIsValid: function(email) {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) { return (true) }
+        else { return (false) }
+    }
+  }  
 }
 </script>
 

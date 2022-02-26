@@ -33,7 +33,8 @@
                 class="pl-0 pr-0 ma-0">
             <strong>{{user.displayName}}</strong>
             {{user.email}}
-            <a href="#" color="Black2" @click="$emit('changeProfilePic')">Change Profile Picture</a>
+            <a href="#" color="Black2" @click="$emit('changeProfilePic')">Change Profile Picture</a><br/>
+            <a href="#" color="Black2" @click="changePassword(user.email)">Change Password</a>
           </v-col>
         </v-row>
         <v-row></v-row>
@@ -56,7 +57,7 @@ export default {
   components:{EhcUserAvattar, ehcImageUpload},
   data () {
     return {
-      picDialog: false
+      picDialog: false,
     }
   },
   mounted() {
@@ -66,12 +67,21 @@ export default {
     org() {
       return this.$store.getters.org
     },
-
+    passwordChangeMessage() {
+      return `A password change link has been sent to ${this.user.email}. Be sure to check your junk mail.`
+    }
   },
   methods: {
     openDialog() {
       console.log("openDialog")
       this.picDialog= true
+    },
+    async changePassword(email){
+      let message =  
+      this.showPasswordChangeAlert = true
+      await this.$store.dispatch('resetPassword',email)
+      this.$store.commit('setAlertMessage', this.passwordChangeMessage)
+      this.$store.commit('setShowAlert', true)
     }
 
   }

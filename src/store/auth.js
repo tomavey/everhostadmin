@@ -39,8 +39,7 @@ export default {
         .then(console.log)
         .catch(console.error);
     },
-    async resetPassword(context){
-      let email = context.getters.user.email
+    async resetPassword(context,email){
       console.log("email ", email)
       return await firebase.auth().sendPasswordResetEmail(email)
       .then(() => {
