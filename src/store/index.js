@@ -21,7 +21,7 @@ export default new Vuex.Store({
       show: false,
     },
     alert: {
-      show: true,
+      show: false,
       message: null,
     }
   },
