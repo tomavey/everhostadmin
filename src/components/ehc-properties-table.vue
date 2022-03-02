@@ -20,7 +20,7 @@
         mdi-pencil
       </v-icon>
     </template>
-    <template v-slot:item.copy="{ item }">
+    <template v-if="userIsAdmin" v-slot:item.copy="{ item }">
       <v-icon
         small
         class="mr-2"
@@ -47,6 +47,15 @@
         mdi-publish-off
       </v-icon>
     </template>
+    <template v-slot:item.delete="{ item }">
+      <v-icon
+        small
+        class="mr-2"
+        @click="deleteProperty(item.propertyId)"
+      >
+        mdi-delete
+      </v-icon>
+    </template>
 
   </v-data-table>
 </v-container>
@@ -54,24 +63,13 @@
 
 <script>
 import PropertyActions from '@/mixins/propertyActions'
+import Auth from '@/mixins/auth'
 
 export default {
-  mixins: [PropertyActions],
+  mixins: [PropertyActions,Auth],
   props: ['properties'],
   data() {
     return {
-      headers: [
-        { text: 'Name', value: 'name' },
-        { text: 'City', value: 'city' },
-        { text: 'State', value: 'state' },
-        { text: 'Property Id', value: 'propertyId' },
-        { text: 'Published', value: 'publishedAtAsString' },
-        { text: 'Created', value: 'createdAtAsString' },
-        { text: 'Edit', value: 'edit', sortable: false },
-        { text: 'Copy', value: 'copy', sortable: false },
-        { text: 'Publish', value: 'publish', sortable: false },
-
-      ]
     }
   },
   methods: {
@@ -87,10 +85,36 @@ export default {
         this.$store.dispatch("markPropertyPublishedAt", publishObj).then(() => {
           console.log("published")
         })
+    },
+    deleteProperty(propertyId){
+      this.$store.dispatch("markPropertyDeletedAt", propertyId)
     }
   },
   computed: {
     appSite() {return this.$store.getters.appSite},
+    headers(){
+      let headers
+      let userHeaders = [
+        { text: 'Name', value: 'name' },
+        { text: 'City', value: 'city' },
+        { text: 'State', value: 'state' },
+        { text: 'Property Id', value: 'propertyId' },
+        { text: 'Published', value: 'publishedAtAsString' },
+        { text: 'Created', value: 'createdAtAsString' },
+        { text: 'Edit', value: 'edit', sortable: false },
+        { text: 'Publish', value: 'publish', sortable: false },
+      ]
+      let adminHeaders = [
+        { text: 'Copy', value: 'copy', sortable: false, admin: true },
+        { text: 'Delete', value: 'delete', sortable: false, admin:true },
+      ]
+      if ( this.userIsAdmin ) {
+        headers = [...userHeaders, ...adminHeaders]
+      } else {
+        headers = userHeaders
+      }
+      return  headers
+    }
   }
 }
 </script>
