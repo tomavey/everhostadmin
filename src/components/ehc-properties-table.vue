@@ -56,20 +56,23 @@
         mdi-delete
       </v-icon>
     </template>
-
   </v-data-table>
+    <ehc-alert-confirm @confirmAction="confirmAction" ></ehc-alert-confirm>
 </v-container>
 </template>
 
 <script>
 import PropertyActions from '@/mixins/propertyActions'
 import Auth from '@/mixins/auth'
+import ehcAlertConfirm from './ehc-alert-confirm.vue'
 
 export default {
+  components: { ehcAlertConfirm },
   mixins: [PropertyActions,Auth],
   props: ['properties'],
   data() {
     return {
+      propertyId: null
     }
   },
   methods: {
@@ -87,7 +90,16 @@ export default {
         })
     },
     deleteProperty(propertyId){
-      this.$store.dispatch("markPropertyDeletedAt", propertyId)
+      this.propertyId = propertyId
+      this.$store.commit("setShowConfirm",true)
+      this.$store.commit("setConfirmMessage",'Are you sure?')
+    },
+    confirmAction(){
+      this.$store.dispatch("markPropertyDeletedAt", this.propertyId)
+      .then( () => {
+        this.$store.commit("setShowConfirm",false)
+        this.$store.commit("setConfirmMessage",'')
+      })
     }
   },
   computed: {

@@ -1,6 +1,6 @@
 <template>
     <v-dialog
-      v-model="showAlert"
+      v-model="showConfirm"
       width="500"
     >
       <v-card>
@@ -15,11 +15,17 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <slot name='confirm'></slot>
+          <v-btn
+              color="primary"
+              text
+              @click="$emit('confirmAction')"
+          >
+              Confirm
+          </v-btn>
           <v-btn
             color="primary"
             text
-            @click="showAlert = false"
+            @click="showConfirm = false"
           >
             Close
           </v-btn>
@@ -32,6 +38,7 @@
 import ehcDialog from './ehc-dialog.vue'
 export default {
   components: { ehcDialog },
+  props: ['item'],
   data() {
     return {
       show: true,
@@ -39,19 +46,13 @@ export default {
     }
   },
   computed: {
-    showAlert: {
-      get() {return this.$store.getters.showAlert},
-      set(value) {this.$store.commit('setShowAlert',value)}
+    showConfirm: {
+      get() {return this.$store.getters.showConfirm},
+      set(value) {this.$store.commit('setShowConfirm',value)}
     },
     message: function(){
-      return this.$store.getters.alertMessage
+      return this.$store.getters.confirmMessage
     }
   },
-  methods: {
-    confirmAction: function() {
-      alert("confirm")
-    }
-  }
- 
 }
 </script>

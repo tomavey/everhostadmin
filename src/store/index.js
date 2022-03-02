@@ -23,6 +23,10 @@ export default new Vuex.Store({
     alert: {
       show: false,
       message: null,
+    },
+    confirm: {
+      show: false,
+      message: null,
     }
   },
   getters: {
@@ -36,6 +40,8 @@ export default new Vuex.Store({
     feedback: state=> state.feedback,
     showAlert: state => state.alert.show,
     alertMessage: state => state.alert.message,
+    showConfirm: state => state.confirm.show,
+    confirmMessage: state => state.confirm.message,
   },
   mutations: {
     setLoading (state,payload) {
@@ -52,6 +58,12 @@ export default new Vuex.Store({
     },
     setAlertMessage (state,payload){
       state.alert.message = payload
+    },
+    setShowConfirm (state,payload){
+      state.confirm.show = payload
+    },
+    setConfirmMessage (state,payload){
+      state.confirm.message = payload
     }
   },
   actions: {
