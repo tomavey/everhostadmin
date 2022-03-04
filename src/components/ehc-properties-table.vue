@@ -116,9 +116,9 @@ export default {
         { text: 'Created', value: 'createdAtAsString' },
         { text: 'Edit', value: 'edit', sortable: false },
         { text: 'Publish', value: 'publish', sortable: false },
+        { text: 'Copy', value: 'copy', sortable: false, admin: true },
       ]
       let adminHeaders = [
-        { text: 'Copy', value: 'copy', sortable: false, admin: true },
         { text: 'Delete', value: 'delete', sortable: false, admin:true },
       ]
       if ( this.userIsAdmin ) {
