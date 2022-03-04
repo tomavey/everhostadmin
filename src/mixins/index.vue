@@ -11,6 +11,7 @@ export default {
     formatDate: function (value,format = "dateAndTime") {
       let formatString = 'MMMM Do YYYY, h:mm:ss a'
       if ( format === "dateOnly") { formatString = 'MM/D/YY'}
+      if ( format === "shortFormat") { formatString = 'MM/D, h:mm:ss' }
       return moment(value).format(formatString)
     },
     dateFormat: function(value,format){

@@ -28,6 +28,7 @@
       >
         mdi-content-copy
       </v-icon>
+      <!-- <span v-if="item.copiedFrom">*</span> -->
     </template>
     <template v-slot:item.publish="{ item }">
       <v-icon

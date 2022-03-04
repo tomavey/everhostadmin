@@ -64,7 +64,10 @@
         </v-list-item>
 
         <v-card-subtitle>
-            PropertyId: {{property.propertyId}}
+            PropertyId: {{property.propertyId}}<br/>
+            <!-- <span v-if="property.copiedAt && property.copiedFrom">
+             Copied from: {{property.copiedFrom}} on {{formatDate(property.copiedAt,"shortFormat")}}
+            </span> -->
         </v-card-subtitle>
         
         <!-- <v-card-title class="text-h6">{{property.name}}</v-card-title>
@@ -152,7 +155,7 @@ export default {
         deleteConfirm: {
             show: false,
             loading: false
-        }
+        },
     }),
     watch: {
         loading(val) {this.$store.commit('setLoading', val)}

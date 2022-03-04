@@ -149,6 +149,8 @@ export default {
     },
     created() {
         this.subscribeToProperties(this.showAll)
+        this.$store.dispatch('getCustomSubsections', { propertyId: '8705181', type: 'areaguide' })
+        this.$store.dispatch('getCustomSubsections', { propertyId: '8705181', type: 'propertyinfo' })
     }
 
 }

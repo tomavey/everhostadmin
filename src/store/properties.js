@@ -10,6 +10,8 @@ export default {
     },
     uidToShowAdmin: null,
     showAll: false,
+    areaguide: [],
+    propertyinfo: [],
   },
   getters: {    
     properties: state=> state.properties,
@@ -35,6 +37,12 @@ export default {
     },
     setShowAll (state,payload) {
       state.showAll = payload
+    },
+    setPropertyinfo (state,payload) {
+      state.propertyinfo = payload
+    },
+    setAreaguide (state,payload) {
+      state.areaguide = payload
     },
   },
   actions: {
@@ -182,6 +190,23 @@ export default {
           resolve(doc)
         })
       })
+    },
+    getCustomSubsections(context,payload){
+      let type = payload.type
+      let propertyId = payload.propertyId
+
+      const propertySubsectionsRef = firebase.firestore().collection("properties").doc(propertyId).collection(type).doc('subsections')
+      propertySubsectionsRef.get()
+      .then( (doc) => {
+        let sections = []
+        let obj = doc.data()
+        Object.keys(obj).forEach(key => {
+        sections.push(obj[key])
+        })      
+        if ( type === "propertyinfo" ) { context.commit('setPropertyinfo',sections) }
+        if ( type === "areaguide" ) { context.commit('setAreaguide',sections) }
+      })
+      .catch ( (err) => console.log(err) )
     },
   }
 }
