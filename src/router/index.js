@@ -7,6 +7,7 @@ import MyAccount from '../views/MyAccount.vue'
 import Users from '../views/admin/Users.vue'
 import EmailToSend from '../views/admin/EmailToSend.vue'
 import Organizations from '../views/admin/Organizations.vue'
+import UpdatesLog from '../views/admin/UpdatesLog.vue'
 import Firebase from 'firebase'
 
 
@@ -63,6 +64,10 @@ const routes = [
   {
     path: "/emailtosend",
     component: EmailToSend,
+  },
+  {
+    path: "/updateslog",
+    component: UpdatesLog,
   },
 ]
 
