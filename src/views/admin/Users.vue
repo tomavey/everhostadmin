@@ -48,7 +48,7 @@
       <v-icon
         small
         class="mr-2"
-        @click="showProperty(item)"
+        @click="showProperties(item)"
       >
         mdi-file-find
       </v-icon>
@@ -88,7 +88,7 @@ export default {
     }
   },
   methods: {
-    showProperty: function(item){
+    showProperties: function(item){
       console.log(item)
       this.$store.commit('setUidToShowAdmin', item.uid)
       this.$router.push({name: "Properties"})

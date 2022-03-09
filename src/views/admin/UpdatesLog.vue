@@ -3,7 +3,18 @@
     <v-data-table
       :headers = headers
       :items = updatesLog
-    ></v-data-table>  
+    >
+    <template v-slot:item.actions="{ item }">
+      <v-icon
+        small
+        class="mr-2"
+        @click="showProperty(item)"
+      >
+        mdi-file-find
+      </v-icon>
+    </template>
+
+    </v-data-table>  
   </v-container>
 </template>
 
@@ -15,6 +26,12 @@ export default {
   data() {
     return {
     }
+  },
+  methods: {
+    showProperty: function(item){
+      let link=`https://everhost.io/${item.propertyId}`
+      window.open(link)
+    },
   },
   computed: {
     updatesLog: function(){
@@ -44,16 +61,18 @@ export default {
             value: 'propertyName',
           },
           {
-            text: 'ID',
+            text: 'Property ID',
             align: 'start',
             sortable: true,
             value: 'propertyId',
           },
           {
-            text: 'User Id',
+            text: 'Updated By (ID)',
             value: 'uid',
           },
           { text: 'Updated', value: "updatedAtAsString", sortable: true },
+          { text: 'View Property', value: 'actions', sortable: false },
+
         ]
     }
   },
