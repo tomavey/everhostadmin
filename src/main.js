@@ -54,7 +54,10 @@ const firebaseConfig = {
   measurementId: "G-ZLJS89XE0W"
 };
 
+
 firebase.initializeApp(firebaseConfig);
+
+const analytics = firebase.analytics()
 
 const app = new Vue({
   router,
