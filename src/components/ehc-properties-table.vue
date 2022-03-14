@@ -58,6 +58,7 @@
       </v-icon>
     </template>
   </v-data-table>
+    <span>* = not updated after 3/14/22</span>
     <ehc-alert-confirm @confirmAction="confirmAction" ></ehc-alert-confirm>
 </v-container>
 </template>
@@ -114,6 +115,7 @@ export default {
         { text: 'Property Id', value: 'propertyId' },
         { text: 'Published', value: 'publishedAtAsString' },
         { text: 'Created', value: 'createdAtAsString' },
+        { text: 'Updated', value: 'updatedAtAsString' },
         { text: 'Edit', value: 'edit', sortable: false },
         { text: 'Publish', value: 'publish', sortable: false },
         { text: 'Copy', value: 'copy', sortable: false, admin: true },

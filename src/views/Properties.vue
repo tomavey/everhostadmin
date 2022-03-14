@@ -107,6 +107,12 @@ export default {
                 } else {
                    el.publishedAtAsString = "not published"
                 }
+                if ( el.updatedAt ) {
+                   el.updatedAtAsString = this.dateFormat(el.updatedAt,'dateOnly')
+                } else {
+                   el.updatedAtAsString = "*"
+                }
+
                 return el
             })
 
