@@ -112,6 +112,7 @@ export default {
       return this.$store.getters.users
       .map( el => {
         el.createdAtAsString = this.dateFormat(el.createdAt,"dateOnly")
+        if ( el.rights && el.rights.admin ) { el.admin = "yes" }
         el.picLink = `<a href="${el.photoURL}">link</a>`
         return el
       })
@@ -131,6 +132,10 @@ export default {
           {
             text: 'User Id',
             value: 'uid',
+          },
+          {
+            text: 'Admin?',
+            value: 'admin',
           },
           { text: 'Created', value: "createdAtAsString", sortable: true },
           { text: 'View These Properties', value: 'actions', sortable: false },
