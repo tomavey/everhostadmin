@@ -38,7 +38,7 @@
                 color="button"
                 dark
                 large
-                @click="copyDefaultProperty()" 
+                @click="addProperty()" 
                 class='mx-1 elevation-0'
                 :loading="addLoading"
             >
@@ -124,7 +124,6 @@ export default {
         },
     },    
     methods: {
-        //deprecated - we use copyDefaultProperty() now to get sections from the default property.
         addProperty() {
             if (this.properties.length < 1000) {
                 this.addLoading=true
