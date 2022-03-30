@@ -12,6 +12,7 @@ export default {
     showAll: false,
     areaguide: [],
     propertyinfo: [],
+    defaultPropertyId: "default12821"
   },
   getters: {    
     properties: state=> state.properties,
@@ -19,6 +20,7 @@ export default {
     property: state => state.property,
     uidToShowAdmin: state=> state.uidToShowAdmin,
     showAll: state=> state.showAll,
+    defaultPropertyId: state => state.defaultPropertyId
   },
   mutations: {
     setProperties (state,payload) {

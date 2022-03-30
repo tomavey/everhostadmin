@@ -38,7 +38,7 @@
                 color="button"
                 dark
                 large
-                @click="addProperty()" 
+                @click="copyDefaultProperty()" 
                 class='mx-1 elevation-0'
                 :loading="addLoading"
             >
@@ -94,6 +94,7 @@ export default {
         loading() {
             return this.$store.getters.propertiesStatus.loading
         },
+        property() {return this.$store.getters.property},
         properties() {
             let properties = this.$store.getters.properties
             .sort( (a,b) => {
@@ -123,6 +124,7 @@ export default {
         },
     },    
     methods: {
+        //deprecated - we use copyDefaultProperty() now to get sections from the default property.
         addProperty() {
             if (this.properties.length < 1000) {
                 this.addLoading=true
@@ -135,6 +137,10 @@ export default {
             } else {
                 this.maxPropsDialog = true
             }
+        },
+        copyDefaultProperty(){
+            this.$store.dispatch("getProperty", this.$store.getters.defaultPropertyId)
+            .then( () => this.$store.dispatch('copyProperty',this.property))    
         },
         searchSettings() {
             console.log("TODO")
