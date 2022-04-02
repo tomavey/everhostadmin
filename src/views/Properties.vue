@@ -20,15 +20,15 @@
                   <span>list view</span>
                 </v-tooltip>
             </v-btn-toggle>
-                <v-btn v-if="userIsAdmin && !showAll" @click="_showAll()" title="show all" :loading="showAllLoading">
+                <v-btn v-if="userIsAdmin && !showAll" @click="_showAll()" title="show all">
                     <v-icon class="mr-1 ml-0">mdi-plus</v-icon>
                     Show All
                 </v-btn>
-                <v-btn v-if="userIsAdmin && showAll" @click="_showAll()" title="show few" :loading="showAllLoading">
+                <v-btn v-if="userIsAdmin && showAll" @click="_showAll()" title="show few">
                     <v-icon class="mr-1 ml-0">mdi-minus</v-icon>
                     Show Few
                 </v-btn>
-        {{properties.length}}
+        {{propertiesFiltered.length}}
             <v-spacer></v-spacer>
             <v-text-field
                 placeholder="Search Properties"
@@ -48,8 +48,8 @@
                 add property
             </v-btn>
         </v-toolbar>
-        <ehc-properties-gallery v-if="displayAs === 'gallery'" :properties="properties"></ehc-properties-gallery>
-        <ehc-properties-table v-if="displayAs =='table'" :properties="properties"></ehc-properties-table>
+        <ehc-properties-gallery v-if="displayAs === 'gallery'" :properties="propertiesFiltered"></ehc-properties-gallery>
+        <ehc-properties-table v-if="displayAs =='table'" :properties="propertiesFiltered"></ehc-properties-table>
         <ehc-dialog max-width="300" v-model="maxPropsDialog" title="Max Properties Reached">
             <h3>you have reached the maximum number of properties available</h3>
             <template v-slot:actions>
@@ -84,6 +84,7 @@ export default {
         addLoading: false,
         search: null,
         displayAs: "gallery",
+        showAll: false,
     }),
     watch: {
         loading(val) {
@@ -91,7 +92,6 @@ export default {
         }
     },
     computed: {
-        showAll() { return this.$store.getters.showAll },
         showAllLoading: {
             get() {
                 return this.$store.getters.showAllLoading
@@ -127,11 +127,20 @@ export default {
                 return el
             })
 
-            if ( this.search ) { properties = properties.filter(el => {
-                return el.searchAble.toLowerCase().includes(this.search.toLowerCase())
-            })}
             return properties
         },
+        propertiesFiltered() {
+            let propertiesFiltered = this.properties
+            if ( this.search ) {
+                propertiesFiltered = this.properties.filter(el => {
+                    return el.searchAble.toLowerCase().includes(this.search.toLowerCase())
+                })
+            }
+            if ( !this.showAll ){
+                propertiesFiltered = propertiesFiltered.filter( el => el.uid === this.user.uid )                 
+            }
+          return propertiesFiltered
+        }
     },    
     methods: {
         addProperty() {
@@ -155,10 +164,7 @@ export default {
             console.log("TODO")
         },
         _showAll() {
-            this.$store.commit("setShowAllLoading" ,true)
-            this.$store.commit("setShowAll", !this.showAll) 
-            this.subscribeToProperties(this.showAll)
-            this.showAllLoading = false
+            this.showAll = !this.showAll
         },
         subscribeToProperties(showAll){
             let payload = {}

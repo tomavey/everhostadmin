@@ -107,13 +107,13 @@ export default {
       console.log("subscribeToProperties ", payload)
       let userId = context.getters.user.uid
       if ( payload && payload.uid ) { userId = payload.uid }
-      let showAll = false
+      let userIsAdmin = context.getters.isAdmin
       if ( payload && payload.showAll ) { showAll = true }
       let propertiesRef = firebase.firestore().collection('properties')
       .where("deletedAt", "==", null)
       .where("uid","==", userId)
 
-      if ( showAll ) {
+      if ( userIsAdmin ) {
         propertiesRef = firebase.firestore().collection('properties')
         .where("deletedAt", "==", null)
       }
