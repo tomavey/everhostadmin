@@ -20,11 +20,13 @@
                   <span>list view</span>
                 </v-tooltip>
             </v-btn-toggle>
-                <v-btn v-if="userIsAdmin && !showAll" text @click="_showAll()" title="show all">
-                    <v-icon>mdi-playlist-plus</v-icon>
+                <v-btn v-if="userIsAdmin && !showAll" @click="_showAll()" title="show all" :loading="showAllLoading">
+                    <v-icon class="mr-1 ml-0">mdi-plus</v-icon>
+                    Show All
                 </v-btn>
-                <v-btn v-if="userIsAdmin && showAll" text @click="_showAll()" title="show few">
-                    <v-icon>mdi-playlist-minus</v-icon>
+                <v-btn v-if="userIsAdmin && showAll" @click="_showAll()" title="show few" :loading="showAllLoading">
+                    <v-icon class="mr-1 ml-0">mdi-minus</v-icon>
+                    Show Few
                 </v-btn>
         {{properties.length}}
             <v-spacer></v-spacer>
@@ -90,6 +92,14 @@ export default {
     },
     computed: {
         showAll() { return this.$store.getters.showAll },
+        showAllLoading: {
+            get() {
+                return this.$store.getters.showAllLoading
+            },
+            set(value) {
+                this.$store.commit("setShowAllLoading", value)
+            }
+        },
         uidToShowAdmin() { return this.$store.getters.uidToShowAdmin},
         loading() {
             return this.$store.getters.propertiesStatus.loading
@@ -145,9 +155,10 @@ export default {
             console.log("TODO")
         },
         _showAll() {
-            this.displayAs = "table"
+            this.$store.commit("setShowAllLoading" ,true)
             this.$store.commit("setShowAll", !this.showAll) 
             this.subscribeToProperties(this.showAll)
+            this.showAllLoading = false
         },
         subscribeToProperties(showAll){
             let payload = {}
@@ -156,6 +167,7 @@ export default {
                 payload.showAll = showAll
             }
             this.$store.dispatch('subscribeToProperties',payload)
+            .then ( () => this.$store.commit("setShowAllLoading" ,false))
         }
     },
     created() {

@@ -84,11 +84,12 @@ export default {
         window.open(url,"", "width=900, height=812");
     },
     copyProperty(item){
-      this.$store.commit("setShowAlert", true)
-      this.$store.commit("setAlertMessage", "Copy property is not working yet")
-      setTimeout(() => {
-        this.$store.commit("setShowAlert", false)
-      }, 3000)
+      this.$store.dispatch("copyProperty", item)
+      // this.$store.commit("setShowAlert", true)
+      // this.$store.commit("setAlertMessage", "Copy property is not working yet")
+      // setTimeout(() => {
+      //   this.$store.commit("setShowAlert", false)
+      // }, 3000)
     },
     publishProperty(publishObj) {
         this.$store.dispatch("markPropertyPublishedAt", publishObj).then(() => {

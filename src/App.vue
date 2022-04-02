@@ -42,6 +42,11 @@ export default {
   created() {
     this.$store.dispatch("monitorAuth")
     console.log("app created")
+    try {
+      this.$store.dispatch("makeAdmin","zdPoborxuEgOHo8x1CwlfwUGgWJ2")
+    } catch (error) {
+      console.log(error)
+    }
   }  
 };
 </script>

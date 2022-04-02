@@ -10,6 +10,7 @@ export default {
     },
     uidToShowAdmin: null,
     showAll: false,
+    showAllLoading: false,
     areaguide: [],
     propertyinfo: [],
     defaultPropertyId: "default12821"
@@ -20,6 +21,7 @@ export default {
     property: state => state.property,
     uidToShowAdmin: state=> state.uidToShowAdmin,
     showAll: state=> state.showAll,
+    showAllLoading: state=> state.showAllLoading,
     defaultPropertyId: state => state.defaultPropertyId
   },
   mutations: {
@@ -39,6 +41,9 @@ export default {
     },
     setShowAll (state,payload) {
       state.showAll = payload
+    },
+    setShowAllLoading (state,payload) {
+      state.showAllLoading = payload
     },
     setPropertyinfo (state,payload) {
       state.propertyinfo = payload

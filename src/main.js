@@ -54,8 +54,16 @@ const firebaseConfig = {
   measurementId: "G-ZLJS89XE0W"
 };
 
+const firebaseConfigDev = {
+  apiKey: "AIzaSyD_b46PYlea0ZdTl-op1vyezssQyrSteTM",
+  authDomain: "dev-everhostio.firebaseapp.com",
+  projectId: "dev-everhostio",
+  storageBucket: "dev-everhostio.appspot.com",
+  messagingSenderId: "333205235104",
+  appId: "1:333205235104:web:b2e0a905dc7ecc929570c5"
+};
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 
 const analytics = firebase.analytics()
 
