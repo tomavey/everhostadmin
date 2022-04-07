@@ -37,7 +37,10 @@ export default {
         let usersArray = []
         docs.forEach( doc => {
           let user = doc.data()
-          usersArray.push(user)
+          //zdPoborxuEgOHo8x1CwlfwUGgWJ2 = check for this uid in users collection and authentication
+          if ( user.uid ){
+            usersArray.push(user)
+          }
         })
         context.commit('setUsers',usersArray)
       })
