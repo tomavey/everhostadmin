@@ -6,7 +6,7 @@
       <v-btn @click="showNewUser = !showNewUser" class="float-right">
         Create a new user
       </v-btn>
-      <ehc-dialog v-model="showNewUser" :title="title" width="500" close>
+      <ehc-dialog v-model="showNewUser" title="Create a new user" width="500" close>
         <ehc-form :meta="newUserMeta" v-model="newUserFormData" @submit="submitNewUser()"></ehc-form>
       </ehc-dialog>
 
@@ -98,10 +98,16 @@ export default {
       this.$store.dispatch('makeAdmin',uid)
       this.showPromote = false
     }, 
+    //TODO: add validation in firebase functions
     submitNewUser: async function(){
       let obj = {
         'email': this.newUserFormData.email,
         'password': this.newUserFormData.password
+      }
+      if ( !this.newUserFormData.email || !this.newUserFormData.password ){
+        this.$store.commit('setAlertMessage', "Please fill in all fields")
+        this.$store.commit('setShowAlert',true)
+        return
       }
       await this.$store.dispatch('createUserWithEmailAndPassword',obj)
       this.showNewUser = false
