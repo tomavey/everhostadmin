@@ -171,13 +171,13 @@ export default {
       console.log('payload ',payload)
       context.commit('setPropertiesStatus', {loading: true})
       let obj = {
-        'propertyId': payload.propertyId
+        'propertyId': payload.propertyId   
       }
       const copyProperty = firebase.functions().httpsCallable('copyProperty')
       return copyProperty( obj )
       .then(res => {
         context.commit('setPropertiesStatus', {loading: false})
-        console.log("copyProperty ",res)
+        // console.log("copyProperty ",payload)
       })
       .catch( err => {
         console.log(err)
