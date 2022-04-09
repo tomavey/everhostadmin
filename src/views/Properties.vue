@@ -178,8 +178,15 @@ export default {
     },
     created() {
         this.subscribeToProperties(this.showAll)
-        this.$store.dispatch('getCustomSubsections', { propertyId: '8705181', type: 'areaguide' })
-        this.$store.dispatch('getCustomSubsections', { propertyId: '8705181', type: 'propertyinfo' })
+        if ( this.$route && this.$route.query ) {
+            this.search = this.$route.query.search
+        }
+        if ( this.$route && this.$route.query && this.userIsAdmin ) {
+            this.showAll = this.$route.query.showAll
+        }
+        // this.$store.dispatch('getCustomSubsections', { propertyId: '8705181', type: 'areaguide' })
+        // this.$store.dispatch('getCustomSubsections', { propertyId: '8705181', type: 'propertyinfo' })
+
     }
 
 }

@@ -90,8 +90,7 @@ export default {
   methods: {
     showThisUidProperties: function(item){
       console.log(item)
-      this.$store.commit('setUidToShowAdmin', item.uid)
-      this.$router.push({name: "Properties"})
+      this.$router.push({name: "Properties", query: {search: item.uid, showAll: true}})  
     },
     submitPromotion: function(){
       let uid = this.formData.uid
