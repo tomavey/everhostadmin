@@ -123,7 +123,7 @@ export default {
         let propertiesArray = []
         docs.forEach( (doc) => {
             let obj = doc.data()
-            obj.searchAble = obj.name + obj.city + obj.state + obj.address + obj.propertyId
+            obj.searchAble = obj.name + obj.city + obj.state + obj.address + obj.propertyId + obj.uid
             // console.log("obj name ",obj.name)
             propertiesArray = [...propertiesArray, obj]
         })
