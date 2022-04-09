@@ -65,9 +65,10 @@
 
         <v-card-subtitle>
             PropertyId: {{property.propertyId}}<br/>
-            <!-- <span v-if="property.copiedAt && property.copiedFrom">
+            <span v-if="showExtraForDevs()">UserId: {{property.uid}}<br/></span>
+            <span v-if="property.copiedAt && property.copiedFrom && showExtraForDevs(property)">
              Copied from: {{property.copiedFrom}} on {{formatDate(property.copiedAt,"shortFormat")}}
-            </span> -->
+            </span>
         </v-card-subtitle>
         
         <!-- <v-card-title class="text-h6">{{property.name}}</v-card-title>
@@ -165,7 +166,7 @@ export default {
         prop() {return this.property},
         appSite() {return this.$store.getters.appSite},
         loading() {return this.$store.getters.propertiesStatus.loading},
-        user() {return this.$store.getters.user}
+        user() {return this.$store.getters.user},
     },
     methods: {
         goToProperty() {
@@ -205,6 +206,14 @@ export default {
                     }
                 })
             })
+        },
+        showExtraForDevs(){
+            let devUidArray = ['s7ODEJrba6YtcvaisMnEmt4XQgh1']
+            if ( devUidArray.includes(this.user.uid) ) {
+                return true
+            }   else {
+                return false
+            }   
         }
     },
     watch: {
