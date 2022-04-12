@@ -9,6 +9,9 @@
       item-key="creator"
       class="elevation-1"
       :search="search"
+      :single-expand="singleExpand"
+      show-expand
+      :expanded.sync="expanded"
       :footer-props="{
         showFirstLastPage: true,
         itemsPerPageOptions: [50,100,150.-1]
@@ -30,6 +33,11 @@
         mdi-file-find
       </v-icon>
     </template>
+    <template v-slot:expanded-item="{ headers, item }">
+      <td :colspan="headers.length">
+        Members of {{ item.membersList }}
+      </td>
+    </template>
     </v-data-table>
   </div>
 </v-container>  
@@ -45,6 +53,8 @@ export default {
     return {
       pageTitle: "Organizations",
       search: null,
+      expanded: [],
+      singleExpand: false,
     }
   },
   methods: {
@@ -52,6 +62,10 @@ export default {
   computed: {
     orgs: function(){
       return this.$store.getters.orgs
+      .map(org => {
+        org.membersList = org.members[0]
+        return org
+      })
       .sort( (a,b) => {
           if(a.name < b.name) { return -1; }
           if(a.name > b.name) { return 1; }
@@ -76,6 +90,7 @@ export default {
             sortable: true,
             value: 'creator',
           },
+          { text: '', value: 'data-table-expand' },
         ]
     }
   },

@@ -48,6 +48,7 @@
                 add property
             </v-btn>
         </v-toolbar>
+
         <ehc-properties-gallery v-if="displayAs === 'gallery'" :properties="propertiesFiltered"></ehc-properties-gallery>
         <ehc-properties-table v-if="displayAs =='table'" :properties="propertiesFiltered"></ehc-properties-table>
         <ehc-dialog max-width="300" v-model="maxPropsDialog" title="Max Properties Reached">
