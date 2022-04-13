@@ -28,7 +28,7 @@
    <ehc-image-upload 
       v-model="imagePopup" 
       title="Upload Image" 
-      :uploadPath="'/supportPictures/'+'-'+Date.now()"  
+      :uploadPath="'/supportPictures/'+Date.now()"  
       instructions="Your image will appear at the end of the section OR you can type ### where you want the video to appear and it will be embeded at that spot!"
       @upload="addImageToSectionContent($event)" 
       :size="{
@@ -82,10 +82,13 @@ export default {
     save() {
       this.$store.dispatch('saveSupportPage', this.content)
     },
-      addImageToSectionContent: function(imageUrl){
+    getImageTag: function(imageUrl){
+      return `<img style='display:block;margin: 0 auto;max-width:100%' class='contentImage' src='${imageUrl}' />`
+    },        
+    addImageToSectionContent: function(imageUrl){
       let urlLink = this.getImageTag(imageUrl)
-      if ( this.draft.content.includes('###') ) { this.draft.content = this.draft.content.replace('###',urlLink) } 
-      else { this.draft.content = this.draft.content + urlLink }
+      if ( this.content.includes('###') ) { this.content = this.content.replace('###',urlLink) } 
+      else { this.content = this.content + urlLink }
     },
   },
   mounted() {
