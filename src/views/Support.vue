@@ -1,5 +1,5 @@
 <template>
-<ehc-page class="d-5-md" style="background-color:yellow">  
+<ehc-page class="d-5-md">  
   <ehc-card :width=width style="margin: 0 auto">
       <v-card-text class="text-h4 text-center">Support</v-card-text>
       <v-icon v-if ="userIsAdmin" @click="showEditor = !showEditor">mdi-pencil</v-icon>  
