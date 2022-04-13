@@ -6,11 +6,15 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import wysiwyg from 'vue-wysiwyg'
+
+import CKEditor from 'ckeditor4-vue'
+
 import ehcPage from '@/components/ehc-page.vue'
 import ehcForm from '@/components/ehc-form.vue'
 import ehcDialog from '@/components/ehc-dialog.vue'
 import ehcDrawer from '@/components/ehc-drawer.vue'
 import ehcButton from '@/components/ehc-btn.vue'
+import ehcButtonSmall from '@/components/ehc-button-small.vue'
 
 import VueTheMask from 'vue-the-mask'
 
@@ -23,6 +27,7 @@ Vue.component('ehc-form', ehcForm)
 Vue.component('ehc-dialog', ehcDialog)
 Vue.component('ehc-drawer', ehcDrawer)
 Vue.component('ehc-btn', ehcButton)
+Vue.component('ehc-button-small', ehcButtonSmall)
 
 
   
@@ -30,6 +35,8 @@ Vue.use(VueTheMask)
 
 
 Vue.config.productionTip = false
+
+Vue.use(CKEditor)
 
 Vue.use(wysiwyg, {
   hideModules: {

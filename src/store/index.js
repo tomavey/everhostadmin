@@ -7,6 +7,7 @@ import Properties from './properties'
 import GuestData from './guestdata'
 import Feedbacks from './feedbacks'
 import Mail from './mail'
+import Support from './support'
 import Users from './users'
 import UpdatesLog from './updateslog.js'
 
@@ -80,5 +81,5 @@ export default new Vuex.Store({
       })
     }
   },
-  modules: {Auth, Org, Properties, GuestData, Feedbacks, Mail, Users, UpdatesLog},
+  modules: {Auth, Org, Properties, GuestData, Feedbacks, Mail, Users, UpdatesLog, Support},
 })

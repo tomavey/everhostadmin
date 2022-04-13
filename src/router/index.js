@@ -6,6 +6,7 @@ import Feedbacks from '../views/Feedbacks.vue'
 import MyAccount from '../views/MyAccount.vue'
 import Users from '../views/admin/Users.vue'
 import EmailToSend from '../views/admin/EmailToSend.vue'
+import Support from '../views/Support.vue'
 import Organizations from '../views/admin/Organizations.vue'
 import UpdatesLog from '../views/admin/UpdatesLog.vue'
 import Firebase from 'firebase'
@@ -64,6 +65,10 @@ const routes = [
   {
     path: "/emailtosend",
     component: EmailToSend,
+  },
+  {
+    path: "/support",
+    component: Support,
   },
   {
     path: "/updateslog",

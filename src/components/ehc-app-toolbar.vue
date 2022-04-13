@@ -109,6 +109,7 @@ export default {
         menu: [
             {label: "Properties", route: "/", icon: "mdi-home-city"},
             {label: "Guest Data", route: "/guestdata", icon: "mdi-account-group"},
+            {label: "Support", route: "/support", icon: "mdi-lifebuoy"},
             // {label: "My Account", route: "/myaccount", icon:"mdi-account"}, TODO
         ],
     }),
