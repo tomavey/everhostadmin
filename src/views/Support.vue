@@ -55,31 +55,37 @@ export default {
       data: '',
       saved: true,
       content: "",
-      saveButton: {
-              text: 'saved',
-              loading: false,
-              icon: "mdi-check-bold",
-              color: 'success'
-      },
       imagePopup: false,
       youTubePopup: false,
       draft: {
         section: '',
         content: ''
-      }
+      },
+      saveButton: {
+        text: 'Save',
+        icon: 'mdi-content-save',
+        color: 'green',
+        disabled: false
+      } 
     }
-  },
+  }, 
+  computed: {
+  },  //end of computed
   methods: {
     save() {
-      this.saved = true
-      this.$store.dispatch('saveSupportDoc', this.content)
+      this.$store.dispatch('saveSupportPage', this.content)
     },
       addImageToSectionContent: function(imageUrl){
       let urlLink = this.getImageTag(imageUrl)
       if ( this.draft.content.includes('###') ) { this.draft.content = this.draft.content.replace('###',urlLink) } 
       else { this.draft.content = this.draft.content + urlLink }
     },
-
   },
+  mounted() {
+    this.$store.dispatch('getSupportPage')
+    .then( () => {
+      this.content = this.$store.getters.supportPage
+    })
+  }
 }
 </script>
