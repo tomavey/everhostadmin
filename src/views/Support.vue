@@ -8,13 +8,14 @@
         <ehc-button-small @submit="youTubePopup = true" icon="mdi-youtube" text="YouTube" class="ml-2"></ehc-button-small>
         
         <template v-slot:right>
-            <ehc-button-small @submit="updatePropertyInfoContent"  v-bind="saveButton"></ehc-button-small>
+            <ehc-button-small @submit="save"  v-bind="saveButton"></ehc-button-small>
         </template>
 
       </ehc-card-toolbar>
 
 
       <ehc-editor v-model="content" @change="saved=false"></ehc-editor>
+      {{content}}
 
     </ehc-card-content>
   </ehc-card>
@@ -69,10 +70,9 @@ export default {
     }
   },
   methods: {
-    updatePropertyInfoContent() {
+    save() {
       this.saved = true
-      alert('saved')
-      // this.$emit('update', this.content)
+      this.$store.dispatch('saveSupportDoc', this.content)
     },
       addImageToSectionContent: function(imageUrl){
       let urlLink = this.getImageTag(imageUrl)
