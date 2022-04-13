@@ -21,10 +21,10 @@
 </template>
 
 <script>
-import mixins from '@/mixins'
+import auth from '@/mixins/auth'
 
     export default {
-        mixins: [mixins],
+        mixins: [auth],
         props: {
             title: String, 
             justify:   {type: String,  default: "center"},
