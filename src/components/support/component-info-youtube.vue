@@ -44,7 +44,7 @@ export default {
       youTubeId = this.youTubeGetID(youTubeId)
       //the wrapper and iframe styles make the youtube responsive
 
-      const embedCode = `<iframe class="youTubeInsert" width="100%" height="auto" src="https://www.youtube.com/embed/${youTubeId}?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+      const embedCode = `<iframe class="youTubeInsert" width="560" height="315" src="https://www.youtube.com/embed/${youTubeId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
 
       if ( this.section.content.includes('###') ) { this.section.content = this.section.content.replace('###',embedCode) } 
       else {
@@ -69,6 +69,7 @@ export default {
     updatePropertyInfoContent: function(){
       console.log("updating")
       this.$emit("insert", this.section.content)
+      this.section = {}
       this.autoSaved = true
       this.imageObjChanged = false
       // this.$store.dispatch("updatePropertyInfoContent", this.section)
@@ -83,3 +84,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+div {
+  width: 800px;
+  margin: auto;
+}
+</style>

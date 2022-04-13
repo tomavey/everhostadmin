@@ -111,4 +111,8 @@ export default {
   width: 800px;
   margin: 0 auto;
 }
+.youtubedialog{
+  width: 800px;
+  margin: 0 auto;
+}
 </style>
