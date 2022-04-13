@@ -1,13 +1,16 @@
 <template>
     <!-- <transition name="slide-up">     -->
+
         <v-card 
             color="rgb(255, 255, 255, .7)" 
-            :class="cardClass" 
+            class="mx-auto" 
             flat 
             transition="slide-y-transition" 
             v-if="triggerTransition"
             v-bind="$attrs"
-            :height="height">
+            :height="height"
+            :width="width"
+            >
             <slot></slot>
         </v-card>
     <!-- </transition> -->
@@ -19,7 +22,8 @@
         mixins: [],
          props: {
             dialog:     {type: Boolean, default: false}, 
-            height: String
+            height: String,
+            width: String,
         },
         components: {
 

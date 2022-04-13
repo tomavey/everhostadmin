@@ -1,6 +1,6 @@
 <template>
-<ehc-page class="support">  
-  <ehc-card >
+<ehc-page class="d-5-md" style="background-color:yellow">  
+  <ehc-card :width=width style="margin: 0 auto">
       <v-card-text class="text-h4 text-center">Support</v-card-text>
       <v-icon v-if ="userIsAdmin" @click="showEditor = !showEditor">mdi-pencil</v-icon>  
     <ehc-card-content v-if="!showEditor" v-html="content"></ehc-card-content>  
@@ -78,6 +78,11 @@ export default {
     }
   }, 
   computed: {
+    width: function() {
+      if ( window.innerWidth < 800 ) { return '700' }
+      if ( window.innerWidth < 1200 ) { return '1000' }
+        return '1400'
+      }
   },  //end of computed
   methods: {
     save() {
@@ -108,7 +113,6 @@ export default {
 
 <style scoped>
 .support {
-  width: 800px;
   margin: 0 auto;
 }
 .youtubedialog{
