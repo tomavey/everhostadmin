@@ -1,7 +1,12 @@
 <template>
 <ehc-page>  
   <ehc-card>
-    <ehc-card-content>
+      <v-card-title class="text-h4">Support</v-card-title>
+      <v-icon v-if ="userIsAdmin" @click="showEditor = !showEditor">mdi-pencil</v-icon>  
+    <ehc-card-content v-if="!showEditor" v-html="content"></ehc-card-content>  
+
+    <div v-if="showEditor"> <!---not sure why wrapper div is needed--->
+    <ehc-card-content >
       <ehc-card-toolbar @edit="showEdit=!showEdit">
 
         <ehc-button-small @submit="imagePopup=true" icon="mdi-image-outline" text="Image"></ehc-button-small>
@@ -13,11 +18,12 @@
 
       </ehc-card-toolbar>
 
-
       <ehc-editor v-model="content" @change="saved=false"></ehc-editor>
       {{content}}
 
     </ehc-card-content>
+    </div>
+
   </ehc-card>
    <ehc-image-upload 
       v-model="imagePopup" 
@@ -66,7 +72,8 @@ export default {
         icon: 'mdi-content-save',
         color: 'green',
         disabled: false
-      } 
+      },
+      showEditor: false,
     }
   }, 
   computed: {
