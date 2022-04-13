@@ -1,7 +1,7 @@
 <template>
-<ehc-page>  
-  <ehc-card>
-      <v-card-title class="text-h4">Support</v-card-title>
+<ehc-page class="support">  
+  <ehc-card >
+      <v-card-text class="text-h4 text-center">Support</v-card-text>
       <v-icon v-if ="userIsAdmin" @click="showEditor = !showEditor">mdi-pencil</v-icon>  
     <ehc-card-content v-if="!showEditor" v-html="content"></ehc-card-content>  
 
@@ -19,7 +19,6 @@
       </ehc-card-toolbar>
 
       <ehc-editor v-model="content" @change="saved=false"></ehc-editor>
-      {{content}}
 
     </ehc-card-content>
     </div>
@@ -106,3 +105,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.support {
+  width: 800px;
+  margin: 0 auto;
+}
+</style>
