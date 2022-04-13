@@ -1,19 +1,6 @@
 <template>
 
-    <!-- <v-card>
-
-      <v-btn 
-        icon
-        @click="closeDialog"
-        class="float-right"
-        >
-        <v-icon>mdi-close-outline</v-icon>
-      </v-btn> -->
-      <div>
-<!-- 
-    <v-card-text>
-      <h2>Embed a youTube video</h2>
-    </v-card-text> -->
+    <div>
     <v-card-text class="h4">
       Enter the youTube video url below and that video will be embeded at the end of the content. You can then move it up.
       OR you can type ### where you want the video to appear and it will be embeded at that spot.
@@ -81,7 +68,7 @@ export default {
     },
     updatePropertyInfoContent: function(){
       console.log("updating")
-      this.$emit("insert", this.section)
+      this.$emit("insert", this.section.content)
       this.autoSaved = true
       this.imageObjChanged = false
       // this.$store.dispatch("updatePropertyInfoContent", this.section)

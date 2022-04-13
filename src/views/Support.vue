@@ -36,7 +36,7 @@
           height: 450
       }"/>
     <ehc-dialog v-model=youTubePopup title="embed a youtube video" close>
-      <component-info-youtube @closeDialog="youTubePopup=false" :section=draft @insert="draft=$event">
+      <component-info-youtube @closeDialog="youTubePopup=false" :section=draft @insert="content=$event">
       </component-info-youtube>
     </ehc-dialog>
 </ehc-page>      
@@ -51,9 +51,10 @@ import EhcCardToolbar from '../components/support/ehc-card-toolbar.vue'
 import ehcPage from '../components/support/ehc-page.vue'
 import auth from '@/mixins/auth'
 import EhcImageUpload from '../components/ehc-image-upload.vue'
+import ComponentInfoYoutube from '../components/support/component-info-youtube.vue'
 
 export default {
-  components: { ehcPage, EhcCard, EhcCardContent, EhcEditSectionPage, EhcEditor, EhcCardToolbar, EhcImageUpload },
+  components: { ehcPage, EhcCard, EhcCardContent, EhcEditSectionPage, EhcEditor, EhcCardToolbar, EhcImageUpload, ComponentInfoYoutube },
   mixins: [auth],
   data() {
     return {
@@ -61,6 +62,7 @@ export default {
       data: '',
       saved: true,
       content: "",
+      draft: {},
       imagePopup: false,
       youTubePopup: false,
       draft: {
@@ -81,6 +83,7 @@ export default {
   methods: {
     save() {
       this.$store.dispatch('saveSupportPage', this.content)
+      this.showEditor = false
     },
     getImageTag: function(imageUrl){
       return `<img style='display:block;margin: 0 auto;max-width:100%' class='contentImage' src='${imageUrl}' />`
@@ -95,6 +98,10 @@ export default {
     this.$store.dispatch('getSupportPage')
     .then( () => {
       this.content = this.$store.getters.supportPage
+      this.draft = {
+        section: 'support',
+        content: this.content
+      } 
     })
   }
 }
