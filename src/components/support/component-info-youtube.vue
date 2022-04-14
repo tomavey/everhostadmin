@@ -57,6 +57,7 @@ export default {
       this.closeDialog()
     },
     closeDialog: function(){
+      this.youTubeId = null
       this.$emit("closeDialog")
     },
     fixImageTag: function() {
@@ -70,6 +71,7 @@ export default {
       console.log("updating")
       this.$emit("insert", this.section.content)
       this.section = {}
+      this.youTubeId = null
       this.autoSaved = true
       this.imageObjChanged = false
       // this.$store.dispatch("updatePropertyInfoContent", this.section)
@@ -81,6 +83,9 @@ export default {
     closeDialog: function(){
       this.$emit('closeDialog')
     },
+  },
+  created(){
+    this.youTubeId = null
   }
 }
 </script>

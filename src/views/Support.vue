@@ -1,7 +1,7 @@
 <template>
 <ehc-page class="d-5-md" >  
   <ehc-card :width=width style="margin: 0 auto">
-      <v-card-text class="text-h4 text-center">Support</v-card-text>
+      <v-card-text class="text-h4 text-center">{{pageTitle}}</v-card-text>
       <v-icon v-if ="userIsAdmin" @click="showEditor = !showEditor">mdi-pencil</v-icon>  
     <ehc-card-content v-if="!showEditor" v-html="content"></ehc-card-content>  
 
@@ -45,36 +45,34 @@
 import EhcEditor from '../components/ehc-editor.vue'
 import EhcCardContent from '../components/support/ehc-card-content.vue'
 import EhcCard from '../components/support/ehc-card.vue'
-import EhcEditSectionPage from '../components/support/ehc-edit-section-page.vue'
 import EhcCardToolbar from '../components/support/ehc-card-toolbar.vue'
 import ehcPage from '../components/support/ehc-page.vue'
-import auth from '@/mixins/auth'
 import EhcImageUpload from '../components/ehc-image-upload.vue'
 import ComponentInfoYoutube from '../components/support/component-info-youtube.vue'
 
+import auth from '@/mixins/auth'
+
 export default {
-  components: { ehcPage, EhcCard, EhcCardContent, EhcEditSectionPage, EhcEditor, EhcCardToolbar, EhcImageUpload, ComponentInfoYoutube },
+  components: { ehcPage, EhcCard, EhcCardContent, EhcEditor, EhcCardToolbar, EhcImageUpload, ComponentInfoYoutube },
   mixins: [auth],
   data() {
     return {
       pageTitle: 'Support',
-      data: '',
-      saved: true,
       content: "",
-      draft: {},
-      imagePopup: false,
-      youTubePopup: false,
       draft: {
         section: '',
         content: ''
       },
+      saved: true,
+      imagePopup: false,
+      youTubePopup: false,
+      showEditor: false,
       saveButton: {
         text: 'Save',
         icon: 'mdi-content-save',
         color: 'green',
         disabled: false
       },
-      showEditor: false,
     }
   }, 
   computed: {
