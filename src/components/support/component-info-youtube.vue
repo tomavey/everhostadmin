@@ -46,12 +46,12 @@ export default {
 
       const embedCode = `<iframe class="youTubeInsert" width="560" height="400" src="https://www.youtube.com/embed/${youTubeId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
 
-      if ( this.section.content.includes('###') ) { this.section.content = this.section.content.replace('###',embedCode) } 
+      if ( this.section.includes('###') ) { this.section = this.section.replace('###',embedCode) } 
       else {
-        this.section.content = `${this.section.content} ${embedCode}`
+        this.section = `${this.section} ${embedCode}`
       }
 
-      this.section.content.replace('###','')
+      this.section.replace('###','')
       this.fixImageTag()
       this.updatePropertyInfoContent()
       this.closeDialog()
@@ -62,14 +62,14 @@ export default {
     },
     fixImageTag: function() {
       console.log('fixImageTag')
-      let text = this.section.content
+      let text = this.section
       text = text.replace("&lt;img","<img") 
       text = text.replace("&gt;",">") 
-      this.section.content = text
+      this.section = text
     },
     updatePropertyInfoContent: function(){
       console.log("updating")
-      this.$emit("insert", this.section.content)
+      this.$emit("insert", this.section)
       this.section = {}
       this.youTubeId = null
       this.autoSaved = true

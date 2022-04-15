@@ -35,7 +35,7 @@
           height: 450
       }"/>
     <ehc-dialog v-model=youTubePopup title="embed a youtube video" close>
-      <component-info-youtube @closeDialog="youTubePopup=false" :section=draft @insert="content=$event">
+      <component-info-youtube @closeDialog="youTubePopup=false" :section=content @insert="content=$event">
       </component-info-youtube>
     </ehc-dialog>
 </ehc-page>      
