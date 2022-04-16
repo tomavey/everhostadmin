@@ -46,7 +46,7 @@ import EhcEditor from '../components/ehc-editor.vue'
 import EhcCardContent from '../components/support/ehc-card-content.vue'
 import EhcCard from '../components/support/ehc-card.vue'
 import EhcCardToolbar from '../components/support/ehc-card-toolbar.vue'
-import ehcPage from '../components/support/ehc-page.vue'
+import ehcPage from '../components/ehc-page.vue'
 import EhcImageUpload from '../components/ehc-image-upload.vue'
 import ComponentInfoYoutube from '../components/support/component-info-youtube.vue'
 
