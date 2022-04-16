@@ -33,14 +33,17 @@
 
                     <v-slide-y-transition :leave-absolute="true">
                         <v-card flat max-width="400px" class="mx-auto" v-if="loginDialog">
-                            <v-card-title><h1>Welcome Back</h1></v-card-title>
-                            <v-card-subtitle>Please enter your credentials to log in</v-card-subtitle>
+                            <v-card-text v-if="showSignUp" class="text-h4">Create A New Account</v-card-text>
+                            <v-card-title v-else><h1>Welcome Back</h1></v-card-title>
+                            <v-card-subtitle v-if="showSignUp">All information is required</v-card-subtitle>
+                            <v-card-subtitle v-else>Please enter your credentials to log in</v-card-subtitle>
                             <v-card-text class="pb-0">
                                 <ehc-form :meta="loginForm" v-model="credentials"></ehc-form>
                                 <span class="error--text mt-0 pt-0" >{{loginError}}</span>
                             </v-card-text>
                             <v-card-actions class="pt-0 px-4">
                             <v-btn 
+                                    v-if="!showSignUp"
                                     @click="forgotPassword(credentials.email)"
                                     plain 
                                     color="button" 
@@ -48,6 +51,7 @@
                                     large ><strong>Forgot password</strong></v-btn>
                                 <v-spacer></v-spacer>
                                 <v-btn 
+                                    v-if="!showSignUp"
                                     width="40%"
                                     color="button" 
                                     dark 
@@ -55,6 +59,15 @@
                                     @click="login(credentials)" 
                                     large>
                                     <strong>Login</strong></v-btn>
+                                <v-btn 
+                                    v-else
+                                    width="100%"
+                                    color="button" 
+                                    dark 
+                                    class="ma-0 pa-0" 
+                                    @click="createNewAccount(credentials)" 
+                                    large>
+                                    <strong>Create new account</strong></v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-slide-y-transition>
@@ -92,15 +105,12 @@ export default {
             email: null,
             password: null
         },
-        loginForm: [
-            {type: "email",     label: "Email",     key: 'email',     required: true},
-            {type: "password",  label: "password",  key: 'password',  required: true}
-        ],
         picOptions: [
             {fileName: "shutterstock_62211796.jpg", position: "bottom -5rem left -30rem"},
             {fileName: "shutterstock_557019241.jpg", position: "top 0px left -48rem"},
             {fileName: "shutterstock_1141204517.jpg", position: "bottom 0px left -7rem"},
-        ]
+        ],
+        showSignUp: false,
     }
   },
   watch: {
@@ -118,6 +128,18 @@ export default {
     }
   },
   computed: {
+    loginForm() {
+        let loginFields = [
+            {type: "email",     label: "Email",     key: 'email',     required: true},
+            {type: "password",  label: "Password",  key: 'password',  required: true}
+        ]
+        let signupFields = [
+            {type: "password",  label: "Password ( repeat )",  key: 'passwordCheck',  required: true},
+            {type: "text",      label: "Name", key: 'displayName', required: true},
+            {type: "phoneNumber",     label: "Phone",   key: 'phone',  required: true},
+        ]
+        return this.showSignUp ? [...loginFields,...signupFields] : loginFields
+        },
     loading() {
         let status = this.orgStatus
         if (this.loggedIn == true && status.loading == true) {return false}
@@ -158,6 +180,9 @@ export default {
                 })
     
     },
+    createNewAccount: function(credentials){
+        console.log("create new account", credentials)
+    },
     logout: function() {
         this.$store.dispatch('logout')
     },
@@ -179,7 +204,14 @@ export default {
     confirmAction: function(){
         alert("confirm ation")
     },
-  }  
+  },
+  mounted() {
+      console.log(this.$route.query.signup )
+
+      if ( this.$route.query.signup !== undefined ) {
+          this.showSignUp = true
+      }
+  },  
 }
 </script>
 
