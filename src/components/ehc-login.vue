@@ -42,25 +42,27 @@
                                 <span class="error--text mt-0 pt-0" >{{loginError}}</span>
                             </v-card-text>
                             <v-card-actions class="pt-0 px-4">
-                            <v-btn 
-                                    v-if="!showSignUp"
-                                    @click="forgotPassword(credentials.email)"
-                                    plain 
-                                    color="button" 
-                                    class="mr-5" 
-                                    large ><strong>Forgot password</strong></v-btn>
-                                <v-spacer></v-spacer>
                                 <v-btn 
+                                    text
                                     v-if="!showSignUp"
-                                    width="40%"
                                     color="button" 
                                     dark 
-                                    class="ma-0 pa-0" 
+                                    class="ma-0 px-4" 
+                                    @click="showSignUp=!showSignUp" 
+                                    small
+                                    >
+                                    Create a new account</v-btn>
+                                     <v-spacer></v-spacer>
+                                <v-btn 
+                                    v-if="!showSignUp"
+                                    color="button" 
+                                    dark 
+                                    class="ma-0 px-9" 
                                     @click="login(credentials)" 
                                     large>
                                     <strong>Login</strong></v-btn>
                                 <v-btn 
-                                    v-else
+                                    v-if="showSignUp"
                                     width="100%"
                                     color="button" 
                                     dark 
@@ -68,6 +70,26 @@
                                     @click="createNewAccount(credentials)" 
                                     large>
                                     <strong>Create new account</strong></v-btn>
+                                
+                            </v-card-actions>
+                            <v-card-actions>
+                                <v-btn 
+                                    v-if="showSignUp"
+                                    @click="showSignUp=!showSignUp"
+                                    plain 
+                                    color="button" 
+                                    class="mr-5" 
+                                    large 
+                                    width="100%"
+                                    >Login to an existing account</v-btn>
+                                <v-btn 
+                                    v-if="!showSignUp"
+                                    @click="forgotPassword(credentials.email)"
+                                    plain 
+                                    color="button" 
+                                    class="mr-5" 
+                                    large ><strong>Forgot password</strong></v-btn>
+                               
                             </v-card-actions>
                         </v-card>
                     </v-slide-y-transition>
@@ -134,7 +156,7 @@ export default {
             {type: "password",  label: "Password",  key: 'password',  required: true}
         ]
         let signupFields = [
-            {type: "password",  label: "Password ( repeat )",  key: 'passwordCheck',  required: true},
+            {type: "password",  label: "Confirm Password",  key: 'passwordCheck',  required: true},
             {type: "text",      label: "Name", key: 'displayName', required: true},
             {type: "phoneNumber",     label: "Phone",   key: 'phone',  required: true},
         ]
@@ -180,8 +202,32 @@ export default {
                 })
     
     },
-    createNewAccount: function(credentials){
-        console.log("create new account", credentials)
+    createNewAccount: async function(){
+      let obj = {
+        'email': this.credentials.email,
+        'password': this.credentials.password,
+        'displayName': this.credentials.displayName,
+        'phone': this.credentials.phone
+      }
+      if ( !this.credentials.email || !this.credentials.password ){
+        this.$store.commit('setAlertMessage', "Please fill in all fields")
+        this.$store.commit('setShowAlert',true)
+        return
+      }
+      if ( this.credentials.password !== this.credentials.passwordCheck ){ 
+        this.$store.commit('setAlertMessage', "Passwords do not match")
+        this.$store.commit('setShowAlert',true)
+        return
+      }
+      await this.$store.dispatch('createUserWithEmailAndPassword',obj)
+      .then( res => {
+        this.$store.commit('setAlertMessage', `Account for ${this.credentials.email} was created`)
+        this.$store.commit('setShowAlert',true)
+        this.showSignUp = false
+      })
+      .catch( err => {
+          console.log("error creating user", err)
+      })
     },
     logout: function() {
         this.$store.dispatch('logout')
