@@ -43,8 +43,15 @@
                             </v-card-text>
                             <v-card-actions class="pt-0 px-4">
                                 <v-btn 
-                                    text
                                     v-if="!showSignUp"
+                                    @click="forgotPassword(credentials.email)"
+                                    plain 
+                                    color="button" 
+                                    class="mr-5" 
+                                    large ><strong>Forgot password</strong></v-btn>
+                                <v-btn 
+                                    text
+                                    v-if="false"
                                     color="button" 
                                     dark 
                                     class="ma-0 px-4" 
@@ -74,7 +81,7 @@
                             </v-card-actions>
                             <v-card-actions>
                                 <v-btn 
-                                    v-if="showSignUp"
+                                    v-if="false"
                                     @click="showSignUp=!showSignUp"
                                     plain 
                                     color="button" 
@@ -82,13 +89,6 @@
                                     large 
                                     width="100%"
                                     >Login to an existing account</v-btn>
-                                <v-btn 
-                                    v-if="!showSignUp"
-                                    @click="forgotPassword(credentials.email)"
-                                    plain 
-                                    color="button" 
-                                    class="mr-5" 
-                                    large ><strong>Forgot password</strong></v-btn>
                                
                             </v-card-actions>
                         </v-card>
@@ -158,7 +158,7 @@ export default {
         let signupFields = [
             {type: "password",  label: "Confirm Password",  key: 'passwordCheck',  required: true},
             {type: "text",      label: "Name", key: 'displayName', required: true},
-            {type: "phoneNumber",     label: "Phone",   key: 'phoneNumber',  required: true},
+            {type: "intPhoneNumber",     label: "Phone",   key: 'phoneNumber',  required: true},
         ]
         return this.showSignUp ? [...loginFields,...signupFields] : loginFields
         },
@@ -253,9 +253,7 @@ export default {
     },
   },
   mounted() {
-      console.log(this.$route.query.signup )
-
-      if ( this.$route.query.signup !== undefined ) {
+      if ( this.$route.path === '/signup' ) {
           this.showSignUp = true
       }
   },  

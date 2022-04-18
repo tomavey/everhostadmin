@@ -76,7 +76,18 @@
                                     v-model="data[field.key]" 
                                     @blur="$emit('blur', {key: field.key, value: data[field.key]})"
                                     @change="$emit('change', {key: field.key, value: data[field.key]})">
-                                    </v-text-field>                                                                           
+                                    </v-text-field>                                                                   
+                    <ehc-int-phone-input
+                                    v-else-if="field.type == 'intPhoneNumber'"
+                                    v-model="data[field.key]" 
+                                    :color="color"
+                                    :dense = dense
+                                    outlined
+                                    v-bind="field"
+                                    @blur="$emit('blur', {key: field.key, value: data[field.key]})"
+                                    @change="$emit('change', {key: field.key, value: data[field.key]})"
+                                    >
+                                    </ehc-int-phone-input>                                                                      
                     <ehc-phone-input   
                                     v-else-if="field.type == 'phoneNumber'"  
                                     :props="field"
@@ -155,7 +166,7 @@
 <script>
     import EhcFileInput from '../components/form/ehc-file-input.vue'
     import EhcPhoneInput from '@/components/form/ehc-phone-Input.vue'
-
+    import EhcIntPhoneInput from '@/components/form/ehc-int-phone-input.vue'
 
     export default {
         mixins: [],
@@ -168,7 +179,8 @@
         },
         components: {
             EhcFileInput,
-            EhcPhoneInput
+            EhcPhoneInput,
+            EhcIntPhoneInput
         },
         data: () => ({
             data: {},

@@ -32,7 +32,7 @@ export default {
       firebase.auth().signOut()
     },
     async createUserWithEmailAndPassword(context, payload) {
-      if ( payload.phoneNumber ) { payload.phoneNumber = `+1${payload.phoneNumber}` }
+      // if ( payload.phoneNumber ) { payload.phoneNumber = `+1${payload.phoneNumber}` }
       const createUser = firebase.functions().httpsCallable('createUser');
       return await createUser(payload)
         .then(console.log)
