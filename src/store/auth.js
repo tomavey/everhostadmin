@@ -32,13 +32,12 @@ export default {
       firebase.auth().signOut()
     },
     async createUserWithEmailAndPassword(context, payload) {
-      let email = payload.email
-      let password = payload.password
+      if ( payload.phoneNumber ) { payload.phoneNumber = `+1${payload.phoneNumber}` }
       const createUser = firebase.functions().httpsCallable('createUser');
-      return await createUser({ email, password })
+      return await createUser(payload)
         .then(console.log)
         .catch(console.error);
-    },
+    },  
     async resetPassword(context,email){
       console.log("email ", email)
       return await firebase.auth().sendPasswordResetEmail(email)

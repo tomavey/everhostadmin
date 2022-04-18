@@ -158,7 +158,7 @@ export default {
         let signupFields = [
             {type: "password",  label: "Confirm Password",  key: 'passwordCheck',  required: true},
             {type: "text",      label: "Name", key: 'displayName', required: true},
-            {type: "phoneNumber",     label: "Phone",   key: 'phone',  required: true},
+            {type: "phoneNumber",     label: "Phone",   key: 'phoneNumber',  required: true},
         ]
         return this.showSignUp ? [...loginFields,...signupFields] : loginFields
         },
@@ -207,8 +207,9 @@ export default {
         'email': this.credentials.email,
         'password': this.credentials.password,
         'displayName': this.credentials.displayName,
-        'phone': this.credentials.phone
+        'phoneNumber': this.credentials.phoneNumber
       }
+      console.log("createNewAccount", obj)
       if ( !this.credentials.email || !this.credentials.password ){
         this.$store.commit('setAlertMessage', "Please fill in all fields")
         this.$store.commit('setShowAlert',true)
