@@ -25,6 +25,14 @@
                                 :size="100"
                                 :width="7"
                                 ></v-progress-circular>
+                            <v-progress-circular
+                                v-if="createAccountLoading"
+                                class="mx-auto"
+                                indeterminate
+                                color="primary"
+                                :size="100"
+                                :width="7"
+                                ></v-progress-circular>
                         </v-card>
                     </v-fade-transition>
                     <v-slide-y-transition :leave-absolute="true">
@@ -133,6 +141,7 @@ export default {
             {fileName: "shutterstock_1141204517.jpg", position: "bottom 0px left -7rem"},
         ],
         showSignUp: false,
+        createAccountLoading: false,
     }
   },
   watch: {
@@ -200,9 +209,9 @@ export default {
                 }).catch((err) => {
                     this.loginError = err.message
                 })
-    
     },
     createNewAccount: async function(){
+        this.createAccountLoading = true      
       let obj = {
         'email': this.credentials.email,
         'password': this.credentials.password,
@@ -224,7 +233,9 @@ export default {
       .then( res => {
         this.$store.commit('setAlertMessage', `Account for ${this.credentials.email} was created`)
         this.$store.commit('setShowAlert',true)
+        this.createAccountLoading = false      
         this.showSignUp = false
+
       })
       .catch( err => {
           console.log("error creating user", err)
