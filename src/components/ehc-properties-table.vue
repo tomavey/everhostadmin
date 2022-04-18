@@ -20,7 +20,7 @@
         mdi-pencil
       </v-icon>
     </template>
-    <template v-if="userIsAdmin" v-slot:item.copy="{ item }">
+    <template v-slot:item.copy="{ item }">
       <v-icon
         small
         class="mr-2"
@@ -30,7 +30,7 @@
       </v-icon>
       <!-- <span v-if="item.copiedFrom">*</span> -->
     </template>
-    <template v-if="userIsAdmin" v-slot:item.guestinfo="{ item }">
+    <template v-slot:item.guestinfo="{ item }">
       <v-icon
         v-if="!item.noguestinfo"
         small
