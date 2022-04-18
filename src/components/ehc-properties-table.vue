@@ -30,6 +30,25 @@
       </v-icon>
       <!-- <span v-if="item.copiedFrom">*</span> -->
     </template>
+    <template v-if="userIsAdmin" v-slot:item.guestinfo="{ item }">
+      <v-icon
+        v-if="!item.noguestinfo"
+        small
+        class="mr-2"
+        @click="setGuestInfo(item)"
+      >
+        mdi-information-off
+      </v-icon>
+      <v-icon
+        v-if="item.noguestinfo"
+        small
+        class="mr-2"
+        @click="setGuestInfo(item)"
+      >
+        mdi-information
+      </v-icon>
+      <!-- <span v-if="item.copiedFrom">*</span> -->
+    </template>
     <template v-slot:item.publish="{ item }">
       <v-icon
         v-if="!item.publishedAt"
@@ -107,6 +126,9 @@ export default {
         this.$store.commit("setShowConfirm",false)
         this.$store.commit("setConfirmMessage",'')
       })
+    },
+    setGuestInfo(item){
+      this.$store.dispatch("setGuestInfoSwitchOnProperty", item)
     }
   },
   computed: {
@@ -124,6 +146,7 @@ export default {
         { text: 'Edit', value: 'edit', sortable: false },
         { text: 'Publish', value: 'publish', sortable: false },
         { text: 'Copy', value: 'copy', sortable: false, admin: true },
+        { text: 'Ask for Guest Info', value: 'guestinfo', sortable: false, admin: true },
       ]
       let adminHeaders = [
         { text: 'Delete', value: 'delete', sortable: false, admin:true },
