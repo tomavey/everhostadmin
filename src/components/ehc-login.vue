@@ -235,7 +235,7 @@ export default {
         this.$store.commit('setShowAlert',true)
         this.createAccountLoading = false      
         this.showSignUp = false
-
+        this.$route.push({name: "Properties"})
       })
       .catch( err => {
           console.log("error creating user", err)
@@ -266,6 +266,7 @@ export default {
   mounted() {
       if ( this.$route.path === '/signup' ) {
           this.showSignUp = true
+          this.$router.push('/')
       }
   },  
 }
