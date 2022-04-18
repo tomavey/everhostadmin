@@ -37,7 +37,7 @@
         class="mr-2"
         @click="setGuestInfo(item)"
       >
-        mdi-information-off
+        mdi-check-outline
       </v-icon>
       <v-icon
         v-if="item.noguestinfo"
@@ -45,7 +45,7 @@
         class="mr-2"
         @click="setGuestInfo(item)"
       >
-        mdi-information
+        mdi-close-box-outline
       </v-icon>
       <!-- <span v-if="item.copiedFrom">*</span> -->
     </template>
