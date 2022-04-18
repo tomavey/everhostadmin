@@ -33,28 +33,63 @@
 
                     <v-slide-y-transition :leave-absolute="true">
                         <v-card flat max-width="400px" class="mx-auto" v-if="loginDialog">
-                            <v-card-title><h1>Welcome Back</h1></v-card-title>
-                            <v-card-subtitle>Please enter your credentials to log in</v-card-subtitle>
+                            <v-card-text v-if="showSignUp" class="text-h4">Create A New Account</v-card-text>
+                            <v-card-title v-else><h1>Welcome Back</h1></v-card-title>
+                            <v-card-subtitle v-if="showSignUp">All information is required</v-card-subtitle>
+                            <v-card-subtitle v-else>Please enter your credentials to log in</v-card-subtitle>
                             <v-card-text class="pb-0">
                                 <ehc-form :meta="loginForm" v-model="credentials"></ehc-form>
                                 <span class="error--text mt-0 pt-0" >{{loginError}}</span>
                             </v-card-text>
                             <v-card-actions class="pt-0 px-4">
-                            <v-btn 
+                                <v-btn 
+                                    v-if="!showSignUp"
                                     @click="forgotPassword(credentials.email)"
                                     plain 
                                     color="button" 
                                     class="mr-5" 
                                     large ><strong>Forgot password</strong></v-btn>
-                                <v-spacer></v-spacer>
                                 <v-btn 
-                                    width="40%"
+                                    text
+                                    v-if="false"
                                     color="button" 
                                     dark 
-                                    class="ma-0 pa-0" 
+                                    class="ma-0 px-4" 
+                                    @click="showSignUp=!showSignUp" 
+                                    small
+                                    >
+                                    Create a new account</v-btn>
+                                     <v-spacer></v-spacer>
+                                <v-btn 
+                                    v-if="!showSignUp"
+                                    color="button" 
+                                    dark 
+                                    class="ma-0 px-9" 
                                     @click="login(credentials)" 
                                     large>
                                     <strong>Login</strong></v-btn>
+                                <v-btn 
+                                    v-if="showSignUp"
+                                    width="100%"
+                                    color="button" 
+                                    dark 
+                                    class="ma-0 pa-0" 
+                                    @click="createNewAccount(credentials)" 
+                                    large>
+                                    <strong>Create new account</strong></v-btn>
+                                
+                            </v-card-actions>
+                            <v-card-actions>
+                                <v-btn 
+                                    v-if="false"
+                                    @click="showSignUp=!showSignUp"
+                                    plain 
+                                    color="button" 
+                                    class="mr-5" 
+                                    large 
+                                    width="100%"
+                                    >Login to an existing account</v-btn>
+                               
                             </v-card-actions>
                         </v-card>
                     </v-slide-y-transition>
@@ -92,15 +127,12 @@ export default {
             email: null,
             password: null
         },
-        loginForm: [
-            {type: "email",     label: "Email",     key: 'email',     required: true},
-            {type: "password",  label: "password",  key: 'password',  required: true}
-        ],
         picOptions: [
             {fileName: "shutterstock_62211796.jpg", position: "bottom -5rem left -30rem"},
             {fileName: "shutterstock_557019241.jpg", position: "top 0px left -48rem"},
             {fileName: "shutterstock_1141204517.jpg", position: "bottom 0px left -7rem"},
-        ]
+        ],
+        showSignUp: false,
     }
   },
   watch: {
@@ -118,6 +150,18 @@ export default {
     }
   },
   computed: {
+    loginForm() {
+        let loginFields = [
+            {type: "email",     label: "Email",     key: 'email',     required: true},
+            {type: "password",  label: "Password",  key: 'password',  required: true}
+        ]
+        let signupFields = [
+            {type: "password",  label: "Confirm Password",  key: 'passwordCheck',  required: true},
+            {type: "text",      label: "Name", key: 'displayName', required: true},
+            {type: "intPhoneNumber",     label: "Phone",   key: 'phoneNumber',  required: true},
+        ]
+        return this.showSignUp ? [...loginFields,...signupFields] : loginFields
+        },
     loading() {
         let status = this.orgStatus
         if (this.loggedIn == true && status.loading == true) {return false}
@@ -158,6 +202,34 @@ export default {
                 })
     
     },
+    createNewAccount: async function(){
+      let obj = {
+        'email': this.credentials.email,
+        'password': this.credentials.password,
+        'displayName': this.credentials.displayName,
+        'phoneNumber': this.credentials.phoneNumber
+      }
+      console.log("createNewAccount", obj)
+      if ( !this.credentials.email || !this.credentials.password ){
+        this.$store.commit('setAlertMessage', "Please fill in all fields")
+        this.$store.commit('setShowAlert',true)
+        return
+      }
+      if ( this.credentials.password !== this.credentials.passwordCheck ){ 
+        this.$store.commit('setAlertMessage', "Passwords do not match")
+        this.$store.commit('setShowAlert',true)
+        return
+      }
+      await this.$store.dispatch('createUserWithEmailAndPassword',obj)
+      .then( res => {
+        this.$store.commit('setAlertMessage', `Account for ${this.credentials.email} was created`)
+        this.$store.commit('setShowAlert',true)
+        this.showSignUp = false
+      })
+      .catch( err => {
+          console.log("error creating user", err)
+      })
+    },
     logout: function() {
         this.$store.dispatch('logout')
     },
@@ -179,7 +251,12 @@ export default {
     confirmAction: function(){
         alert("confirm ation")
     },
-  }  
+  },
+  mounted() {
+      if ( this.$route.path === '/signup' ) {
+          this.showSignUp = true
+      }
+  },  
 }
 </script>
 

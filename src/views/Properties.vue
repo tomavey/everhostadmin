@@ -66,12 +66,10 @@
 
 <script>
 import EhcBtn from '../components/ehc-btn.vue'
-import firebase from 'firebase'
 import mixins from '@/mixins'
 import auth from '@/mixins/auth'
 import EhcPropertiesGallery from '../components/ehc-properties-gallery.vue'
 import EhcPropertiesTable from '../components/ehc-properties-table.vue'
-
 
 
 export default {
