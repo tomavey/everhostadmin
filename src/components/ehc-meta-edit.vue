@@ -55,6 +55,11 @@ import auth from '@/mixins/auth'
 export default {
   components: { ehcPage, EhcCard, EhcCardContent, EhcEditor, EhcCardToolbar, EhcImageUpload, ComponentInfoYoutube },
   mixins: [auth],
+  props: {
+    docId: {
+      type: String,
+    },
+  },
   data() {
     return {
       pageTitle: 'Support',
@@ -84,7 +89,11 @@ export default {
   },  //end of computed
   methods: {
     save() {
-      this.$store.dispatch('saveSupportPage', this.content)
+      let payload = {
+        content: this.content,  
+        docId: this.docId
+              }
+      this.$store.dispatch('saveMetaPage', payload)
       this.showEditor = false
     },
     getImageTag: function(imageUrl){
@@ -97,7 +106,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('getSupportPage')
+    this.$store.dispatch('getMetaPage',this.docId)
     .then( () => {
       this.content = this.$store.getters.supportPage
       this.draft = {

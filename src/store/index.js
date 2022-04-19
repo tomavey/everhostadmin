@@ -81,5 +81,5 @@ export default new Vuex.Store({
       })
     }
   },
-  modules: {Auth, Org, Properties, GuestData, Feedbacks, Mail, Users, UpdatesLog, Support},
+  modules: {Auth, Org, Properties, GuestData, Feedbacks, Mail, Users, UpdatesLog, Support, Meta},
 })

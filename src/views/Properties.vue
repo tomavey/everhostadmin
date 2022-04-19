@@ -51,7 +51,6 @@
 
         <ehc-properties-gallery v-if="displayAs === 'gallery'" :properties="propertiesFiltered"></ehc-properties-gallery>
         <ehc-properties-table v-if="displayAs =='table'" :properties="propertiesFiltered"></ehc-properties-table>
-        <ehc-meta-edit v-if=true ></ehc-meta-edit>
         <ehc-dialog max-width="300" v-model="maxPropsDialog" title="Max Properties Reached">
             <h3>you have reached the maximum number of properties available</h3>
             <template v-slot:actions>
@@ -71,13 +70,11 @@ import mixins from '@/mixins'
 import auth from '@/mixins/auth'
 import EhcPropertiesGallery from '../components/ehc-properties-gallery.vue'
 import EhcPropertiesTable from '../components/ehc-properties-table.vue'
-import EhcMetaEdit from '../components/ehc-meta-edit.vue'
 
 
 export default {
-    components: {EhcBtn, EhcPropertiesGallery, EhcPropertiesTable},
-    mixins: [mixi,
-        EhcMetaEditns,auth],
+    components: {EhcBtn, EhcPropertiesGallery, EhcPropertiesTable, },
+    mixins: [mixins,auth],
     name: 'properties',
 
     data: () => ({
