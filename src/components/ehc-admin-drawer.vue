@@ -33,6 +33,12 @@
             </v-list-item-icon>
             <v-list-item-title>Reset Password</v-list-item-title>
           </v-list-item>
+          <v-list-item link @click="showWelcomePage()">
+            <v-list-item-icon>
+              <v-icon>mdi-human-greeting</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Welcome Page</v-list-item-title>
+          </v-list-item>
           <v-list-item link @click="$router.push('/updateslog')">
             <v-list-item-icon>
               <v-icon>mdi-update</v-icon>
@@ -74,6 +80,9 @@ export default {
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) { return (true) }
         else { return (false) }
     },
+    showWelcomePage() {
+      this.$store.commit('toggleWelcomePage')
+    } 
   }
 }
 </script>

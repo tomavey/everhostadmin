@@ -1,5 +1,5 @@
 <template>
-<ehc-page class="d-5-md" >  
+<ehc-page>  
   <ehc-card :width=width style="margin: 0 auto">
       <v-card-text class="text-h4 text-center">{{pageTitle}}</v-card-text>
       <v-icon v-if ="userIsAdmin" @click="showEditor = !showEditor">mdi-pencil</v-icon>  
@@ -59,10 +59,12 @@ export default {
     docId: {
       type: String,
     },
+    pageTitle: {
+      type: String,
+    },
   },
   data() {
     return {
-      pageTitle: 'Support',
       content: "",
       draft: {
         section: '',
@@ -108,9 +110,9 @@ export default {
   mounted() {
     this.$store.dispatch('getMetaPage',this.docId)
     .then( () => {
-      this.content = this.$store.getters.supportPage
+      this.content = this.$store.getters.metaPage
       this.draft = {
-        section: 'support',
+        section: 'intro',
         content: this.content
       } 
     })

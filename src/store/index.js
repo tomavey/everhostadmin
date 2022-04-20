@@ -10,6 +10,7 @@ import Mail from './mail'
 import Support from './support'
 import Users from './users'
 import UpdatesLog from './updateslog.js'
+import Meta from './meta'
 
 
 Vue.use(Vuex)

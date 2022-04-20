@@ -49,8 +49,9 @@
             </v-btn>
         </v-toolbar>
 
-        <ehc-properties-gallery v-if="displayAs === 'gallery'" :properties="propertiesFiltered"></ehc-properties-gallery>
-        <ehc-properties-table v-if="displayAs =='table'" :properties="propertiesFiltered"></ehc-properties-table>
+        <ehc-meta-edit v-if="!propertiesFiltered.length || showWelcomePage" docId="intro" pageTitle=""></ehc-meta-edit>
+        <ehc-properties-gallery v-if="displayAs === 'gallery' && !showWelcomePage" :properties="propertiesFiltered"></ehc-properties-gallery>
+        <ehc-properties-table v-if="displayAs =='table' && !showWelcomePage" :properties="propertiesFiltered"></ehc-properties-table>
         <ehc-dialog max-width="300" v-model="maxPropsDialog" title="Max Properties Reached">
             <h3>you have reached the maximum number of properties available</h3>
             <template v-slot:actions>
@@ -70,10 +71,11 @@ import mixins from '@/mixins'
 import auth from '@/mixins/auth'
 import EhcPropertiesGallery from '../components/ehc-properties-gallery.vue'
 import EhcPropertiesTable from '../components/ehc-properties-table.vue'
+import EhcMetaEdit from '../components/ehc-meta-edit.vue'
 
 
 export default {
-    components: {EhcBtn, EhcPropertiesGallery, EhcPropertiesTable, },
+    components: {EhcBtn, EhcPropertiesGallery, EhcPropertiesTable, EhcMetaEdit},
     mixins: [mixins,auth],
     name: 'properties',
 
@@ -91,6 +93,9 @@ export default {
         }
     },
     computed: {
+        showWelcomePage: function(){
+            return this.$store.getters.showWelcomePage   
+        },
         showAllLoading: {
             get() {
                 return this.$store.getters.showAllLoading
