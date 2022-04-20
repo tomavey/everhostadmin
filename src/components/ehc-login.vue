@@ -264,6 +264,7 @@ export default {
     },
   },
   mounted() {
+      //this removes the signup psudo route from the url if it is there
       if ( this.$route.path === '/signup' ) {
           this.showSignUp = true
           this.$router.push('/')
