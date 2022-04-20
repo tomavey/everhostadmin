@@ -11,37 +11,37 @@
         >
           <v-list-item link @click="$router.push('/users')">
             <v-list-item-icon>
-              <v-icon>mdi-account-multiple</v-icon>
+              <v-icon color="orange darken-2">mdi-account-multiple</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Users</v-list-item-title>
           </v-list-item>
           <v-list-item link @click="$router.push('/feedbacks')">
             <v-list-item-icon>
-              <v-icon>mdi-message-alert</v-icon>
+              <v-icon color="blue darken-2">mdi-message-alert</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Feedback</v-list-item-title>
           </v-list-item>
           <v-list-item link @click="$router.push('/organizations')">
             <v-list-item-icon>
-              <v-icon>mdi-group</v-icon>
+              <v-icon color="red accent-4">mdi-group</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Organizations</v-list-item-title>
           </v-list-item>
           <v-list-item link @click="forgotPassword(email)">
             <v-list-item-icon>
-              <v-icon>mdi-lock-reset</v-icon>
+              <v-icon color="green">mdi-lock-reset</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Reset Password</v-list-item-title>
           </v-list-item>
-          <v-list-item link @click="showWelcomePage()">
+          <v-list-item link @click="showWelcomePage()" v-if="$route.path==='/'">
             <v-list-item-icon>
-              <v-icon>mdi-human-greeting</v-icon>
+              <v-icon color="yellow accent-5">mdi-human-greeting</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Welcome Page</v-list-item-title>
           </v-list-item>
           <v-list-item link @click="$router.push('/updateslog')">
             <v-list-item-icon>
-              <v-icon>mdi-update</v-icon>
+              <v-icon color="cyan accent-4">mdi-update</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Updates Log</v-list-item-title>
           </v-list-item>
