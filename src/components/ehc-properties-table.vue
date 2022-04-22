@@ -5,6 +5,10 @@
     :items="properties"
     :items-per-page="30"
     class="elevation-1"
+    :single-expand="singleExpand"
+    :expanded.sync="expanded"    
+    :show-expand = userIsAdmin  
+    item-key="createdAt"   
     :footer-props="{
       showFirstLastPage: true,
       itemsPerPageOptions: [50,100,150.-1]
@@ -76,6 +80,24 @@
         mdi-delete
       </v-icon>
     </template>
+
+    <template v-slot:expanded-item="{ headers, item }">
+      <td :colspan="headers.length">
+        <span style="font-size: .8em;">This feature is in 'beta'. Be sure you enter a valid uid<br/></span>
+        Change User ID for Property ID: {{item.propertyId}}:&nbsp;
+        <v-col cols="4">
+        <v-text-field
+          v-if="!newUidMessage"
+          v-model="newUid"
+          label="New User Id"
+          :append-outer-icon="newUid ? 'mdi-send' : ''"
+          @click:append-outer="updatePropertyUid({propertyId: item.propertyId, uid: newUid})"
+          >
+        </v-text-field>
+        <p v-if="newUidMessage">{{newUidMessage}}</p>
+        </v-col>
+      </td>
+    </template>
   </v-data-table>
     <span>* = not updated after 3/14/22</span>
     <ehc-alert-confirm @confirmAction="confirmAction" ></ehc-alert-confirm>
@@ -93,7 +115,11 @@ export default {
   props: ['properties'],
   data() {
     return {
-      propertyId: null
+      propertyId: null,
+      expanded: [],
+      singleExpand: false,
+      newUid: null,
+      newUidMessage: null,
     }
   },
   methods: {
@@ -129,7 +155,14 @@ export default {
     },
     setGuestInfo(item){
       this.$store.dispatch("setGuestInfoSwitchOnProperty", item)
-    }
+    },
+    updatePropertyUid(item){
+      console.log("updating property uid", item)
+      this.newUidMessage = "Updating..."
+      setTimeout( () => this.expanded = [], 1000)
+      
+      this.$store.dispatch("updatePropertyUid", item)
+    },
   },
   computed: {
     appSite() {return this.$store.getters.appSite},
@@ -139,7 +172,7 @@ export default {
         { text: 'Name', value: 'name' },
         { text: 'City', value: 'city' },
         { text: 'State', value: 'state' },
-        { text: 'Property Id', value: 'propertyId' },
+        { text: 'Id', value: 'propertyId' },
         { text: 'Published', value: 'publishedAtAsString' },
         { text: 'Created', value: 'createdAtAsString' },
         { text: 'Updated', value: 'updatedAtAsString' },
@@ -150,6 +183,7 @@ export default {
       ]
       let adminHeaders = [
         { text: 'Delete', value: 'delete', sortable: false, admin:true },
+        { text: '', value: 'data-table-expand' },
       ]
       if ( this.userIsAdmin ) {
         headers = [...userHeaders, ...adminHeaders]

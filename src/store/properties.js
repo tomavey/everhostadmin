@@ -215,5 +215,18 @@ export default {
       })
       .catch ( (err) => console.log(err) )
     },
+    updatePropertyUid(context,payload){
+      let propertyId = payload.propertyId
+      let uid = payload.uid
+      let obj = {}
+      obj.uid = uid
+      const propertyRef = firebase.firestore().collection('properties').doc(propertyId)
+      propertyRef.set(obj, { merge:true })
+      .then( (res) => {
+        console.log(`${propertyId} uid updated ${uid}` )
+      }).catch( (err) => {
+        console.log(err)
+      })  
+    }
   }
 }
