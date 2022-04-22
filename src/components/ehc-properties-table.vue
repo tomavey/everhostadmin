@@ -161,7 +161,11 @@ export default {
       this.newUidMessage = "Updating..."
       setTimeout( () => this.expanded = [], 1000)
       
-      this.$store.dispatch("updatePropertyUid", item)
+      this.$store.dispatch("updatePropertyUid", item).
+      then( () =>  { 
+        this.newUidMessage = null 
+        this.newUid = null
+        })
     },
   },
   computed: {
