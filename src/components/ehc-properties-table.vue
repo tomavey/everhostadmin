@@ -159,13 +159,25 @@ export default {
     updatePropertyUid(item){
       console.log("updating property uid", item)
       this.newUidMessage = "Updating..."
-      setTimeout( () => this.expanded = [], 1000)
-      
-      this.$store.dispatch("updatePropertyUid", item).
-      then( () =>  { 
-        this.newUidMessage = null 
-        this.newUid = null
-        })
+      this.$store.dispatch("doesUserExist", item.uid).then( (response) => {
+        if(!response){
+          this.newUidMessage = "Not a valid user id"
+          setTimeout( () => {
+            this.expanded = []
+            this.newUidMessage = ""
+            this.newUid = null
+          }, 3000)
+        } else {
+          this.$store.dispatch("updatePropertyUid", item).then( () => {
+            this.newUidMessage = "Updated"
+            setTimeout( () => {
+              this.expanded = []
+              this.newUidMessage = ""
+              this.newUid = null
+            }, 3000)
+          })
+        }
+      })
     },
   },
   computed: {

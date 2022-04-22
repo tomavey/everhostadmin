@@ -52,5 +52,17 @@ export default {
             context.commit("setUser", user)
           });
     },
+    doesUserExist: async function(context, uid){
+      console.log(uid)
+      const usersRef = firebase.firestore().collection('users').doc(uid)
+      return await usersRef.get()
+        .then(doc => {
+          if ( doc.exists ) {
+            return true
+          } else {
+            return false
+          }
+        });
+    }
   }
 }
