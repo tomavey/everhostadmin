@@ -227,6 +227,27 @@ export default {
       }).catch( (err) => {
         console.log(err)
       })  
+    },
+    async isPropertyMine(context,payload){
+      let propertyId = payload.propertyId
+      let uid = payload.uid
+      let isMine = false
+      const propertiesRef = firebase.firestore().collection('properties')
+      await propertiesRef.doc(propertyId).get()
+      .then( (doc) => {
+        let obj = doc.data()
+        if ( obj.uid === uid ) { isMine = true }
+        console.log("isPropertyMine? ", isMine)
+        return isMine
+      })
+    },
+    async doesPropertyExist(context,propertyId){
+      const propertiesRef = firebase.firestore().collection('properties')
+      return await propertiesRef.doc(propertyId).get()
+      .then( (doc) => {
+        if (doc.exists) { return true }
+        else { return false }
+      })
     }
   }
 }

@@ -24,9 +24,12 @@
     <v-data-table
       :headers="headers"
       :items="users"
-      item-key="name"
+      item-key="createdAt"
       class="elevation-1"
       :search="search"
+      :single-expand="singleExpand"
+      :expanded.sync="expanded"    
+      :show-expand = userIsAdmin  
       :footer-props="{
         showFirstLastPage: true,
         itemsPerPageOptions: [50,100,150.-1]
@@ -54,6 +57,23 @@
       </v-icon>
     </template>
 
+    <template v-slot:expanded-item="{ headers, item }">
+      <td :colspan="headers.length">
+        <span style="font-size: .8em;">This feature is in 'beta'. Be sure you enter a valid propertyId<br/></span>
+        Add an existing property to {{item.email}}:&nbsp;
+        <v-col cols="4">
+        <v-text-field
+          v-if="!newPropertyMessage"
+          v-model="newPropertyId"
+          label="New Property Id"
+          :append-outer-icon="newPropertyId ? 'mdi-send' : ''"
+          @click:append-outer="addPropertyToUser(item.uid)"
+          >
+        </v-text-field>
+        <p v-if="newPropertyMessage">{{newPropertyMessage}}</p>
+        </v-col>
+      </td>
+    </template>
     </v-data-table>
   </div>
 
@@ -72,9 +92,13 @@ export default {
       search: null,
       showPromote: false,
       showNewUser: false,
+      expanded: [],
+      singleExpand: false,
+      newPropertyId: null,
+      newPropertyMessage: null,
       formData: {},
-      newUserFormData: {},
       title: "UserId for new admin",
+      newUserFormData: {},
       newUserFormData: {},
       meta: [
           {type: "text",         label: "UserId",                     key: "uid"},
@@ -111,6 +135,34 @@ export default {
       await this.$store.dispatch('createUserWithEmailAndPassword',obj)
       this.showNewUser = false
     },  
+    addPropertyToUser: async function(uid){
+      let propertyId = this.newPropertyId
+      console.log("addPropertyToUser: ", uid, propertyId)
+      return await this.$store.dispatch('doesPropertyExist',propertyId)
+      .then( (response) => {
+        if(!response){
+          this.newPropertyMessage = "Not a valid property id"
+          setTimeout( () => {
+            this.expanded = []
+            this.newPropertyMessage = ""
+            this.newPropertyId = null
+          }, 3000)
+        } else {
+          this.$store.dispatch("updatePropertyUid", {uid:uid, propertyId: propertyId}).then( () => {
+            this.newPropertyMessage = "Updated"
+            setTimeout( () => {
+              this.expanded = []
+              this.newPropertyMessage = ""
+              this.newPropertyId = null
+            }, 3000)
+          })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        this.newPropertyMessage = err
+      })
+    },
   },
   computed: {
     users: function(){
@@ -144,6 +196,7 @@ export default {
           },
           { text: 'Created', value: "createdAtAsString", sortable: true },
           { text: 'View These Properties', value: 'actions', sortable: false },
+          { text: '', value: 'data-table-expand' },
         ]
     }
   },
