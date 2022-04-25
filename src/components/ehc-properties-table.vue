@@ -94,6 +94,12 @@
           @click:append-outer="updatePropertyUid({propertyId: item.propertyId, uid: newUid})"
           >
         </v-text-field>
+        <v-checkbox
+          v-model="moveGuestInfo"
+          label="Move guest contact info also"
+          value=true
+          class="my-1"
+        ></v-checkbox>
         <p v-if="newUidMessage">{{newUidMessage}}</p>
         </v-col>
       </td>
@@ -120,6 +126,7 @@ export default {
       singleExpand: false,
       newUid: null,
       newUidMessage: null,
+      moveGuestInfo: null,
     }
   },
   methods: {
@@ -170,6 +177,7 @@ export default {
         } else {
           this.$store.dispatch("updatePropertyUid", item).then( () => {
             this.newUidMessage = "Updated"
+            if ( this.moveGuestInfo ) { this.$store.dispatch("moveGuestDataToUser", {uid: item.uid, propertyId: item.propertyId}) }
             setTimeout( () => {
               this.expanded = []
               this.newUidMessage = ""

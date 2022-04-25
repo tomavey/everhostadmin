@@ -36,6 +36,21 @@ export default {
         console.log("property set to info saved")
       })
     },
+    moveGuestDataToUser: async function(context, payload){
+      console.log("payload ", payload)
+      let guestsRef = firebase.firestore().collection("guests")
+      await guestsRef.where("propertyId", "==", payload.propertyId).get()
+      .then( (docs) => {
+        docs.forEach(doc => {
+          let obj = doc.data()
+          obj.propertyUid = payload.uid 
+          console.log("obj ", obj)
+          firebase.firestore().collection("guests").doc(doc.id).set(obj  , { merge: true })  
+        })
+        return "done"
+      })
+      .catch( err => console.log(err))
+    }
   }
 
 }

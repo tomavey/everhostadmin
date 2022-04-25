@@ -70,6 +70,12 @@
           @click:append-outer="addPropertyToUser(item.uid)"
           >
         </v-text-field>
+        <v-checkbox
+          v-model="moveGuestInfo"
+          label="Move guest contact info also"
+          value=true
+          class="my-1"
+        ></v-checkbox>
         <p v-if="newPropertyMessage">{{newPropertyMessage}}</p>
         </v-col>
       </td>
@@ -96,6 +102,7 @@ export default {
       singleExpand: false,
       newPropertyId: null,
       newPropertyMessage: null,
+      moveGuestInfo: null,
       formData: {},
       title: "UserId for new admin",
       newUserFormData: {},
@@ -138,6 +145,7 @@ export default {
     addPropertyToUser: async function(uid){
       let propertyId = this.newPropertyId
       console.log("addPropertyToUser: ", uid, propertyId)
+      if ( this.moveGuestInfo ) { await this.$store.dispatch("moveGuestDataToUser", {uid: uid, propertyId: propertyId}) }
       return await this.$store.dispatch('doesPropertyExist',propertyId)
       .then( (response) => {
         if(!response){

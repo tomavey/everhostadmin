@@ -24,9 +24,10 @@
 
 <script>
 import auth from "@/mixins/auth.vue"
+import mixins from '@/mixins'
 
 export default {
-    mixins: [auth],
+    mixins: [auth, mixins],
     data() {
         return {
             pageTitle: "Guest Data",
@@ -80,13 +81,21 @@ export default {
                     value: 'propertyName',
                     filterable: true,
                 },
-
+                {   
+                    text: 'Created', 
+                    value: "createdAtAsString", 
+                    sortby: "createdAt",
+                    sortable: true 
+                },
             ]
         }
     },
     computed: {
         guests: function(){
-            return this.$store.getters.guests
+            return this.$store.getters.guests.map( el => {
+                el.createdAtAsString = this.dateFormat(el.createdAt,"dateOnly")
+                return el
+            })
         }
     },
     created(){
