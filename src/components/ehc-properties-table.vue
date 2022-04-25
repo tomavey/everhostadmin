@@ -91,13 +91,14 @@
           v-model="newUid"
           label="New User Id"
           :append-outer-icon="newUid ? 'mdi-send' : ''"
-          @click:append-outer="updatePropertyUid({propertyId: item.propertyId, uid: newUid})"
+          @click:append-outer="transferProperty({propertyId: item.propertyId, uid: newUid})"
           >
         </v-text-field>
         <v-checkbox
+          v-if="!newUidMessage"
           v-model="moveGuestInfo"
-          label="Move guest contact info also"
-          value=true
+          label="Transfer guest data also"
+          :value=moveGuestInfo
           class="my-1"
         ></v-checkbox>
         <p v-if="newUidMessage">{{newUidMessage}}</p>
@@ -126,7 +127,8 @@ export default {
       singleExpand: false,
       newUid: null,
       newUidMessage: null,
-      moveGuestInfo: null,
+      moveGuestInfo: true,
+      item: {},
     }
   },
   methods: {
@@ -153,15 +155,22 @@ export default {
       this.$store.commit("setShowConfirm",true)
       this.$store.commit("setConfirmMessage",'Are you sure?')
     },
-    confirmAction(){
-      this.$store.dispatch("markPropertyDeletedAt", this.propertyId)
-      .then( () => {
-        this.$store.commit("setShowConfirm",false)
-        this.$store.commit("setConfirmMessage",'')
-      })
+    async confirmAction(){
+      if ( this.newUid ) { await this.updatePropertyUid(this.item) }
+      else { await this.$store.dispatch("markPropertyDeletedAt", this.propertyId) }
+      this.$store.commit("setShowConfirm",false)
+      this.$store.commit("setConfirmMessage",'')
     },
     setGuestInfo(item){
       this.$store.dispatch("setGuestInfoSwitchOnProperty", item)
+    },
+    transferProperty(item){
+      this.item = item
+      this.$store.commit("setShowConfirm",true)
+      let message = "Are you sure that you want to transfer this property"
+      if ( this.moveGuestInfo ) { message += " and guest data" } else { message += " without guest data" }
+      message = message + " to " + this.newUid + "?"
+      this.$store.commit("setConfirmMessage", message)
     },
     updatePropertyUid(item){
       console.log("updating property uid", item)

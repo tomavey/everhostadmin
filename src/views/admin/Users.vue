@@ -67,13 +67,14 @@
           v-model="newPropertyId"
           label="New Property Id"
           :append-outer-icon="newPropertyId ? 'mdi-send' : ''"
-          @click:append-outer="addPropertyToUser(item.uid)"
+          @click:append-outer="transferProperty(item)"
           >
         </v-text-field>
         <v-checkbox
+          v-if="!newPropertyMessage"
           v-model="moveGuestInfo"
-          label="Move guest contact info also"
-          value=true
+          label="Transfer guest data also"
+          :value=moveGuestInfo
           class="my-1"
         ></v-checkbox>
         <p v-if="newPropertyMessage">{{newPropertyMessage}}</p>
@@ -81,6 +82,7 @@
       </td>
     </template>
     </v-data-table>
+    <ehc-alert-confirm @confirmAction="confirmAction" ></ehc-alert-confirm>
   </div>
 
 </v-container>  
@@ -89,9 +91,13 @@
 <script>
 import mixins from '@/mixins'
 import auth from '@/mixins/auth'
+import ehcAlertConfirm from '@/components/ehc-alert-confirm'
 
 export default {
   mixins: [mixins,auth],
+  components: {
+    'ehc-alert-confirm': ehcAlertConfirm
+  },  
   data: function() {
     return {
       pageTitle: "USERS",
@@ -102,7 +108,8 @@ export default {
       singleExpand: false,
       newPropertyId: null,
       newPropertyMessage: null,
-      moveGuestInfo: null,
+      moveGuestInfo: true,
+      item: {},
       formData: {},
       title: "UserId for new admin",
       newUserFormData: {},
@@ -141,7 +148,20 @@ export default {
       }
       await this.$store.dispatch('createUserWithEmailAndPassword',obj)
       this.showNewUser = false
-    },  
+    },
+    async confirmAction(){
+      await this.addPropertyToUser(this.item.uid)
+      this.$store.commit("setShowConfirm",false)
+      this.$store.commit("setConfirmMessage",'')
+    },
+    transferProperty(item){
+      this.item = item
+      this.$store.commit("setShowConfirm",true)
+      let message = "Are you sure that you want to transfer this property"
+      if ( this.moveGuestInfo ) { message += " and guest data" } else { message += " without guest data" }
+      message = message + " to " + item.uid + "?"
+      this.$store.commit("setConfirmMessage", message)
+    },
     addPropertyToUser: async function(uid){
       let propertyId = this.newPropertyId
       console.log("addPropertyToUser: ", uid, propertyId)
