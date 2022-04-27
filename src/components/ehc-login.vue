@@ -222,11 +222,19 @@ export default {
       if ( !this.credentials.email || !this.credentials.password ){
         this.$store.commit('setAlertMessage', "Please fill in all fields")
         this.$store.commit('setShowAlert',true)
+        this.createAccountLoading = false
         return
       }
+      if ( this.credentials.password.length < 6 ){
+        this.$store.commit('setAlertMessage', "Password must be at least 6 characters")
+        this.$store.commit('setShowAlert',true)
+        this.createAccountLoading = false
+        return
+      } 
       if ( this.credentials.password !== this.credentials.passwordCheck ){ 
         this.$store.commit('setAlertMessage', "Passwords do not match")
         this.$store.commit('setShowAlert',true)
+        this.createAccountLoading = false
         return
       }
       await this.$store.dispatch('createUserWithEmailAndPassword',obj)

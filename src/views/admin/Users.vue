@@ -146,6 +146,11 @@ export default {
         this.$store.commit('setShowAlert',true)
         return
       }
+      if ( obj.password.length < 6 ){
+        this.$store.commit('setAlertMessage', "Password must be at least 6 characters")
+        this.$store.commit('setShowAlert',true)
+        return
+      }
       await this.$store.dispatch('createUserWithEmailAndPassword',obj)
       this.showNewUser = false
     },
