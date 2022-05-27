@@ -14,7 +14,7 @@ export default new Vuetify({
                 offColor: '#536D91',
                 appBar: '#FFFFFF',
                 secondary: "#5887fa",
-                button: '#1D77AF',
+                button: '#893393',
                 black2: '#1D3557',
                 red: '#FF1F1F',
                 green: '#27AE62',
@@ -24,7 +24,8 @@ export default new Vuetify({
                 darkRed: '#EF5645',
                 Gray1: '#F1F1F1',
                 Black: '#1D3557',
-                drawerIcons: '#4a5d79'
+                drawerIcons: '#4a5d79',
+                PrimaryPurple: '#6E38DD'
             }
         },
     }

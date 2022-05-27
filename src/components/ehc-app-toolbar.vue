@@ -7,7 +7,7 @@
        
         <v-divider vertical inset></v-divider>
         <v-tabs
-            color="black2"
+            color="primary"
             v-model="tab"
             >
             <v-tab
@@ -42,7 +42,7 @@
         -->
         <v-tooltip bottom >
             <template v-slot:activator="{ on, attrs }">
-            <v-btn plain small  v-on="on" v-bind="attrs" @click="$store.commit('setFeedback',{show:true})"><v-icon>mdi-message-alert</v-icon> FEEDBACK</v-btn>
+            <v-btn plain small  v-on="on" v-bind="attrs" @click="$store.commit('setFeedback',{show:true})"><v-img :src="require('@/assets/icons/Support-outline@3x.svg')"></v-img> FEEDBACK</v-btn>
             </template>
             <span>give feedback or report error</span>
         </v-tooltip> 
