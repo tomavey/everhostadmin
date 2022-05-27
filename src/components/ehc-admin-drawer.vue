@@ -1,6 +1,7 @@
 <template>
       <v-navigation-drawer
-
+        class="px-0 mx-0"
+        width="180px"
         clipped
         app
         v-model="drawerShow"
@@ -11,37 +12,37 @@
         >
           <v-list-item link @click="$router.push('/users')">
             <v-list-item-icon>
-              <v-icon color="orange darken-2">mdi-account-multiple</v-icon>
+              <v-img :src="require('@/assets/icons/2 User@3x.svg')"></v-img>
             </v-list-item-icon>
             <v-list-item-title>Users</v-list-item-title>
           </v-list-item>
           <v-list-item link @click="$router.push('/feedbacks')">
             <v-list-item-icon>
-              <v-icon color="blue darken-2">mdi-message-alert</v-icon>
+              <v-img :src="require('@/assets/icons/Support-outline@3x.svg')"></v-img>
             </v-list-item-icon>
             <v-list-item-title>Feedback</v-list-item-title>
           </v-list-item>
           <v-list-item link @click="$router.push('/organizations')">
             <v-list-item-icon>
-              <v-icon color="red accent-4">mdi-group</v-icon>
+              <v-img :src="require('@/assets/icons/Home@3xplain.svg')"></v-img>
             </v-list-item-icon>
             <v-list-item-title>Organizations</v-list-item-title>
           </v-list-item>
           <v-list-item link @click="forgotPassword(email)">
             <v-list-item-icon>
-              <v-icon color="green">mdi-lock-reset</v-icon>
+              <v-icon color="drawerIcons">mdi-lock-reset</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Reset Password</v-list-item-title>
           </v-list-item>
           <v-list-item link @click="showWelcomePage()" v-if="$route.path==='/'">
             <v-list-item-icon>
-              <v-icon color="yellow accent-5">mdi-human-greeting</v-icon>
+              <v-img :src="require('@/assets/icons/Support-outline@3x.svg')"></v-img>
             </v-list-item-icon>
             <v-list-item-title>Welcome Page</v-list-item-title>
           </v-list-item>
           <v-list-item link @click="$router.push('/updateslog')">
             <v-list-item-icon>
-              <v-icon color="cyan accent-4">mdi-update</v-icon>
+              <v-img :src="require('@/assets/icons/clock@3x.svg')"></v-img>
             </v-list-item-icon>
             <v-list-item-title>Updates Log</v-list-item-title>
           </v-list-item>

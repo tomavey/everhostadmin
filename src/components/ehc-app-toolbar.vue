@@ -1,7 +1,7 @@
 <template>
     <v-app-bar flat dense app         clipped-left class="px-0 mx-0 mainAppBar" color="appBar">
         <!-- <v-toolbar-title v-if="userIsAdmin">spacer</v-toolbar-title> -->
-        <v-toolbar-title class="pl-0 ml-0">
+        <v-toolbar-title class="pl-0 ml-0" width ="190px">
             <v-img src="@/assets/everhost_v3_logo 1.png" contain height="50px" width="190px" class="ma-0 pa-0" @click="drawerShow = !drawerShow"></v-img>
         </v-toolbar-title>
        

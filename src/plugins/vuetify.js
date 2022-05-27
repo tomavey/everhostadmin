@@ -23,6 +23,8 @@ export default new Vuetify({
                 purple: '#6E38DD',
                 darkRed: '#EF5645',
                 Gray1: '#F1F1F1',
+                Black: '#1D3557',
+                drawerIcons: '#4a5d79'
             }
         },
     }
