@@ -30,9 +30,13 @@ export default new Vuex.Store({
     confirm: {
       show: false,
       message: null,
+    },
+    drawer: {
+      show: false
     }
   },
   getters: {
+    drawer: state=>state.drawer,
     appSite: state=> { 
       if (window.location.hostname === "localhost") {
        return state.devAppSite 
@@ -47,6 +51,11 @@ export default new Vuex.Store({
     confirmMessage: state => state.confirm.message,
   },
   mutations: {
+    setDrawer(state, payload) {
+      for (var key in payload) {
+        state.drawer[key] = payload[key]
+      }
+    },
     setLoading (state,payload) {
       // console.log("setLoading", payload)
       state.loading = payload

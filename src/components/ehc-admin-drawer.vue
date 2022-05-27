@@ -1,9 +1,9 @@
 <template>
       <v-navigation-drawer
-        expand-on-hover
-        permanent
+
         clipped
         app
+        v-model="drawerShow"
       >
         <v-list
           nav
@@ -57,6 +57,14 @@ export default {
     }
   },
   computed: {
+    drawerShow: {
+      get() {
+        return this.$store.getters.drawer.show
+      },
+      set(val) {
+        this.$store.commit('setDrawer',{show: val})
+      } 
+    },
     email: function(){
       return this.$store.getters.user.email
     }    

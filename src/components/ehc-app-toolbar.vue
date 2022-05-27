@@ -1,8 +1,8 @@
 <template>
-    <v-app-bar flat dense app         clipped-left class="px-0 mx-0" color="appBar">
+    <v-app-bar flat dense app         clipped-left class="px-0 mx-0 mainAppBar" color="appBar">
         <!-- <v-toolbar-title v-if="userIsAdmin">spacer</v-toolbar-title> -->
-        <v-toolbar-title>
-            <v-img src="@/assets/icons/everhost_v3_logo.svg" contain height="50px" width="190px" class="ma-0 pa-0"></v-img>
+        <v-toolbar-title class="pl-0 ml-0">
+            <v-img src="@/assets/everhost_v3_logo 1.png" contain height="50px" width="190px" class="ma-0 pa-0" @click="drawerShow = !drawerShow"></v-img>
         </v-toolbar-title>
        
         <v-divider vertical inset></v-divider>
@@ -129,6 +129,14 @@ export default {
         }
     },
     computed: {
+        drawerShow: {
+            get() {
+                return this.$store.getters.drawer.show
+            },
+            set(val) {
+                this.$store.commit('setDrawer', {show: val})
+            }
+        },
         loading() {
             return this.$store.getters.loading
         },
@@ -136,3 +144,11 @@ export default {
 
 }
 </script>
+
+
+<style scoped>
+.mainAppBar >>> .v-toolbar__content {
+      padding: 0px !important;
+}
+
+</style>
