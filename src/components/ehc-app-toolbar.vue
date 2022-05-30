@@ -17,9 +17,27 @@
                 <v-icon class="mr-1">{{item.icon}}</v-icon>
                 <strong>{{item.label}}</strong>
             </v-tab>    
-            
-            
         </v-tabs>
+        <v-tabs
+            color="primary"
+            hide-slider
+            v-if="!disableSearch"
+            >    
+            <v-tab class="custom">
+                <v-text-field
+                    
+                    active-class="active"
+                    outlined
+                    label="Search"
+                    rounded
+                    dense
+                    class="mt-7"
+                    v-model="searchString"
+                >
+                </v-text-field>
+            </v-tab>
+        </v-tabs>
+
         <v-spacer></v-spacer>
         <!-- TODO
         <v-btn icon @click="searching=!searching">
@@ -140,6 +158,24 @@ export default {
         loading() {
             return this.$store.getters.loading
         },
+        searchString:{
+            get() {
+                return this.$store.getters.searchString
+            },
+            set(val) {
+                this.$store.commit('setSearchString', val)
+            }
+        },
+        disableSearch() {
+            let disabledRoutes = [
+                "/support",
+                "/myaccount",
+            ]
+            if ( disabledRoutes.includes(this.$route.path) ) {
+                return true
+            }
+            return false
+        },
     }
 
 }
@@ -150,5 +186,9 @@ export default {
 .mainAppBar >>> .v-toolbar__content {
       padding: 0px !important;
 }
+.v-tab-active {
+    border: none !important;
+}
+ 
 
 </style>

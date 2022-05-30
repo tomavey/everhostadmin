@@ -2,20 +2,11 @@
     <ehc-page>
     <v-card class="mx-auto">
         <v-card-title>{{pageTitle}}</v-card-title>
-        <v-card-title>
-            <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-            ></v-text-field>
-        </v-card-title>
         <v-data-table
             :headers="headers"
             :items="guests"
             :items-per-page="20"
-            :search='search' 
+            :search='searchString' 
             class="elevation-1"
         ></v-data-table>
     </v-card>
@@ -96,7 +87,10 @@ export default {
                 el.createdAtAsString = this.dateFormat(el.createdAt,"dateOnly")
                 return el
             })
-        }
+        },
+        searchString: function(){
+            return this.$store.getters.searchString
+        },  // this is the search string from the store
     },
     created(){
         this.$store.dispatch('getGuests',this.$store.getters.user.uid)

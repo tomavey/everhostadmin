@@ -28,12 +28,7 @@
                     <v-icon class="mr-1 ml-0">mdi-minus</v-icon>
                     Show Few
                 </v-btn>
-        {{propertiesFiltered.length}}
-            <v-spacer></v-spacer>
-            <v-text-field
-                placeholder="Search Properties"
-                v-model="search"
-            ></v-text-field>
+        {{propertiesFiltered.length}}{{searchString}}
             <v-spacer></v-spacer>
             <v-btn
                 rounded
@@ -130,21 +125,30 @@ export default {
 
                 return el
             })
+            .filter( el => {
+                if(this.searchString) {
+                    return el.searchAble.toLowerCase().includes(this.searchString.toLowerCase())
+                }
+                return true
+            })
 
             return properties
         },
         propertiesFiltered() {
             let propertiesFiltered = this.properties
-            if ( this.search ) {
+            if ( this.searchString ) {
                 propertiesFiltered = this.properties.filter(el => {
-                    return el.searchAble.toLowerCase().includes(this.search.toLowerCase())
+                    return el.searchAble.toLowerCase().includes(this.searchString.toLowerCase())
                 })
             }
             if ( !this.showAll ){
                 propertiesFiltered = propertiesFiltered.filter( el => el.uid === this.user.uid )                 
             }
           return propertiesFiltered
-        }
+        },
+        searchString() {
+            return this.$store.getters.searchString
+        },
     },    
     methods: {
         addProperty() {

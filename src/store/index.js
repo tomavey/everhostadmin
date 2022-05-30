@@ -33,7 +33,8 @@ export default new Vuex.Store({
     },
     drawer: {
       show: false
-    }
+    },
+    searchString: null
   },
   getters: {
     drawer: state=>state.drawer,
@@ -49,6 +50,7 @@ export default new Vuex.Store({
     alertMessage: state => state.alert.message,
     showConfirm: state => state.confirm.show,
     confirmMessage: state => state.confirm.message,
+    searchString: state => state.searchString,
   },
   mutations: {
     setDrawer(state, payload) {
@@ -76,6 +78,9 @@ export default new Vuex.Store({
     },
     setConfirmMessage (state,payload){
       state.confirm.message = payload
+    },
+    setSearchString (state,payload){
+      state.searchString = payload
     }
   },
   actions: {

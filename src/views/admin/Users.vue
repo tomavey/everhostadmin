@@ -1,5 +1,6 @@
 <template>
 <v-container>
+  {{searchString}}
   <v-card>
     <v-card-text class="text-center text-h4">USERS</v-card-text>
     <v-card-actions v-if="userIsAdmin">
@@ -19,7 +20,6 @@
 
     </v-card-actions>
   </v-card>
-
   <div>
     <v-data-table
       :headers="headers"
@@ -35,18 +35,18 @@
         itemsPerPageOptions: [50,100,150.-1]
       }"
     >
-    <template v-slot:top>
+    <!-- <template v-slot:top>
 
       <v-card>
       <v-text-field
-        v-model="search"
+        v-model="searchs"
         label="Search"
         class="mx-4"
       ></v-text-field>
       </v-card>
 
 
-    </template>
+    </template> -->
       <template v-slot:item.actions="{ item }">
       <v-icon
         small
@@ -206,6 +206,13 @@ export default {
         el.picLink = `<a href="${el.photoURL}">link</a>`
         return el
       })
+      .filter( el => {
+        if ( this.searchString ) {
+          return el.email.toLowerCase().includes(this.searchString.toLowerCase())
+        } else {
+          return true
+        }
+      })
       .sort( (a,b) => {
           if ( a.createdAt < b.createdAt ) {return 1}
           else { return -1 }
@@ -231,7 +238,10 @@ export default {
           { text: 'View These Properties', value: 'actions', sortable: false },
           { text: '', value: 'data-table-expand' },
         ]
-    }
+    },
+    searchString: function(){
+      return this.$store.getters.searchString
+    },
   },
   created(){
     if ( !this.userIsAdmin ) { this.$router.push( {name: "Properties"} ) }
