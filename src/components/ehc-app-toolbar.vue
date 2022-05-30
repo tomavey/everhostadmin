@@ -174,6 +174,9 @@ export default {
             if ( disabledRoutes.includes(this.$route.path) ) {
                 return true
             }
+            if ( this.$router.currentRoute.path === '/support' ){
+                return true
+            }
             return false
         },
     }
