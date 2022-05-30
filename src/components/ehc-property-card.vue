@@ -1,13 +1,14 @@
 <template>
     <v-card class="pa-0 black2--text" max-width="19rem">
-        <v-img :src="property.avatarImg" height="13rem" @click="goToProperty()" class="pointer"></v-img>
+        <v-img :src="property.avatarImg" height="13rem" @click="goToProperty()" class="pointer ma-2">
+        </v-img>
+        <ehc-user-avatar class="mt-n15 mx-3" v-if="property.contactInfo.hostPhotoUrl" :photoURL="property.contactInfo.hostPhotoUrl" :label="property.contactInfo.hostName" />
         <v-list-item two-line>
             <v-list-item-content>
                     {{property.name}} - 
                     {{property.city}}, {{property.state}}
                 <v-list-item-subtitle><v-icon small>mdi-google-maps</v-icon>{{property.address}}</v-list-item-subtitle>
             </v-list-item-content>
-            <ehc-user-avatar v-if="property.contactInfo.hostPhotoUrl" :photoURL="property.contactInfo.hostPhotoUrl" :label="property.contactInfo.hostName" />
         </v-list-item>
         <v-divider></v-divider>
         <v-list-item >
