@@ -1,35 +1,26 @@
 <template>
     <ehc-page>
-        <v-toolbar flat>
+        <v-toolbar flat right>
+        <v-spacer/>
             <v-btn-toggle v-model="displayAs" mandatory>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
                     <v-btn text value="gallery" v-bind="attrs" v-on="on">
-                        <v-icon>mdi-view-grid</v-icon>
+                        <v-img :src="require('@/assets/icons/Grid View@3x.svg')" class="mr-1" />
+                        <span>Grid View</span>
                     </v-btn>
-                  </template>  
-                <span>gallery view</span>
-                </v-tooltip>
 
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
                     <v-btn text value="table" v-bind="attrs" v-on="on">
-                        <v-icon>mdi-view-list</v-icon>
+                        <v-img :src="require('@/assets/icons/List View@3x.svg')" class="mr-1" />
+                        <span>List View</span>
                     </v-btn>
-                  </template>
-                  <span>list view</span>
-                </v-tooltip>
             </v-btn-toggle>
-                <v-btn v-if="userIsAdmin && !showAll" @click="_showAll()" title="show all">
-                    <v-icon class="mr-1 ml-0">mdi-plus</v-icon>
-                    Show All
+                <v-btn text v-if="userIsAdmin && !showAll" @click="_showAll()" title="show all">
+                    <v-img :src="require('@/assets/icons/show@3x.svg')" class="mr-1" />
+                    <span>Show All</span>
                 </v-btn>
-                <v-btn v-if="userIsAdmin && showAll" @click="_showAll()" title="show few">
-                    <v-icon class="mr-1 ml-0">mdi-minus</v-icon>
-                    Show Few
+                <v-btn text v-if="userIsAdmin && showAll" @click="_showAll()" title="show few">
+                    <v-img :src="require('@/assets/icons/show@3x.svg')" class="mr-1" />
+                    <span>Show Few</span>
                 </v-btn>
-        {{propertiesFiltered.length}}{{searchString}}
-            <v-spacer></v-spacer>
             <v-btn
                 rounded
                 color="button"
