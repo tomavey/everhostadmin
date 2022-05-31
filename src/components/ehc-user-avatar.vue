@@ -1,4 +1,5 @@
 <template>
+<div>
     <v-avatar 
         color="button" 
         v-bind="$attrs"
@@ -10,6 +11,7 @@
         </v-icon>
         <span v-if="label">{{label}}</span>
     </v-avatar>
+</div>
 </template>
 
 

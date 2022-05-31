@@ -6,78 +6,98 @@
         <v-list-item two-line>
             <v-list-item-content>
                 <v-list-item-title class="black--text font-weight-bold">{{property.name}}</v-list-item-title>
-                <v-list-item-subtitle><v-icon small>mdi-google-maps</v-icon>{{address}}{{property.address}},{{property.state}}</v-list-item-subtitle>
-            </v-list-item-content>
-        </v-list-item>
-        <v-divider></v-divider>
-        <v-list-item>
-            <v-list-item-icon>
-                <v-img :src="require('@/assets/icons/calendar-2@3x.svg')" class="mr-2"/>
-                {{property.createdAtAsString}} 
-                ID: {{property.propertyId}}    
-            </v-list-item-icon>    
-
-        </v-list-item>
-        <v-list-item >
-            <v-list-item-icon class="mr-1 ">
-                <v-icon>mdi-calendar-import</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-                <v-list-item-subtitle>
-                    <span v-if="property.publishedAt">Published: {{dateFormat(property.publishedAt, 'dateOnly')}}</span>
-                    <span  v-else>Not Published Yet</span>
+                <v-list-item-subtitle>  
+                    <v-list-item-icon>                  
+                        <v-img :src="require('@/assets/icons/location@3x.svg')" class="mr-2"/>
+                        {{address}}
+                    </v-list-item-icon>
                 </v-list-item-subtitle>
             </v-list-item-content>
+        </v-list-item>
 
+        <v-list-item class="mt-n10">
+            <v-list-item-subtitle>
+                <v-list-item-icon>
+                    <v-img :src="require('@/assets/icons/calendar-2@3x.svg')" class="mr-2"/>
+                    {{property.createdAtAsString}} 
+                </v-list-item-icon>    
+            </v-list-item-subtitle>
+                <v-list-item-subtitle>Property ID: {{property.propertyId}}</v-list-item-subtitle>
+
+        </v-list-item>
+
+        <v-list-item >
+
+            <!-- EDIT -->
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
-                        <v-btn class="mx-0" small icon @click="goToProperty()"><v-icon small color="green darken-2">mdi-pencil</v-icon></v-btn>
+                        <v-btn class="mx-0" small icon @click="goToProperty()">
+                            <v-img :src="require('@/assets/icons/edit@3x.svg')" class="mr-2"/>
+                        </v-btn>
                     </v-list-item-icon>
                 </template>
                 <span>Edit this property</span>
             </v-tooltip>
 
-            <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                    <v-list-item-icon class="mx-0"  v-bind="attrs" v-on="on">
-                        <v-btn class="mx-0" v-if="!property.publishedAt" small icon @click="publishProperty({propertyId: property.propertyId, publishedAt: true})">
-                            <v-icon small color="grey darken-2">mdi-publish</v-icon>
-                        </v-btn>
-                        <v-btn class="mx-0" v-else small :loading="publishLoading" icon @click="publishProperty({propertyId: property.propertyId, publishedAt: false})"><v-icon small color="grey darken-2">mdi-publish-off</v-icon></v-btn>
-                    </v-list-item-icon>
-                </template>
-                <span>Publish this property</span>
-            </v-tooltip>
-
+            <!-- LINK W/ QR CODE -->
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
-                        <v-btn class="mx-0" small icon @click="copyLink()"><v-icon small color="yellow darken-2">mdi-link</v-icon></v-btn>
+                        <v-btn class="mx-0" small icon @click="copyLink()">
+                            <v-img :src="require('@/assets/icons/Link@3x.svg')" class="mr-2"/>
+                        </v-btn>
                     </v-list-item-icon>
                 </template>    
                 <span>See a link to this property with QR code</span>
             </v-tooltip>
 
 
+            <!-- DELETE -->
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
-                        <v-btn class="mx-0" small icon @click="deleteConfirm.show = true"><v-icon small color="red darken-2">mdi-trash-can-outline</v-icon></v-btn>
+                        <v-btn class="mx-0" small icon @click="deleteConfirm.show = true">
+                            <v-img :src="require('@/assets/icons/trash@3x.svg')" class="mr-2"/>
+                        </v-btn>
                     </v-list-item-icon>
                 </template>    
                 <span>Delete this property</span>
             </v-tooltip>
 
+            <!-- PUBLISH -->
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-list-item-icon class="mx-0"  v-bind="attrs" v-on="on">
+                        <v-btn class="mx-0" v-if="!property.publishedAt" small icon @click="publishProperty({propertyId: property.propertyId, publishedAt: true})">
+                            <v-img :src="require('@/assets/icons/unpulish@3x.svg')" class="mr-2 publish"/>
+                        </v-btn>
+                        <v-btn class="mx-0" v-else small :loading="publishLoading" icon @click="publishProperty({propertyId: property.propertyId, publishedAt: false})">
+                            <v-img :src="require('@/assets/icons/unpulish@3x.svg')" class="mr-2 unpublish"/>
+                        </v-btn>
+                    </v-list-item-icon>
+                </template>
+                <span v-if="!property.publishedAt">Publish this property</span>
+                <span v-else>Unpublish this property</span>
+            </v-tooltip>
+
+
+        </v-list-item>
+        <v-list-item>
+            <v-list-item-content>
+                <v-list-item-subtitle>
+                    <span v-if="property.publishedAt">Published: {{dateFormat(property.publishedAt, 'dateOnly')}}</span>
+                    <span  v-else>Not Published Yet</span>
+                </v-list-item-subtitle>
+            </v-list-item-content>
         </v-list-item>
 
-        <v-card-subtitle>
-            PropertyId: {{property.propertyId}}<br/>
+        <!-- <v-card-subtitle>
             <span v-if="showExtraForDevs()">UserId: {{property.uid}}<br/></span>
             <span v-if="property.copiedAt && property.copiedFrom && showExtraForDevs(property)">
              Copied from: {{property.copiedFrom}} on {{formatDate(property.copiedAt,"shortFormat")}}
             </span>
-        </v-card-subtitle>
+        </v-card-subtitle> -->
         
         <!-- <v-card-title class="text-h6">{{property.name}}</v-card-title>
         <v-spacer/>
@@ -234,6 +254,9 @@ export default {
     watch: {
 
     },
+    mounted(){
+        this.$el.published.setAttribute('fill', 'red');
+    },
     created() {
     }
 
@@ -253,6 +276,13 @@ export default {
     font-size: .8em !important;
     padding:0px;
     margin:0px
+}
+.publish {
+    fill: #d4002e;
+}
+
+.unpublish {
+    transform: rotate(180deg);
 }
 
 </style>

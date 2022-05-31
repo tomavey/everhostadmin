@@ -32,25 +32,9 @@
             v-model="searchString"
         >
         </v-text-field>
-        <!-- TODO
-        <v-btn icon @click="searching=!searching">
-            <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-        <v-expand-x-transition>
-            <v-text-field dense hide-details solo light flat single-line v-show="searching"></v-text-field>
-        </v-expand-x-transition> 
-        -->
-
 
         <v-divider vertical inset></v-divider>
-        <!-- TODO 
-        <v-tooltip bottom >
-            <template v-slot:activator="{ on, attrs }">
-            <v-btn plain small fab v-on="on" v-bind="attrs" @click="openSupport"><v-icon>mdi-lifebuoy</v-icon></v-btn>
-            </template>
-            <span>Support</span>
-        </v-tooltip> 
-        -->
+
         <v-tooltip bottom >
             <template v-slot:activator="{ on, attrs }">
             <v-btn plain small  v-on="on" v-bind="attrs" @click="$store.commit('setFeedback',{show:true})"><v-img :src="require('@/assets/icons/Support-outline@3x.svg')"></v-img> FEEDBACK</v-btn>
@@ -63,11 +47,12 @@
             offset-y>
             <template v-slot:activator="{ attrs, on }">
                 <div v-bind="attrs" v-on="on">
-                <ehc-user-avatar  size="30" :photoURL="user.photoURL" :label="user.name"></ehc-user-avatar>
+                <ehc-user-avatar  size="30" :photoURL="user.photoURL"></ehc-user-avatar>
                 </div>
            </template>
             <ehc-profile-card @changeProfilePic="picDialog=true"></ehc-profile-card>
         </v-menu>
+           <span class="ml-3">{{org.name}}</span>
 
         <ehc-image-upload 
             v-model="picDialog" 
@@ -171,6 +156,9 @@ export default {
                 return true
             }
             return false
+        },
+        org(){
+            return this.$store.getters.org
         },
     }
 
