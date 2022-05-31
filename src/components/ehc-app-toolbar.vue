@@ -17,41 +17,21 @@
                 <v-icon class="mr-1">{{item.icon}}</v-icon>
                 <strong>{{item.label}}</strong>
             </v-tab>    
-            <v-tab class="custom" v-if="!disableSearch">
-                <v-text-field
-                    
-                    active-class="active"
-                    outlined
-                    label="Search"
-                    rounded
-                    dense
-                    class="mt-7"
-                    v-model="searchString"
-                >
-                </v-text-field>
-            </v-tab>
         </v-tabs>
-        <!-- <v-tabs
-            color="primary"
-            hide-slider
-            v-if="!disableSearch"
-            >    
-            <v-tab class="custom">
-                <v-text-field
-                    
-                    active-class="active"
-                    outlined
-                    label="Search"
-                    rounded
-                    dense
-                    class="mt-7"
-                    v-model="searchString"
-                >
-                </v-text-field>
-            </v-tab>
-        </v-tabs> -->
 
         <v-spacer></v-spacer>
+
+        <v-text-field
+            
+            active-class="active"
+            outlined
+            label="Search"
+            rounded
+            dense
+            class="mt-7"
+            v-model="searchString"
+        >
+        </v-text-field>
         <!-- TODO
         <v-btn icon @click="searching=!searching">
             <v-icon>mdi-magnify</v-icon>
@@ -83,7 +63,7 @@
             offset-y>
             <template v-slot:activator="{ attrs, on }">
                 <div v-bind="attrs" v-on="on">
-                <ehc-user-avatar  size="30" :photoURL="user.photoURL"></ehc-user-avatar>
+                <ehc-user-avatar  size="30" :photoURL="user.photoURL" :label="user.name"></ehc-user-avatar>
                 </div>
            </template>
             <ehc-profile-card @changeProfilePic="picDialog=true"></ehc-profile-card>

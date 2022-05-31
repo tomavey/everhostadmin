@@ -2,15 +2,22 @@
     <v-card class="pa-0 black2--text" max-width="19rem">
         <v-img :src="property.avatarImg" height="13rem" @click="goToProperty()" class="pointer ma-2">
         </v-img>
-        <ehc-user-avatar class="mt-n15 mx-3" v-if="property.contactInfo.hostPhotoUrl" :photoURL="property.contactInfo.hostPhotoUrl" :label="property.contactInfo.hostName" />
+        <ehc-user-avatar class="mt-n15 mx-3" v-if="property.contactInfo.hostPhotoUrl" :photoURL="property.contactInfo.hostPhotoUrl" />
         <v-list-item two-line>
             <v-list-item-content>
-                    {{property.name}} - 
-                    {{property.city}}, {{property.state}}
-                <v-list-item-subtitle><v-icon small>mdi-google-maps</v-icon>{{property.address}}</v-list-item-subtitle>
+                <v-list-item-title class="black--text font-weight-bold">{{property.name}}</v-list-item-title>
+                <v-list-item-subtitle><v-icon small>mdi-google-maps</v-icon>{{address}}{{property.address}},{{property.state}}</v-list-item-subtitle>
             </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
+        <v-list-item>
+            <v-list-item-icon>
+                <v-img :src="require('@/assets/icons/calendar-2@3x.svg')" class="mr-2"/>
+                {{property.createdAtAsString}} 
+                ID: {{property.propertyId}}    
+            </v-list-item-icon>    
+
+        </v-list-item>
         <v-list-item >
             <v-list-item-icon class="mr-1 ">
                 <v-icon>mdi-calendar-import</v-icon>
@@ -168,6 +175,13 @@ export default {
         appSite() {return this.$store.getters.appSite},
         loading() {return this.$store.getters.propertiesStatus.loading},
         user() {return this.$store.getters.user},
+        address() {
+            let property = this.property
+            if ( property.mapAddress ) {
+                return property.mapAddress.formatted_address
+            } 
+            return `${property.city} ${property.state}`
+        },
     },
     methods: {
         goToProperty() {

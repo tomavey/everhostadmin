@@ -2,11 +2,13 @@
     <v-avatar 
         color="button" 
         v-bind="$attrs"
+        class="avatar"
         >
         <v-img class="avatarimg" :src="url" v-if="url"></v-img>
         <v-icon dark v-else>
             mdi-account-circle
         </v-icon>
+        <span v-if="label">{{label}}</span>
     </v-avatar>
 </template>
 
@@ -44,5 +46,8 @@ export default {
 <style scoped>
 .avatarimg {
     border: 4px solid white;
+    border-radius: 20px;
     }
+
+
 </style>
