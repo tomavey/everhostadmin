@@ -3,7 +3,7 @@
         color="button" 
         v-bind="$attrs"
         >
-        <v-img :src="url" v-if="url"></v-img>
+        <v-img class="avatarimg" :src="url" v-if="url"></v-img>
         <v-icon dark v-else>
             mdi-account-circle
         </v-icon>
@@ -40,3 +40,9 @@ export default {
 }
 
 </script>
+
+<style scoped>
+.avatarimg {
+    border: 4px solid white;
+    }
+</style>
