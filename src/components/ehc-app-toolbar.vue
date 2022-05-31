@@ -17,8 +17,21 @@
                 <v-icon class="mr-1">{{item.icon}}</v-icon>
                 <strong>{{item.label}}</strong>
             </v-tab>    
+            <v-tab class="custom" v-if="!disableSearch">
+                <v-text-field
+                    
+                    active-class="active"
+                    outlined
+                    label="Search"
+                    rounded
+                    dense
+                    class="mt-7"
+                    v-model="searchString"
+                >
+                </v-text-field>
+            </v-tab>
         </v-tabs>
-        <v-tabs
+        <!-- <v-tabs
             color="primary"
             hide-slider
             v-if="!disableSearch"
@@ -36,7 +49,7 @@
                 >
                 </v-text-field>
             </v-tab>
-        </v-tabs>
+        </v-tabs> -->
 
         <v-spacer></v-spacer>
         <!-- TODO
