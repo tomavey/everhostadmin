@@ -14,71 +14,110 @@
       itemsPerPageOptions: [50,100,150.-1]
     }"
   >
+    <template v-slot:item.avatarImg="{ item }">
+      <ehc-user-avatar class="mr-n14" v-if="item.avatarImg" :photoURL="item.avatarImg"/>
+    </template>
+  
 
-    <template v-slot:item.edit="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="goToProperty(item)"
-      >
-        mdi-pencil
-      </v-icon>
-    </template>
-    <template v-slot:item.copy="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="copyProperty(item)"
-      >
-        mdi-content-copy
-      </v-icon>
-      <!-- <span v-if="item.copiedFrom">*</span> -->
-    </template>
+
+
+
+    <!-- ASK FOR GUEST INFO -->
     <template v-slot:item.guestinfo="{ item }">
-      <v-icon
-        v-if="!item.noguestinfo"
-        small
-        class="mr-2"
-        @click="setGuestInfo(item)"
-      >
-        mdi-check-outline
-      </v-icon>
-      <v-icon
-        v-if="item.noguestinfo"
-        small
-        class="mr-2"
-        @click="setGuestInfo(item)"
-      >
-        mdi-close-box-outline
-      </v-icon>
-      <!-- <span v-if="item.copiedFrom">*</span> -->
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+            <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
+              <v-img
+                v-if="!item.noguestinfo"
+                :src="require('@/assets/icons/Seen@3x.svg')"
+                small
+                class="mr-2"
+                @click="setGuestInfo(item)"
+              />
+              <v-img
+                v-if="item.noguestinfo"
+                :src="require('@/assets/icons/Seen@3x.svg')"
+                small
+                class="mr-2"
+                @click="setGuestInfo(item)"
+              />
+            </v-list-item-icon>
+        </template>
+        <span>{{ item.noguestinfo ? 'No guest info' : 'Guest info' }}</span>
+      </v-tooltip>
     </template>
-    <template v-slot:item.publish="{ item }">
-      <v-icon
-        v-if="!item.publishedAt"
-        small
-        class="mr-2"
-        @click="publishProperty({propertyId: item.propertyId, publishedAt: true})"
-      >
-        mdi-publish
-      </v-icon>
-      <v-icon
-        v-else
-        small
-        class="mr-2"
-        @click="publishProperty({propertyId: item.propertyId, publishedAt: false})"
-      >
-        mdi-publish-off
-      </v-icon>
-    </template>
-    <template v-slot:item.delete="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="deleteProperty(item.propertyId)"
-      >
-        mdi-delete
-      </v-icon>
+
+
+    <template v-slot:item.actions="{ item }">
+      <!-- EDIT -->
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
+          <v-img
+            :src="require('@/assets/icons/edit@3x.svg')"
+            small
+            class="mr-2 pointer"
+            @click="goToProperty(item)"
+          />
+          </v-list-item-icon>
+        </template>
+        <span>Edit</span>
+      </v-tooltip>
+
+      <!-- COPY -->
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
+            <v-img
+              :src="require('@/assets/icons/edit@3x.svg')"
+              small
+              class="mr-2 pointer"
+              @click="copyProperty(item)"
+            />
+          </v-list-item-icon>
+        </template>
+        <span>Copy</span>
+      </v-tooltip>
+
+      <!-- PUBLISH -->
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
+            <v-img 
+              v-if="!item.publishedAt"
+              :src="require('@/assets/icons/unpulish@3x.svg')"
+              small
+              class="mr-2 pointer"
+              @click="publishProperty({propertyId: item.propertyId, publishedAt: true})"
+            />
+            <v-img
+              v-else
+              :src="require('@/assets/icons/unpulish@3x.svg')"
+              small
+              class="mr-2 pointer"
+              @click="publishProperty({propertyId: item.propertyId, publishedAt: false})"
+            />
+          </v-list-item-icon>
+        </template>
+        <span>Publish</span>
+      </v-tooltip>
+
+      <!-- DELETE -->
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
+            <v-img
+              small
+              class="mr-2 pointer"
+              :src="require('@/assets/icons/trash@3x.svg')"
+              @click="deleteProperty(item.propertyId)"
+            >
+            </v-img>
+          </v-list-item-icon>
+        </template>
+        <span>Delete</span>
+      </v-tooltip>
+
     </template>
 
     <template v-slot:expanded-item="{ headers, item }">
@@ -115,9 +154,10 @@
 import PropertyActions from '@/mixins/propertyActions'
 import Auth from '@/mixins/auth'
 import ehcAlertConfirm from './ehc-alert-confirm.vue'
+import EhcUserAvatar from './ehc-user-avatar.vue' 
 
 export default {
-  components: { ehcAlertConfirm },
+  components: { ehcAlertConfirm, EhcUserAvatar },
   mixins: [PropertyActions,Auth],
   props: ['properties'],
   data() {
@@ -202,6 +242,7 @@ export default {
     headers(){
       let headers
       let userHeaders = [
+        { text: '', value: 'avatarImg' },
         { text: 'Name', value: 'name' },
         { text: 'City', value: 'city' },
         { text: 'State', value: 'state' },
@@ -209,13 +250,10 @@ export default {
         { text: 'Published', value: 'publishedAtAsString' },
         { text: 'Created', value: 'createdAtAsString' },
         { text: 'Updated', value: 'updatedAtAsString' },
-        { text: 'Edit', value: 'edit', sortable: false },
-        { text: 'Publish', value: 'publish', sortable: false },
-        { text: 'Copy', value: 'copy', sortable: false, admin: true },
         { text: 'Ask for Guest Info', value: 'guestinfo', sortable: false, admin: true },
+        { text: 'Actions', value: 'actions', sortable: false},
       ]
       let adminHeaders = [
-        { text: 'Delete', value: 'delete', sortable: false, admin:true },
         { text: '', value: 'data-table-expand' },
       ]
       if ( this.userIsAdmin ) {
