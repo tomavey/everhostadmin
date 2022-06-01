@@ -1,14 +1,14 @@
 <template>
-    <ehc-page>
-        <v-toolbar flat right>
+    <ehc-page class="grey lighten-4" >
+        <v-toolbar flat right class="grey lighten-4" >
         <v-spacer/>
             <v-btn-toggle v-model="displayAs" mandatory>
-                    <v-btn text value="gallery" v-bind="attrs" v-on="on">
+                    <v-btn text value="gallery" >
                         <v-img :src="require('@/assets/icons/Grid View@3x.svg')" class="mr-1" />
                         <span>Grid View</span>
                     </v-btn>
 
-                    <v-btn text value="table" v-bind="attrs" v-on="on">
+                    <v-btn text value="table" >
                         <v-img :src="require('@/assets/icons/List View@3x.svg')" class="mr-1" />
                         <span>List View</span>
                     </v-btn>
@@ -35,9 +35,15 @@
             </v-btn>
         </v-toolbar>
 
-        <ehc-meta-edit v-if="!propertiesFiltered.length || showWelcomePage" docId="intro" pageTitle=""></ehc-meta-edit>
+            <v-progress-linear
+                v-if="!properties.length"
+                indeterminate
+                color="yellow darken-2"
+                ></v-progress-linear>
+
+        <ehc-meta-edit v-if="showWelcomePage" docId="intro" pageTitle=""></ehc-meta-edit>
         <ehc-properties-gallery v-if="displayAs === 'gallery' && !showWelcomePage" :properties="propertiesFiltered"></ehc-properties-gallery>
-        <ehc-properties-table v-if="displayAs =='table' && !showWelcomePage" :properties="propertiesFiltered"></ehc-properties-table>
+        <ehc-properties-table v-if="displayAs =='table' && !showWelcomePage" :properties="propertiesFiltered" @displayAsGrid='displayAs = "grid"' ></ehc-properties-table>
         <ehc-dialog max-width="300" v-model="maxPropsDialog" title="Max Properties Reached">
             <h3>you have reached the maximum number of properties available</h3>
             <template v-slot:actions>
@@ -76,7 +82,7 @@ export default {
     watch: {
         loading(val) {
             this.$store.commit('setLoading', val)
-        }
+        },
     },
     computed: {
         showWelcomePage: function(){
@@ -164,6 +170,7 @@ export default {
         },
         _showAll() {
             this.showAll = !this.showAll
+            this.$store.commit("setSearchString", null)
         },
         subscribeToProperties(showAll){
             let payload = {}
@@ -190,3 +197,4 @@ export default {
 
 }
 </script>
+

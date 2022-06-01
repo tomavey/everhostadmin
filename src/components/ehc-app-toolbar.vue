@@ -52,7 +52,7 @@
            </template>
             <ehc-profile-card @changeProfilePic="picDialog=true"></ehc-profile-card>
         </v-menu>
-           <span class="ml-3">{{org.name}}</span>
+           <span class="mx-3">{{org.name}}</span>
 
         <ehc-image-upload 
             v-model="picDialog" 
@@ -123,6 +123,19 @@ export default {
         openSupport() {
             console.log("TODO")
         }
+    },
+    watch: {
+        $route(val) {
+            console.log("tab changed", val)
+            let clearSearchStringOn = [
+                "GuestData",
+                "Support",
+                "Users"
+            ]
+            if ( clearSearchStringOn.includes(this.$route.name) ) {
+                this.$store.commit('setSearchString', null)
+            }
+        },
     },
     computed: {
         drawerShow: {

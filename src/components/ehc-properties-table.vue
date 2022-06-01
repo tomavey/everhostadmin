@@ -4,11 +4,12 @@
     :headers="headers"
     :items="properties"
     :items-per-page="30"
+    :item-class="itemRowBackground"
     class="elevation-1"
     :single-expand="singleExpand"
     :expanded.sync="expanded"    
     :show-expand = userIsAdmin  
-    item-key="createdAt"   
+    item-key="index"   
     :footer-props="{
       showFirstLastPage: true,
       itemsPerPageOptions: [50,100,150.-1]
@@ -16,6 +17,12 @@
   >
     <template v-slot:item.avatarImg="{ item }">
       <ehc-user-avatar class="mr-n14" v-if="item.avatarImg" :photoURL="item.avatarImg"/>
+    </template>
+
+    <template v-slot:item.name="{ item }">
+      <v-btn text @click="setSearchString(item.name)">
+      {{item.name}}
+      </v-btn>
     </template>
   
 
@@ -69,7 +76,7 @@
         <template v-slot:activator="{ on, attrs }">
           <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
             <v-img
-              :src="require('@/assets/icons/edit@3x.svg')"
+              :src="require('@/assets/icons/copy.png')"
               small
               class="mr-2 pointer"
               @click="copyProperty(item)"
@@ -236,6 +243,15 @@ export default {
         }
       })
     },
+    itemRowBackground(item){
+      if ( !item.publishedAt ) { return "" }
+      return ""
+    },
+           setSearchString(searchString){
+      this.$store.commit("setSearchString", searchString)
+      this.$emit('displayAsGrid')
+    },
+
   },
   computed: {
     appSite() {return this.$store.getters.appSite},
@@ -266,3 +282,9 @@ export default {
   }
 }
 </script>
+
+<style>
+tbody tr:nth-of-type(odd) {
+   background-color: #E0E0E0;
+ }
+</style>

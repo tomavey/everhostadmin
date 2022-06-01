@@ -92,6 +92,19 @@ export default {
     showWelcomePage() {
       this.$store.commit('toggleWelcomePage')
     } 
-  }
+  },
+  watch: {
+    $route(val) {
+        console.log("tab changed", val)
+        let clearSearchStringOn = [
+            "GuestData",
+            "Support",
+            "Users"
+        ]
+        if ( clearSearchStringOn.includes(this.$route.name) ) {
+            this.$store.commit('setSearchString', null)
+        }
+    },
+  },
 }
 </script>
