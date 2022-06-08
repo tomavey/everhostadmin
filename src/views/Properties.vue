@@ -181,11 +181,11 @@ export default {
         }
     },
     watch: {
-        properties(){
-            if ( this.properties.length  ) {
-                this.showWelcomePage = false
-            }
-        }
+        // properties(){
+        //     if ( this.properties.length  ) {
+        //         this.showWelcomePage = false
+        //     }
+        // }
     },
     created() {
         this.subscribeToProperties(this.showAll)
