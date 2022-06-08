@@ -180,6 +180,13 @@ export default {
             .then ( () => this.$store.commit("setShowAllLoading" ,false))
         }
     },
+    watch: {
+        properties(){
+            if ( this.properties.length  ) {
+                this.showWelcomePage = false
+            }
+        }
+    },
     created() {
         this.subscribeToProperties(this.showAll)
         if ( this.$route && this.$route.query ) {

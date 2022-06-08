@@ -3,7 +3,7 @@ import firebase from 'firebase'
 export default {
   state:{
     metaPage: null,
-    showWelcomePage: false,
+    showWelcomePage: true,
   },
   getters: {
     metaPage: state=> state.metaPage,
