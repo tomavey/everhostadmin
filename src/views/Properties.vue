@@ -1,6 +1,6 @@
 <template>
     <ehc-page class="grey lighten-4" >
-        <v-toolbar flat right class="grey lighten-4" >
+        <v-toolbar flat right class="grey lighten-4 my-5" >
         <v-spacer/>
             <v-btn-toggle v-model="displayAs" mandatory>
                     <v-btn text value="gallery" >

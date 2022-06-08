@@ -1,7 +1,7 @@
 <template>
     <v-app-bar flat dense app         clipped-left class="px-0 mx-0 mainAppBar" color="appBar">
         <!-- <v-toolbar-title v-if="userIsAdmin">spacer</v-toolbar-title> -->
-        <v-toolbar-title class="pl-0 ml-0" width ="190px">
+        <v-toolbar-title class="pl-0 ml-0 toolbartitle">
             <v-img src="@/assets/everhost_v3_logo 1.png" contain height="50px" width="190px" class="ma-0 pa-0" @click="drawerShow = !drawerShow"></v-img>
         </v-toolbar-title>
        
@@ -14,15 +14,13 @@
                 v-for="item in menu" 
                 :key="item.label"
                 @click="$router.push(item.route)">
-                <v-icon class="mr-1">{{item.icon}}</v-icon>
+                <v-img class="mr-1" :src="require(`@/assets/icons/${item.icon}`)"/>
                 <strong>{{item.label}}</strong>
             </v-tab>    
         </v-tabs>
-
         <v-spacer></v-spacer>
 
         <v-text-field
-            
             active-class="active"
             outlined
             label="Search"
@@ -90,12 +88,12 @@ import EhcAlert from './ehc-alert.vue';
 
 import auth from "@/mixins/auth.vue"
 import api from "@/mixins/api.vue"
-
+import mixins from '@/mixins/index.vue'
 
 
 export default {
     components: {EhcProfileCard, EhcUserAvatar, ehcImageUpload, EhcAlert},
-    mixins: [auth, api],
+    mixins: [auth, api, mixins],
     name: 'ehcAppToolbar',
 
     data: () => ({
@@ -103,9 +101,9 @@ export default {
         picDialog: false,
         searching:false,
         menu: [
-            {label: "Properties", route: "/", icon: "mdi-home-city"},
-            {label: "Guest Data", route: "/guestdata", icon: "mdi-account-group"},
-            {label: "Support", route: "/support", icon: "mdi-lifebuoy"},
+            {label: "Properties", route: "/", icon: "Properties@3x.svg"},
+            {label: "Guest Data", route: "/guestdata", icon: "2 User@3x.svg"},
+            {label: "Support", route: "/support", icon: "Support -normal@3x.svg"},
             // {label: "My Account", route: "/myaccount", icon:"mdi-account"}, TODO
         ],
     }),
@@ -185,6 +183,12 @@ export default {
 }
 .v-tab-active {
     border: none !important;
+}
+.Xv-text-field{
+      width: 600px;
+}
+.toolbartitle {
+    width: 300px;
 }
  
 

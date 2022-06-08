@@ -11,7 +11,9 @@
           <v-col self-align="end" cols="2">
             <v-tooltip bottom >
                 <template v-slot:activator="{ on, attrs }">
-                <v-btn plain small fab v-on="on" v-bind="attrs" @click="$store.dispatch('logout')"><v-icon>mdi-logout</v-icon></v-btn>
+                <v-btn plain small fab v-on="on" v-bind="attrs" @click="$store.dispatch('logout')">
+                  <v-img :src="require('@/assets/icons/logout@3x.svg')"/>
+                </v-btn>
                 </template>
                 <span>Logout</span>
             </v-tooltip>

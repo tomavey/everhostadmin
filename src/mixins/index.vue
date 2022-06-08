@@ -4,9 +4,10 @@ import moment from 'moment'
 export default {
   data () {
     return {
-
+      isMobile: false,
     }
   },
+
   methods: {    
     formatDate: function (value,format = "dateAndTime") {
       let formatString = 'MMMM Do YYYY, h:mm:ss a'
@@ -17,10 +18,23 @@ export default {
     dateFormat: function(value,format){
       return this.formatDate(value,format)
     },
+    onResize () {
+      this.isMobile = window.innerWidth < 600
+    },
   },
-  computed: {
 
-  }
+  computed: {
+  }, 
+
+  beforeDestroy () {
+      if (typeof window === 'undefined') return
+      window.removeEventListener('resize', this.onResize, { passive: true })
+  },
+
+  mounted () {
+      this.onResize()
+      window.addEventListener('resize', this.onResize, { passive: true })
+  },
 }
 
 </script>

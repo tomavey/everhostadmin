@@ -41,13 +41,14 @@
                 class="mr-2"
                 @click="setGuestInfo(item)"
               />
-              <v-img
+              <!-- <v-img
                 v-if="item.noguestinfo"
-                :src="require('@/assets/icons/Seen@3x.svg')"
+                :src="require('@/assets/icons/Profile@3x.svg')"
                 small
                 class="mr-2"
                 @click="setGuestInfo(item)"
-              />
+              /> -->
+              <span v-if="item.noguestinfo" @click="setGuestInfo(item)" class="pointer">&nbsp;--&nbsp;</span>
             </v-list-item-icon>
         </template>
         <span>{{ item.noguestinfo ? 'No guest info' : 'Guest info' }}</span>
@@ -76,7 +77,7 @@
         <template v-slot:activator="{ on, attrs }">
           <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
             <v-img
-              :src="require('@/assets/icons/copy.png')"
+              :src="require('@/assets/icons/Copy@3x.svg')"
               small
               class="mr-2 pointer"
               @click="copyProperty(item)"
@@ -152,7 +153,6 @@
       </td>
     </template>
   </v-data-table>
-    <span>* = not updated after 3/14/22</span>
     <ehc-alert-confirm @confirmAction="confirmAction" ></ehc-alert-confirm>
 </v-container>
 </template>

@@ -31,7 +31,11 @@ export default {
         }
     },
     mounted() {
-        this.url = this.photoURL ? this.photoURL : this.apiGetUser(this.userID).uid.photoURL
+        try {
+            this.url = this.photoURL ? this.photoURL : this.apiGetUser(this.userID).uid.photoURL
+        } catch (e) {
+            this.url = ""
+        }
     },
     watch: {
         photoURL(val) {
