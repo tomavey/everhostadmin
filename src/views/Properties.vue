@@ -41,7 +41,7 @@
                 color="yellow darken-2"
                 ></v-progress-linear>
 
-        <ehc-meta-edit v-if="showWelcomePage" docId="intro" pageTitle=""></ehc-meta-edit>
+        <ehc-meta-edit v-if="!propertiesFiltered.length || showWelcomePage" docId="intro" pageTitle=""></ehc-meta-edit>
         <ehc-properties-gallery v-if="displayAs === 'gallery' && !showWelcomePage" :properties="propertiesFiltered"></ehc-properties-gallery>
         <ehc-properties-table v-if="displayAs =='table' && !showWelcomePage" :properties="propertiesFiltered" @displayAsGrid='displayAs = "grid"' ></ehc-properties-table>
         <ehc-dialog max-width="300" v-model="maxPropsDialog" title="Max Properties Reached">
