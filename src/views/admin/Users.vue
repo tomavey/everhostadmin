@@ -204,11 +204,12 @@ export default {
         el.createdAtAsString = this.dateFormat(el.createdAt,"dateOnly")
         if ( el.rights && el.rights.admin ) { el.admin = "yes" }
         el.picLink = `<a href="${el.photoURL}">link</a>`
+        el.searchAble = `${el.uid} ${el.email} ${el.displayName} ${el.createdAtAsString}`
         return el
       })
       .filter( el => {
         if ( this.searchString ) {
-          return el.email.toLowerCase().includes(this.searchString.toLowerCase())
+          return el.searchAble.toLowerCase().includes(this.searchString.toLowerCase())
         } else {
           return true
         }
@@ -229,6 +230,10 @@ export default {
           {
             text: 'User Id',
             value: 'uid',
+          },
+          {
+            text: 'Display Name',
+            value: 'displayName',
           },
           {
             text: 'Admin?',
