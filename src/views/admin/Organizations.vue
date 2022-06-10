@@ -8,7 +8,7 @@
       :items="orgs"
       item-key="creator"
       class="elevation-1"
-      :search="search"
+      :search="searchString"
       :single-expand="singleExpand"
       show-expand
       :expanded.sync="expanded"
@@ -17,13 +17,6 @@
         itemsPerPageOptions: [50,100,150.-1]
       }"
     >
-      <template v-slot:top>
-        <v-text-field
-          v-model="search"
-          label="Search"
-          class="mx-4"
-        ></v-text-field>
-      </template>
       <template v-slot:item.actions="{ item }">
       <v-icon
         small
@@ -52,7 +45,6 @@ export default {
   data: function() {
     return {
       pageTitle: "Organizations",
-      search: null,
       expanded: [],
       singleExpand: false,
     }
@@ -92,7 +84,10 @@ export default {
           },
           { text: '', value: 'data-table-expand' },
         ]
-    }
+    },
+    searchString: function(){
+      return this.$store.getters.searchString
+    },  
   },
   created(){
     this.$store.dispatch('getOrgs')

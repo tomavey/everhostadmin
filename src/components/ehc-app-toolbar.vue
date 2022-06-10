@@ -1,48 +1,41 @@
 <template>
-    <v-app-bar flat dense app         clipped-left class="px-0 mx-0" color="appBar">
+    <v-app-bar flat dense app         clipped-left class="px-0 mx-0 mainAppBar" color="appBar">
         <!-- <v-toolbar-title v-if="userIsAdmin">spacer</v-toolbar-title> -->
-        <v-toolbar-title>
-            <v-img src="@/assets/icons/everhost_v3_logo.svg" contain height="50px" width="190px" class="ma-0 pa-0"></v-img>
+        <v-toolbar-title class="pl-0 ml-0 toolbartitle">
+            <v-img src="@/assets/everhost_v3_logo 1.png" contain height="50px" min-width="190px" max-width="290px" class="ma-0 pa-0" @click="drawerShow = !drawerShow"></v-img>
         </v-toolbar-title>
        
         <v-divider vertical inset></v-divider>
         <v-tabs
-            color="black2"
+            color="primary"
             v-model="tab"
             >
             <v-tab
                 v-for="item in menu" 
                 :key="item.label"
                 @click="$router.push(item.route)">
-                <v-icon class="mr-1">{{item.icon}}</v-icon>
+                <v-img class="mr-1" :src="require(`@/assets/icons/${item.icon}`)"/>
                 <strong>{{item.label}}</strong>
             </v-tab>    
-            
-            
         </v-tabs>
         <v-spacer></v-spacer>
-        <!-- TODO
-        <v-btn icon @click="searching=!searching">
-            <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-        <v-expand-x-transition>
-            <v-text-field dense hide-details solo light flat single-line v-show="searching"></v-text-field>
-        </v-expand-x-transition> 
-        -->
 
+        <v-text-field
+            active-class="active"
+            outlined
+            label="Search"
+            rounded
+            dense
+            class="mt-7"
+            v-model="searchString"
+        >
+        </v-text-field>
 
         <v-divider vertical inset></v-divider>
-        <!-- TODO 
+
         <v-tooltip bottom >
             <template v-slot:activator="{ on, attrs }">
-            <v-btn plain small fab v-on="on" v-bind="attrs" @click="openSupport"><v-icon>mdi-lifebuoy</v-icon></v-btn>
-            </template>
-            <span>Support</span>
-        </v-tooltip> 
-        -->
-        <v-tooltip bottom >
-            <template v-slot:activator="{ on, attrs }">
-            <v-btn plain small  v-on="on" v-bind="attrs" @click="$store.commit('setFeedback',{show:true})"><v-icon>mdi-message-alert</v-icon> FEEDBACK</v-btn>
+            <v-btn plain small  v-on="on" v-bind="attrs" @click="$store.commit('setFeedback',{show:true})"><v-img :src="require('@/assets/icons/Support-outline@3x.svg')"></v-img> FEEDBACK</v-btn>
             </template>
             <span>give feedback or report error</span>
         </v-tooltip> 
@@ -57,6 +50,7 @@
            </template>
             <ehc-profile-card @changeProfilePic="picDialog=true"></ehc-profile-card>
         </v-menu>
+           <span class="mx-3">{{org.name}}</span>
 
         <ehc-image-upload 
             v-model="picDialog" 
@@ -94,12 +88,12 @@ import EhcAlert from './ehc-alert.vue';
 
 import auth from "@/mixins/auth.vue"
 import api from "@/mixins/api.vue"
-
+import mixins from '@/mixins/index.vue'
 
 
 export default {
     components: {EhcProfileCard, EhcUserAvatar, ehcImageUpload, EhcAlert},
-    mixins: [auth, api],
+    mixins: [auth, api, mixins],
     name: 'ehcAppToolbar',
 
     data: () => ({
@@ -107,9 +101,9 @@ export default {
         picDialog: false,
         searching:false,
         menu: [
-            {label: "Properties", route: "/", icon: "mdi-home-city"},
-            {label: "Guest Data", route: "/guestdata", icon: "mdi-account-group"},
-            {label: "Support", route: "/support", icon: "mdi-lifebuoy"},
+            {label: "Properties", route: "/", icon: "Properties@3x.svg"},
+            {label: "Guest Data", route: "/guestdata", icon: "2 User@3x.svg"},
+            {label: "Support", route: "/support", icon: "Support -normal@3x.svg"},
             // {label: "My Account", route: "/myaccount", icon:"mdi-account"}, TODO
         ],
     }),
@@ -128,11 +122,74 @@ export default {
             console.log("TODO")
         }
     },
+    watch: {
+        $route(val) {
+            console.log("tab changed", val)
+            let clearSearchStringOn = [
+                "GuestData",
+                "Support",
+                "Users"
+            ]
+            if ( clearSearchStringOn.includes(this.$route.name) ) {
+                this.$store.commit('setSearchString', null)
+            }
+        },
+    },
     computed: {
+        drawerShow: {
+            get() {
+                return this.$store.getters.drawer.show
+            },
+            set(val) {
+                this.$store.commit('setDrawer', {show: val})
+            }
+        },
         loading() {
             return this.$store.getters.loading
+        },
+        searchString:{
+            get() {
+                return this.$store.getters.searchString
+            },
+            set(val) {
+                this.$store.commit('setSearchString', val)
+            }
+        },
+        disableSearch() {
+            let disabledRoutes = [
+                "/support",
+                "/myaccount",
+            ]
+            if ( disabledRoutes.includes(this.$route.path) ) {
+                return true
+            }
+            if ( this.$router.currentRoute.path === '/support' ){
+                return true
+            }
+            return false
+        },
+        org(){
+            return this.$store.getters.org
         },
     }
 
 }
 </script>
+
+
+<style scoped>
+.mainAppBar >>> .v-toolbar__content {
+      padding: 0px !important;
+}
+.v-tab-active {
+    border: none !important;
+}
+.Xv-text-field{
+      width: 600px;
+}
+.toolbartitle {
+    width: 300px;
+}
+ 
+
+</style>

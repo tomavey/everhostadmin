@@ -30,9 +30,14 @@ export default new Vuex.Store({
     confirm: {
       show: false,
       message: null,
-    }
+    },
+    drawer: {
+      show: false
+    },
+    searchString: null
   },
   getters: {
+    drawer: state=>state.drawer,
     appSite: state=> { 
       if (window.location.hostname === "localhost") {
        return state.devAppSite 
@@ -45,8 +50,14 @@ export default new Vuex.Store({
     alertMessage: state => state.alert.message,
     showConfirm: state => state.confirm.show,
     confirmMessage: state => state.confirm.message,
+    searchString: state => state.searchString,
   },
   mutations: {
+    setDrawer(state, payload) {
+      for (var key in payload) {
+        state.drawer[key] = payload[key]
+      }
+    },
     setLoading (state,payload) {
       // console.log("setLoading", payload)
       state.loading = payload
@@ -67,6 +78,9 @@ export default new Vuex.Store({
     },
     setConfirmMessage (state,payload){
       state.confirm.message = payload
+    },
+    setSearchString (state,payload){
+      state.searchString = payload
     }
   },
   actions: {

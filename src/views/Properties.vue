@@ -1,40 +1,32 @@
 <template>
-    <ehc-page>
-        <v-toolbar flat>
+    <ehc-page class="grey lighten-4" >
+        <v-toolbar flat right class="grey lighten-4 my-5" >
+        <v-spacer/>
             <v-btn-toggle v-model="displayAs" mandatory>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn text value="gallery" v-bind="attrs" v-on="on">
-                        <v-icon>mdi-view-grid</v-icon>
+                    <v-btn text value="gallery" >
+                        <v-img :src="require('@/assets/icons/Grid View@3x.svg')" class="mr-1" />
+                        <span>Grid View</span>
                     </v-btn>
-                  </template>  
-                <span>gallery view</span>
-                </v-tooltip>
 
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn text value="table" v-bind="attrs" v-on="on">
-                        <v-icon>mdi-view-list</v-icon>
+                    <v-btn text value="table" >
+                        <v-img :src="require('@/assets/icons/List View@3x.svg')" class="mr-1" />
+                        <span>List View</span>
                     </v-btn>
-                  </template>
-                  <span>list view</span>
-                </v-tooltip>
             </v-btn-toggle>
-                <v-btn v-if="userIsAdmin && !showAll" @click="_showAll()" title="show all">
-                    <v-icon class="mr-1 ml-0">mdi-plus</v-icon>
-                    Show All
+                <v-btn text 
+                    v-if="userIsAdmin && !showAll" 
+                    @click="_showAll()" 
+                    title="show all">
+                    <v-img :src="require('@/assets/icons/show@3x.svg')" class="mr-1" />
+                    <span>Show All</span>
                 </v-btn>
-                <v-btn v-if="userIsAdmin && showAll" @click="_showAll()" title="show few">
-                    <v-icon class="mr-1 ml-0">mdi-minus</v-icon>
-                    Show Few
+                <v-btn text 
+                    v-if="userIsAdmin && showAll" 
+                    @click="_showAll()" 
+                    title="show few">
+                    <v-img :src="require('@/assets/icons/show@3x.svg')" class="mr-1" />
+                    <span>Show Few</span>
                 </v-btn>
-        {{propertiesFiltered.length}}
-            <v-spacer></v-spacer>
-            <v-text-field
-                placeholder="Search Properties"
-                v-model="search"
-            ></v-text-field>
-            <v-spacer></v-spacer>
             <v-btn
                 rounded
                 color="button"
@@ -49,9 +41,15 @@
             </v-btn>
         </v-toolbar>
 
+            <v-progress-linear
+                v-if="showProgress"
+                indeterminate
+                color="yellow darken-2"
+                ></v-progress-linear>
+
         <ehc-meta-edit v-if="!propertiesFiltered.length || showWelcomePage" docId="intro" pageTitle=""></ehc-meta-edit>
         <ehc-properties-gallery v-if="displayAs === 'gallery' && !showWelcomePage" :properties="propertiesFiltered"></ehc-properties-gallery>
-        <ehc-properties-table v-if="displayAs =='table' && !showWelcomePage" :properties="propertiesFiltered"></ehc-properties-table>
+        <ehc-properties-table v-if="displayAs =='table' && !showWelcomePage" :properties="propertiesFiltered" @displayAsGrid='displayAs = "grid"' ></ehc-properties-table>
         <ehc-dialog max-width="300" v-model="maxPropsDialog" title="Max Properties Reached">
             <h3>you have reached the maximum number of properties available</h3>
             <template v-slot:actions>
@@ -90,7 +88,7 @@ export default {
     watch: {
         loading(val) {
             this.$store.commit('setLoading', val)
-        }
+        },
     },
     computed: {
         showWelcomePage: function(){
@@ -130,21 +128,33 @@ export default {
 
                 return el
             })
+            .filter( el => {
+                if(this.searchString) {
+                    return el.searchAble.toLowerCase().includes(this.searchString.toLowerCase())
+                }
+                return true
+            })
 
             return properties
         },
         propertiesFiltered() {
             let propertiesFiltered = this.properties
-            if ( this.search ) {
+            if ( this.searchString ) {
                 propertiesFiltered = this.properties.filter(el => {
-                    return el.searchAble.toLowerCase().includes(this.search.toLowerCase())
+                    return el.searchAble.toLowerCase().includes(this.searchString.toLowerCase())
                 })
             }
             if ( !this.showAll ){
                 propertiesFiltered = propertiesFiltered.filter( el => el.uid === this.user.uid )                 
             }
           return propertiesFiltered
-        }
+        },
+        searchString() {
+            return this.$store.getters.searchString
+        },
+        showProgress() {
+            return !this.propertiesFiltered.length && this.loading
+        },
     },    
     methods: {
         addProperty() {
@@ -169,6 +179,7 @@ export default {
         },
         _showAll() {
             this.showAll = !this.showAll
+            this.$store.commit("setSearchString", null)
         },
         subscribeToProperties(showAll){
             let payload = {}
@@ -202,3 +213,4 @@ export default {
 
 }
 </script>
+

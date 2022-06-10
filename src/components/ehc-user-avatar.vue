@@ -1,13 +1,17 @@
 <template>
+<div>
     <v-avatar 
         color="button" 
         v-bind="$attrs"
+        class="avatar"
         >
-        <v-img :src="url" v-if="url"></v-img>
+        <v-img class="avatarimg" :src="url" v-if="url"></v-img>
         <v-icon dark v-else>
             mdi-account-circle
         </v-icon>
+        <span v-if="label">{{label}}</span>
     </v-avatar>
+</div>
 </template>
 
 
@@ -27,7 +31,11 @@ export default {
         }
     },
     mounted() {
-        this.url = this.photoURL ? this.photoURL : this.apiGetUser(this.userID).uid.photoURL
+        try {
+            this.url = this.photoURL ? this.photoURL : this.apiGetUser(this.userID).uid.photoURL
+        } catch (e) {
+            this.url = ""
+        }
     },
     watch: {
         photoURL(val) {
@@ -40,3 +48,12 @@ export default {
 }
 
 </script>
+
+<style scoped>
+.avatarimg {
+    border: 4px solid white;
+    border-radius: 20px;
+    }
+
+
+</style>

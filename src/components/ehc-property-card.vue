@@ -1,95 +1,110 @@
 <template>
-    <v-card class="pa-0 black2--text" max-width="19rem">
-        <v-img :src="property.avatarImg" height="13rem" @click="goToProperty()" class="pointer"></v-img>
+    <v-card class="pt-1 black2--text" max-width="19rem">
+
+        <!-- TODO: Get border radius on the top of the property avatar -->
+        <v-img :src="property.avatarImg" height="13rem" @click="goToProperty()" class="pointer mx-2 mb-2 mt-2 propertyAvatar" />
+
+        <ehc-user-avatar class="mt-n15 mx-3" v-if="property.contactInfo.hostPhotoUrl" :photoURL="property.contactInfo.hostPhotoUrl" />
+
+        <!-- PROPERTY NAME AND ADDRESS -->
         <v-list-item two-line>
             <v-list-item-content>
-                    {{property.name}} - 
-                    {{property.city}}, {{property.state}}
-                <v-list-item-subtitle><v-icon small>mdi-google-maps</v-icon>{{property.address}}</v-list-item-subtitle>
-            </v-list-item-content>
-            <ehc-user-avatar v-if="property.contactInfo.hostPhotoUrl" :photoURL="property.contactInfo.hostPhotoUrl" :label="property.contactInfo.hostName" />
-        </v-list-item>
-        <v-divider></v-divider>
-        <v-list-item >
-            <v-list-item-icon class="mr-1 ">
-                <v-icon>mdi-calendar-import</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-                <v-list-item-subtitle>
-                    <span v-if="property.publishedAt">Published: {{dateFormat(property.publishedAt, 'dateOnly')}}</span>
-                    <span  v-else>Not Published Yet</span>
+                <v-list-item-title class="black--text font-weight-bold">{{property.name}}</v-list-item-title>
+                <v-list-item-subtitle>  
+                    <v-list-item-icon>                  
+                        <v-img :src="require('@/assets/icons/location@3x.svg')" class="mr-2"/>
+                        {{address}}
+                    </v-list-item-icon>
                 </v-list-item-subtitle>
             </v-list-item-content>
+        </v-list-item>
 
+        <!-- CREATED AT AND PROPERTY ID -->
+        <v-list-item class="mt-n10">
+            <v-list-item-subtitle>
+                <v-list-item-icon>
+                    <v-img :src="require('@/assets/icons/calendar-2@3x.svg')" class="mr-2"/>
+                    {{property.createdAtAsString}} 
+                </v-list-item-icon>    
+            </v-list-item-subtitle>
+            <v-list-item-subtitle class="ml-sm-n5">
+                Property ID: {{property.propertyId}}
+            </v-list-item-subtitle>
+        </v-list-item>
+
+        <!-- ACTION BUTTONS -->
+        <v-list-item >
+
+            <!-- EDIT -->
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
-                        <v-btn class="mx-0" small icon @click="goToProperty()"><v-icon small color="green darken-2">mdi-pencil</v-icon></v-btn>
+                        <v-btn class="mx-0" small icon @click="goToProperty()">
+                            <v-img :src="require('@/assets/icons/edit@3x.svg')" class="mr-2"/>
+                        </v-btn>
                     </v-list-item-icon>
                 </template>
                 <span>Edit this property</span>
             </v-tooltip>
 
-            <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                    <v-list-item-icon class="mx-0"  v-bind="attrs" v-on="on">
-                        <v-btn class="mx-0" v-if="!property.publishedAt" small icon @click="publishProperty({propertyId: property.propertyId, publishedAt: true})">
-                            <v-icon small color="grey darken-2">mdi-publish</v-icon>
-                        </v-btn>
-                        <v-btn class="mx-0" v-else small :loading="publishLoading" icon @click="publishProperty({propertyId: property.propertyId, publishedAt: false})"><v-icon small color="grey darken-2">mdi-publish-off</v-icon></v-btn>
-                    </v-list-item-icon>
-                </template>
-                <span>Publish this property</span>
-            </v-tooltip>
-
+            <!-- LINK WITH QR CODE -->
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
-                        <v-btn class="mx-0" small icon @click="copyLink()"><v-icon small color="yellow darken-2">mdi-link</v-icon></v-btn>
+                        <v-btn class="mx-0" small icon @click="copyLink()">
+                            <v-img :src="require('@/assets/icons/Link@3x.svg')" class="mr-2"/>
+                        </v-btn>
                     </v-list-item-icon>
                 </template>    
                 <span>See a link to this property with QR code</span>
             </v-tooltip>
 
 
+            <!-- DELETE -->
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
-                        <v-btn class="mx-0" small icon @click="deleteConfirm.show = true"><v-icon small color="red darken-2">mdi-trash-can-outline</v-icon></v-btn>
+                        <v-btn class="mx-0" small icon @click="deleteConfirm.show = true">
+                            <v-img :src="require('@/assets/icons/trash@3x.svg')" class="mr-2"/>
+                        </v-btn>
                     </v-list-item-icon>
                 </template>    
                 <span>Delete this property</span>
             </v-tooltip>
 
+            <!-- PUBLISH -->
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-list-item-icon class="mx-0"  v-bind="attrs" v-on="on">
+                        <v-btn class="mx-0" v-if="!property.publishedAt" small icon @click="publishProperty({propertyId: property.propertyId, publishedAt: true})">
+                            <v-img :src="require('@/assets/icons/unpulish@3x.svg')" class="mr-2 publish"/>
+                        </v-btn>
+                        <v-btn class="mx-0" v-else small :loading="publishLoading" icon @click="publishProperty({propertyId: property.propertyId, publishedAt: false})">
+                            <v-img :src="require('@/assets/icons/unpulish@3x.svg')" class="mr-2 unpublish"/>
+                        </v-btn>
+                    </v-list-item-icon>
+                </template>
+                <span v-if="!property.publishedAt">Publish this property</span>
+                <span v-else>Unpublish this property</span>
+            </v-tooltip>
+
         </v-list-item>
 
-        <v-card-subtitle>
-            PropertyId: {{property.propertyId}}<br/>
-            <span v-if="showExtraForDevs()">UserId: {{property.uid}}<br/></span>
-            <span v-if="property.copiedAt && property.copiedFrom && showExtraForDevs(property)">
-             Copied from: {{property.copiedFrom}} on {{formatDate(property.copiedAt,"shortFormat")}}
-            </span>
-        </v-card-subtitle>
-        
-        <!-- <v-card-title class="text-h6">{{property.name}}</v-card-title>
-        <v-spacer/>
-        <v-card-actions class="d-flex justify-center">
-            <v-btn text class="text-caption created">Created: {{formatDate(property.createdAt,"dateOnly")}}</v-btn> -->
-    <!-- edit -->
-            <!-- <v-btn class="mx-0" small icon @click="goToProperty()"><v-icon small color="green darken-2">mdi-pencil</v-icon></v-btn>
-            <v-btn class="mx-0" v-if="!property.publishedAt" small icon @click="publishProperty({propertyId: property.propertyId, publishedAt: true})">
-                <v-icon small color="grey darken-2">mdi-publish</v-icon>
-            </v-btn>
-            <v-btn class="mx-0" v-else small :loading="publisLoading" icon @click="publishProperty({propertyId: property.propertyId, publishedAt: false})"><v-icon small color="grey darken-2">mdi-publish-off</v-icon></v-btn> -->
-    <!-- TODO copy -->
-            <!-- <v-btn class="mx-0" small icon @click="copyProperty(property.propertyId)"><v-icon small color="blue darken-2">mdi-content-copy</v-icon></v-btn> -->
-            <!-- <v-btn class="mx-0" small icon @click="copyLink()"><v-icon small color="yellow darken-2">mdi-link</v-icon></v-btn>
-            <v-btn class="mx-1" small icon @click="deleteConfirm.show = true"><v-icon small color="red darken-2">mdi-trash-can-outline</v-icon></v-btn>
-        </v-card-actions>
-        <v-card-text>PropertyId: {{property.propertyId}}<br/>
-        <span v-if="property.publishedAt">Published: {{dateFormat(property.publishedAt, 'dateOnly')}}</span>
-        <span v-else>Not Published Yet</span>
-        </v-card-text> -->
+        <!-- PUBLISHED OR NOT -->
+        <v-list-item>
+            <v-list-item-content>
+                <v-list-item-subtitle>
+                    <span v-if="property.publishedAt">Published: {{dateFormat(property.publishedAt, 'dateOnly')}}</span>
+                    <span  v-else>Not Published Yet</span>
+                </v-list-item-subtitle>
+            </v-list-item-content>
+        </v-list-item>
+
+        <!------------>
+        <!-- POPUPS -->
+        <!------------>
+
+        <!-- CONFIRM DELETE POPUP -->
         <ehc-dialog 
             v-model="deleteConfirm.show" 
             width="300" 
@@ -106,6 +121,8 @@
                 </v-btn>
             </template>
         </ehc-dialog>
+
+        <!-- LINK AND QR CODE POPUP -->
         <ehc-dialog v-model="linkDialog" title="Link Copied" width="350">
             Link to {{property.name}} guide has been copied to your clipboard <br/><br/>
             <p class="text-h5 text-center" v-if="!property.publishedAt">This property has not been published yet.</p>
@@ -118,6 +135,8 @@
                 <v-btn color="button" dark @click="linkDialog = false">ok</v-btn>
             </template>
         </ehc-dialog>
+
+        <!-- ALERT THAT PROPERTY HAS BEEN PUBLISHED -->
         <ehc-dialog v-model="message.show" :title="message.title" :width="message.width ? message.width : '300'">
             {{message.message}}
             <br/><br/>
@@ -128,6 +147,7 @@
             </template>
         </ehc-dialog>
     </v-card>
+
 </template>
 
 
@@ -149,7 +169,6 @@ export default {
     data: () => ({
         message: {
             show: false,
-
         },
         linkDialog: false,
         publishLoading: false,
@@ -167,6 +186,13 @@ export default {
         appSite() {return this.$store.getters.appSite},
         loading() {return this.$store.getters.propertiesStatus.loading},
         user() {return this.$store.getters.user},
+        address() {
+            let property = this.property
+            if ( property.mapAddress ) {
+                return property.mapAddress.formatted_address
+            } 
+            return `${property.city} ${property.state}`
+        },
     },
     methods: {
         goToProperty() {
@@ -219,6 +245,8 @@ export default {
     watch: {
 
     },
+    mounted(){
+    },
     created() {
     }
 
@@ -238,6 +266,17 @@ export default {
     font-size: .8em !important;
     padding:0px;
     margin:0px
+}
+.publish {
+    fill: #d4002e;
+}
+
+.unpublish {
+    transform: rotate(180deg);
+}
+
+.propertyAvatar{
+    border-radius: 10px 10px 10px 10px;
 }
 
 </style>

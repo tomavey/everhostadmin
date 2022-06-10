@@ -4,81 +4,128 @@
     :headers="headers"
     :items="properties"
     :items-per-page="30"
+    :item-class="itemRowBackground"
     class="elevation-1"
     :single-expand="singleExpand"
     :expanded.sync="expanded"    
     :show-expand = userIsAdmin  
-    item-key="createdAt"   
+    item-key="index"   
     :footer-props="{
       showFirstLastPage: true,
       itemsPerPageOptions: [50,100,150.-1]
     }"
   >
+    <template v-slot:item.avatarImg="{ item }">
+      <ehc-user-avatar class="mr-n14" v-if="item.avatarImg" :photoURL="item.avatarImg"/>
+    </template>
 
-    <template v-slot:item.edit="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="goToProperty(item)"
-      >
-        mdi-pencil
-      </v-icon>
+    <template v-slot:item.name="{ item }">
+      <v-btn text @click="setSearchString(item.name)">
+      {{item.name}}
+      </v-btn>
     </template>
-    <template v-slot:item.copy="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="copyProperty(item)"
-      >
-        mdi-content-copy
-      </v-icon>
-      <!-- <span v-if="item.copiedFrom">*</span> -->
-    </template>
+  
+
+
+
+
+    <!-- ASK FOR GUEST INFO -->
     <template v-slot:item.guestinfo="{ item }">
-      <v-icon
-        v-if="!item.noguestinfo"
-        small
-        class="mr-2"
-        @click="setGuestInfo(item)"
-      >
-        mdi-check-outline
-      </v-icon>
-      <v-icon
-        v-if="item.noguestinfo"
-        small
-        class="mr-2"
-        @click="setGuestInfo(item)"
-      >
-        mdi-close-box-outline
-      </v-icon>
-      <!-- <span v-if="item.copiedFrom">*</span> -->
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+            <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
+              <v-img
+                v-if="!item.noguestinfo"
+                :src="require('@/assets/icons/Seen@3x.svg')"
+                small
+                class="mr-2"
+                @click="setGuestInfo(item)"
+              />
+              <!-- <v-img
+                v-if="item.noguestinfo"
+                :src="require('@/assets/icons/Profile@3x.svg')"
+                small
+                class="mr-2"
+                @click="setGuestInfo(item)"
+              /> -->
+              <span v-if="item.noguestinfo" @click="setGuestInfo(item)" class="pointer">&nbsp;--&nbsp;</span>
+            </v-list-item-icon>
+        </template>
+        <span>{{ item.noguestinfo ? 'No guest info' : 'Guest info' }}</span>
+      </v-tooltip>
     </template>
-    <template v-slot:item.publish="{ item }">
-      <v-icon
-        v-if="!item.publishedAt"
-        small
-        class="mr-2"
-        @click="publishProperty({propertyId: item.propertyId, publishedAt: true})"
-      >
-        mdi-publish
-      </v-icon>
-      <v-icon
-        v-else
-        small
-        class="mr-2"
-        @click="publishProperty({propertyId: item.propertyId, publishedAt: false})"
-      >
-        mdi-publish-off
-      </v-icon>
-    </template>
-    <template v-slot:item.delete="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="deleteProperty(item.propertyId)"
-      >
-        mdi-delete
-      </v-icon>
+
+
+    <template v-slot:item.actions="{ item }">
+      <!-- EDIT -->
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
+          <v-img
+            :src="require('@/assets/icons/edit@3x.svg')"
+            small
+            class="mr-2 pointer"
+            @click="goToProperty(item)"
+          />
+          </v-list-item-icon>
+        </template>
+        <span>Edit</span>
+      </v-tooltip>
+
+      <!-- COPY -->
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
+            <v-img
+              :src="require('@/assets/icons/Copy@3x.svg')"
+              small
+              class="mr-2 pointer"
+              @click="copyProperty(item)"
+            />
+          </v-list-item-icon>
+        </template>
+        <span>Copy</span>
+      </v-tooltip>
+
+      <!-- PUBLISH -->
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
+            <v-img 
+              v-if="!item.publishedAt"
+              :src="require('@/assets/icons/unpulish@3x.svg')"
+              small
+              class="mr-2 pointer"
+              @click="publishProperty({propertyId: item.propertyId, publishedAt: true})"
+            />
+            <v-img
+              v-else
+              :src="require('@/assets/icons/unpulish@3x.svg')"
+              small
+              class="mr-2 pointer"
+              @click="publishProperty({propertyId: item.propertyId, publishedAt: false})"
+            />
+          </v-list-item-icon>
+        </template>
+        <span>Publish</span>
+      </v-tooltip>
+
+      <!-- DELETE -->
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-list-item-icon class="mx-0" v-bind="attrs" v-on="on">
+            <v-img
+              small
+              class="mr-2 pointer"
+              :src="require('@/assets/icons/trash@3x.svg')"
+              @click="deleteProperty(item.propertyId)"
+            >
+            </v-img>
+          </v-list-item-icon>
+        </template>
+        <span>Delete</span>
+      </v-tooltip>
+
     </template>
 
     <template v-slot:expanded-item="{ headers, item }">
@@ -106,7 +153,6 @@
       </td>
     </template>
   </v-data-table>
-    <span>* = not updated after 3/14/22</span>
     <ehc-alert-confirm @confirmAction="confirmAction" ></ehc-alert-confirm>
 </v-container>
 </template>
@@ -115,9 +161,10 @@
 import PropertyActions from '@/mixins/propertyActions'
 import Auth from '@/mixins/auth'
 import ehcAlertConfirm from './ehc-alert-confirm.vue'
+import EhcUserAvatar from './ehc-user-avatar.vue' 
 
 export default {
-  components: { ehcAlertConfirm },
+  components: { ehcAlertConfirm, EhcUserAvatar },
   mixins: [PropertyActions,Auth],
   props: ['properties'],
   data() {
@@ -196,12 +243,22 @@ export default {
         }
       })
     },
+    itemRowBackground(item){
+      if ( !item.publishedAt ) { return "" }
+      return ""
+    },
+           setSearchString(searchString){
+      this.$store.commit("setSearchString", searchString)
+      this.$emit('displayAsGrid')
+    },
+
   },
   computed: {
     appSite() {return this.$store.getters.appSite},
     headers(){
       let headers
       let userHeaders = [
+        { text: '', value: 'avatarImg' },
         { text: 'Name', value: 'name' },
         { text: 'City', value: 'city' },
         { text: 'State', value: 'state' },
@@ -209,13 +266,10 @@ export default {
         { text: 'Published', value: 'publishedAtAsString' },
         { text: 'Created', value: 'createdAtAsString' },
         { text: 'Updated', value: 'updatedAtAsString' },
-        { text: 'Edit', value: 'edit', sortable: false },
-        { text: 'Publish', value: 'publish', sortable: false },
-        { text: 'Copy', value: 'copy', sortable: false, admin: true },
         { text: 'Ask for Guest Info', value: 'guestinfo', sortable: false, admin: true },
+        { text: 'Actions', value: 'actions', sortable: false},
       ]
       let adminHeaders = [
-        { text: 'Delete', value: 'delete', sortable: false, admin:true },
         { text: '', value: 'data-table-expand' },
       ]
       if ( this.userIsAdmin ) {
@@ -228,3 +282,9 @@ export default {
   }
 }
 </script>
+
+<style>
+tbody tr:nth-of-type(odd) {
+   background-color: #E0E0E0;
+ }
+</style>

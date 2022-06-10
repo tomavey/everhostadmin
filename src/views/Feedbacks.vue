@@ -2,21 +2,11 @@
     <ehc-page>
     <v-card class="mx-auto" width="900">
         <v-card-title>{{pageTitle}}</v-card-title>
-        <v-card-title>
-            <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-                full-width
-            ></v-text-field>
-        </v-card-title>
         <v-data-table
             :headers="headers"
             :items="feedbacks"
             :items-per-page="30"
-            :search='search' 
+            :search='searchString' 
             :single-expand="singleExpand"
             :expanded.sync="expanded"
             item-key="createdAt"
@@ -95,7 +85,10 @@ export default {
                 }
                 return el
             })
-        }
+        },
+        searchString: function(){
+            return this.$store.getters.searchString
+        },
     },
     created(){
         this.$store.dispatch('getFeedbacks')
