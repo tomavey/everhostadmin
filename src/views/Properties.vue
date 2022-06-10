@@ -13,11 +13,17 @@
                         <span>List View</span>
                     </v-btn>
             </v-btn-toggle>
-                <v-btn text v-if="userIsAdmin && !showAll" @click="_showAll()" title="show all">
+                <v-btn text 
+                    v-if="userIsAdmin && !showAll" 
+                    @click="_showAll()" 
+                    title="show all">
                     <v-img :src="require('@/assets/icons/show@3x.svg')" class="mr-1" />
                     <span>Show All</span>
                 </v-btn>
-                <v-btn text v-if="userIsAdmin && showAll" @click="_showAll()" title="show few">
+                <v-btn text 
+                    v-if="userIsAdmin && showAll" 
+                    @click="_showAll()" 
+                    title="show few">
                     <v-img :src="require('@/assets/icons/show@3x.svg')" class="mr-1" />
                     <span>Show Few</span>
                 </v-btn>
@@ -36,7 +42,7 @@
         </v-toolbar>
 
             <v-progress-linear
-                v-if="!properties.length"
+                v-if="showProgress"
                 indeterminate
                 color="yellow darken-2"
                 ></v-progress-linear>
@@ -145,6 +151,9 @@ export default {
         },
         searchString() {
             return this.$store.getters.searchString
+        },
+        showProgress() {
+            return !this.propertiesFiltered.length && this.loading
         },
     },    
     methods: {
