@@ -1,7 +1,7 @@
 <template>
       <v-navigation-drawer
         class="px-0 mx-0"
-        width="193px"
+        width="190px"
         clipped
         app
         v-model="drawerShow"
