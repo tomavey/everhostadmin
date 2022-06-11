@@ -1,7 +1,11 @@
 <template>
     <ehc-page>
     <v-card class="mx-auto">
+        <v-card-text>
+           <ehc-download-button :data="guests" :label="'Download Guests as CSV '" :csvTitle="'MY GUESTS'" />
+        </v-card-text>
         <v-card-title>{{pageTitle}}</v-card-title>
+
         <v-data-table
             :headers="headers"
             :items="guests"
@@ -16,9 +20,11 @@
 <script>
 import auth from "@/mixins/auth.vue"
 import mixins from '@/mixins'
+import EhcDownloadButton from '@/components/ehc-download-button.vue'
 
 export default {
     mixins: [auth, mixins],
+    components: {EhcDownloadButton}, 
     data() {
         return {
             pageTitle: "Guest Data",

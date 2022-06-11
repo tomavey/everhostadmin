@@ -15,13 +15,7 @@
         Promote user to admin
       </v-btn>
 
-          <v-btn elevation="2" class="float-right ml-1">
-            <vue-json-to-csv
-                :json-data="usersForDownload"
-                >
-                Download CSV
-            </vue-json-to-csv>
-          </v-btn>
+      <ehc-download-button :label="'Download CSV'" :csvTitle="'USERS'" :data="usersForDownload"></ehc-download-button>  
 
       <ehc-dialog v-model="showPromote" :title="title" width="500" close>
         <ehc-form :meta="meta" v-model="formData" @submit="submitPromotion()"></ehc-form>
@@ -100,14 +94,14 @@
 import mixins from '@/mixins'
 import auth from '@/mixins/auth'
 import ehcAlertConfirm from '@/components/ehc-alert-confirm'
-import VueJsonToCsv from 'vue-json-to-csv'
+import EhcDownloadButton from '@/components/ehc-download-button.vue'
 
 
 export default {
   mixins: [mixins,auth],
   components: {
     'ehc-alert-confirm': ehcAlertConfirm,
-    'VueJsonToCsv': VueJsonToCsv
+    'ehc-download-button': EhcDownloadButton
   },  
   data: function() {
     return {
