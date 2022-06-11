@@ -15,7 +15,13 @@
         Promote user to admin
       </v-btn>
 
-      <ehc-download-button :label="'Download CSV'" :csvTitle="'USERS'" :data="usersForDownload"></ehc-download-button>  
+      <ehc-download-button 
+        :label="'Download as CSV'" 
+        :fileName="'USERS.csv'" 
+        :data="usersForDownload"
+        :header="'EVERHOST USER DATA'"
+        :type="'csv'"
+      />  
 
       <ehc-dialog v-model="showPromote" :title="title" width="500" close>
         <ehc-form :meta="meta" v-model="formData" @submit="submitPromotion()"></ehc-form>
@@ -229,10 +235,10 @@ export default {
       let user = {}
       this.users.forEach( el => {
         user = {}
-        user.uid = el.uid
-        user.email = el.email
-        user.name = el.displayName || ""
-        user.createdAt = el.createdAtAsString
+        user.ID = el.uid
+        user.EMAIL = el.email
+        user.NAME = el.displayName || ""
+        user.CREATED = el.createdAtAsString
         usersForDownload.push(user)
       })
       return usersForDownload

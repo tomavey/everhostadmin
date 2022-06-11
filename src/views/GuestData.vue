@@ -2,7 +2,12 @@
     <ehc-page>
     <v-card class="mx-auto">
         <v-card-text>
-           <ehc-download-button :data="guests" :label="'Download Guests as CSV '" :csvTitle="'MY GUESTS'" />
+           <ehc-download-button 
+                :data="guestsForDownload" 
+                :label="'Download as Excel'" 
+                :fileName="'MY_GUESTS'" 
+                :header="'EVERHOST GUEST DATA'"
+                />
         </v-card-text>
         <v-card-title>{{pageTitle}}</v-card-title>
 
@@ -93,6 +98,24 @@ export default {
                 el.createdAtAsString = this.dateFormat(el.createdAt,"dateOnly")
                 return el
             })
+        },
+        guestsForDownload: function(){
+            let guestsForDownload = []
+            let guest = {}
+            this.guests.forEach( el => {
+                guest = {}
+                guest.LAST_NAME = el.lname || ""
+                guest.FIRST_NAME = el.fname || ""
+                guest.EMAIL = el.email || ""
+                guest.PHONE = el.phone || ""
+                guest.CITY = el.propertyCity || ""
+                guest.STATE = el.propertyState || ""
+                guest.PROPERTY = el.propertyName || ""
+                guest.PROPERTY_ID = el.propertyId || ""
+                guest.CREATED = el.createdAtAsString || ""
+                guestsForDownload.push(guest)
+            })
+            return guestsForDownload
         },
         searchString: function(){
             return this.$store.getters.searchString
