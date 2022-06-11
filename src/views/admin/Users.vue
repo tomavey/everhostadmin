@@ -2,6 +2,17 @@
 <v-container>
   {{searchString}}
   <v-card>
+
+    <v-card-text>
+        <ehc-download-button 
+          :label="'Download as CSV'" 
+          :fileName="'USERS.csv'" 
+          :data="usersForDownload"
+          :header="'EVERHOST USER DATA'"
+          :type="'csv'"
+        />  
+    </v-card-text>
+
     <v-card-text class="text-center text-h4">USERS</v-card-text>
     <v-card-actions v-if="userIsAdmin">
       <v-btn @click="showNewUser = !showNewUser" class="float-right mr-2">
@@ -15,13 +26,6 @@
         Promote user to admin
       </v-btn>
 
-      <ehc-download-button 
-        :label="'Download as CSV'" 
-        :fileName="'USERS.csv'" 
-        :data="usersForDownload"
-        :header="'EVERHOST USER DATA'"
-        :type="'csv'"
-      />  
 
       <ehc-dialog v-model="showPromote" :title="title" width="500" close>
         <ehc-form :meta="meta" v-model="formData" @submit="submitPromotion()"></ehc-form>
