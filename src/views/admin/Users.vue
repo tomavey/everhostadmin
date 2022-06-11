@@ -4,21 +4,29 @@
   <v-card>
     <v-card-text class="text-center text-h4">USERS</v-card-text>
     <v-card-actions v-if="userIsAdmin">
-      <v-btn @click="showNewUser = !showNewUser" class="float-right">
+      <v-btn @click="showNewUser = !showNewUser" class="float-right mr-2">
         Create a new user
       </v-btn>
       <ehc-dialog v-model="showNewUser" title="Create a new user" width="500" close>
         <ehc-form :meta="newUserMeta" v-model="newUserFormData" @submit="submitNewUser()"></ehc-form>
       </ehc-dialog>
 
-      <v-btn @click="showPromote = !showPromote" class="float-right">
+      <v-btn @click="showPromote = !showPromote" class="float-right mr-1">
         Promote user to admin
       </v-btn>
+
+          <v-btn elevation="2" class="float-right ml-1">
+            <vue-json-to-csv
+                :json-data="usersForDownload"
+                >
+                Download CSV
+            </vue-json-to-csv>
+          </v-btn>
+
       <ehc-dialog v-model="showPromote" :title="title" width="500" close>
         <ehc-form :meta="meta" v-model="formData" @submit="submitPromotion()"></ehc-form>
       </ehc-dialog>
-
-    </v-card-actions>
+   </v-card-actions>
   </v-card>
   <div>
     <v-data-table
@@ -92,11 +100,14 @@
 import mixins from '@/mixins'
 import auth from '@/mixins/auth'
 import ehcAlertConfirm from '@/components/ehc-alert-confirm'
+import VueJsonToCsv from 'vue-json-to-csv'
+
 
 export default {
   mixins: [mixins,auth],
   components: {
-    'ehc-alert-confirm': ehcAlertConfirm
+    'ehc-alert-confirm': ehcAlertConfirm,
+    'VueJsonToCsv': VueJsonToCsv
   },  
   data: function() {
     return {
@@ -218,6 +229,19 @@ export default {
           if ( a.createdAt < b.createdAt ) {return 1}
           else { return -1 }
       })
+    },
+    usersForDownload: function(){
+      let usersForDownload = []
+      let user = {}
+      this.users.forEach( el => {
+        user = {}
+        user.uid = el.uid
+        user.email = el.email
+        user.name = el.displayName || ""
+        user.createdAt = el.createdAtAsString
+        usersForDownload.push(user)
+      })
+      return usersForDownload
     },
     headers: function(){
       return [

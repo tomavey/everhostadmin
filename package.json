@@ -18,6 +18,8 @@
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
     "vue-advanced-cropper": "^1.9.0",
+    "vue-json-csv": "^2.1.0",
+    "vue-json-to-csv": "^1.1.8",
     "vue-page-transition": "^0.2.2",
     "vue-router": "^3.2.0",
     "vue-tel-input-vuetify": "^1.5.2",

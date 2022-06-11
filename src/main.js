@@ -21,7 +21,6 @@ import VueTheMask from 'vue-the-mask'
 
 
 
-
 Vue.component('ehc-page', ehcPage)
 Vue.component('ehc-form', ehcForm)
 Vue.component('ehc-dialog', ehcDialog)
