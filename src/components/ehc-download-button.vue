@@ -39,17 +39,6 @@
         </v-list-item>
       </v-list>
     </v-menu>
-  <!-- <v-btn elevation="2" class="float-right ml-1">
-            <vue-json-to-excel
-                :data="data"
-                :name="fileName"
-                :header="header"
-                :type="type"
-                :escapeCsv = false
-                >
-                {{label}}
-            </vue-json-to-excel>
-  </v-btn> -->
 </template>
 
 <script>
