@@ -28,7 +28,16 @@
     </template>
     <template v-slot:expanded-item="{ headers, item }">
       <td :colspan="headers.length">
-        Members of {{ item.membersList }}
+        <v-card>
+          <v-card-text>
+            Members of {{ item.membersList }}
+          </v-card-text>
+        </v-card>
+        <v-card>
+          <v-card-text>
+            Add a company white label:<v-text-field v-model="whiteLabel" @change="updateLabel(item.orgId)"></v-text-field>
+          </v-card-text>
+        </v-card>
       </td>
     </template>
     </v-data-table>
@@ -47,9 +56,14 @@ export default {
       pageTitle: "Organizations",
       expanded: [],
       singleExpand: false,
+      whiteLabel: "",
     }
   },
   methods: {
+    updateLabel: function(orgId) {
+      console.log("updateLabel",this.whiteLabel, orgId)
+      this.$store.dispatch('addWhiteLabel',{orgId: orgId, label: this.whiteLabel})
+    }
   },
   computed: {
     orgs: function(){

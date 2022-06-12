@@ -91,11 +91,16 @@ export default {
         })
         context.commit("setOrgs",orgsArray)
       })
-    }
+    },
+    async addWhiteLabel (context, payload) {
+      console.log("Adding White Label", payload)
+      let orgRef = firebase.firestore().collection("organizations").doc(payload.orgId)
+      let obj = {companyLabel: payload.label}
+      console.log("Adding White Label2", obj)
+      orgRef.update(obj)
+      .then( () => {
+        console.log(`White Label - ${obj.companyLabel} added to ${payload.orgId}`)  
+      }) 
+    }  
   }
 }
-
-
-
-
-
