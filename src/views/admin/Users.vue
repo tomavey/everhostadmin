@@ -6,7 +6,7 @@
     <v-card-text>
         <ehc-download-button 
           :label="'Download as CSV'" 
-          :fileName="'USERS.csv'" 
+          :fileName="'USERS'" 
           :data="usersForDownload"
           :header="'EVERHOST USER DATA'"
           :type="'csv'"
