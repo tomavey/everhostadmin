@@ -17,7 +17,7 @@
         </v-btn>
     </template>
 
-      <v-card>
+      <v-card class="feedback">
         <v-list>
           <v-list-item>
            
@@ -40,27 +40,17 @@
 
         <v-divider></v-divider>
 
-        <v-list>
-          <v-list-item>
-            <v-list-item-action>
-              <v-switch
-                v-model="message"
-                color="purple"
-              ></v-switch>
-            </v-list-item-action>
-            <v-list-item-title>Enable messages</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-action>
-              <v-switch
-                v-model="hints"
-                color="purple"
-              ></v-switch>
-            </v-list-item-action>
-            <v-list-item-title>Enable hints</v-list-item-title>
-          </v-list-item>
-        </v-list>
+        <v-card>
+          <v-card-text>
+             <ehc-form 
+            v-model="formData" 
+            :meta="meta" 
+            :shakeInvalid="shakeInvalid"
+            @valid="isValid = $event"
+            :dense="true"
+            />
+          </v-card-text>
+        </v-card>
 
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -74,9 +64,9 @@
           <v-btn
             color="primary"
             text
-            @click="menu = false"
+            @click="submit"
           >
-            Save
+            Submit
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -88,10 +78,52 @@
 <script>
   export default {
     data: () => ({
-      fav: true,
-      menu: false,
-      message: false,
-      hints: true,
+        fav: true,
+        menu: false,
+        message: false,
+        hints: true,
+        shakeInvalid: false,
+        formData: {
+                upload:[]
+            },
+        meta: [
+                {type: "text",          label: "name",                      key: "name"},
+                {type: "email",         label: "email",                     key: "email"},
+                {type: "textArea",      label: "Description of issue",      key: "description"},
+                // {type: "fileInput",     label: "upload screenshot(s)",      key: "upload",          multiple:true},        
+            ],
+        sendEmailTo: ['tom@everhost.io','grant@everhost.io','ed@everhost.io'],
     }),
+    methods: {
+        submit() {
+            const delay = ms => new Promise(res => setTimeout(res, ms));
+            let that = this
+            this.loading=true
+            this.$store.dispatch("submitFeedback", this.formData).then(async() =>{
+                that.loading=false;
+                that.$store.commit('setShowAlert', true)
+                that.$store.commit('setAlertMessage', 'Thank you for your feedback!')
+                await delay(500);
+                that.menu= false
+                let mailObj = {
+                    to: this.sendEmailTo,
+                    subject: "Feedback from an Everhost beta tester",
+                    html: `
+                        <p>Description: ${this.formData.description}</p>
+                        <p>From: ${this.formData.name} - <a href="mailto:${this.formData.email}">${this.formData.email}</a></p>
+                        `
+                }
+                this.sendMail(mailObj)
+                that.formData= {upload:[]}
+            })
+        },
+        sendMail(mailObj) {
+            this.$store.dispatch("sendMail",mailObj)
+            .then( console.log("sendMail dispatched", mailObj) )
+        }
+    }
   }
 </script>
+
+<style scoped>  
+</style>
