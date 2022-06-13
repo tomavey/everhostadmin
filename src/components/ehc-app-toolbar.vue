@@ -11,6 +11,8 @@
             color="primary"
             v-model="tab"
             >
+
+            <!-- MENU ITEMS -->
             <v-tab
                 v-for="item in menu" 
                 :key="item.label"
@@ -18,53 +20,59 @@
                 <v-img class="mr-1" :src="require(`@/assets/icons/${item.icon}`)"/>
                 <strong>{{item.label}}</strong>
             </v-tab>    
+            <v-spacer></v-spacer>
+
+            <!-- SEARCH TEXT BOX -->
+            <v-tab>
+                <v-text-field
+                    active-class="active"
+                    outlined
+                    label="Search"
+                    clearable
+                    rounded
+                    dense
+                    class="mt-7 searchField"
+                    v-model="searchString"
+                >
+                </v-text-field>
+            </v-tab>    
+
+            <!-- FEEDBACK -->
+            <v-tab>
+                <ehc-feedback/>
+            </v-tab>
+
+            <!-- USER PROFILE AND LOGOUT -->
+            <v-tab>
+                <v-menu
+                    bottom
+                    offset-y>
+                    <template v-slot:activator="{ attrs, on }">
+                        <div v-bind="attrs" v-on="on">
+                        <ehc-user-avatar  size="30" :photoURL="user.photoURL"></ehc-user-avatar>
+                        </div>
+                </template>
+                    <ehc-profile-card @changeProfilePic="picDialog=true"></ehc-profile-card>
+                </v-menu>
+
+                <ehc-image-upload 
+                    v-model="picDialog" 
+                    title="Upload Profile Image" 
+                    :uploadPath="'/profilePictures/'+user.uid + Date.now()"  
+                    @upload="setProfilePic($event)" 
+                    circle
+                    :size="{
+                        width: 200,
+                        height: 200
+                    }"
+                />
+            </v-tab>
+
         </v-tabs>
-        <v-spacer></v-spacer>
 
-        <v-text-field
-            active-class="active"
-            outlined
-            label="Search"
-            clearable
-            rounded
-            dense
-            class="mt-7 searchField"
-            v-model="searchString"
-        >
-        </v-text-field>
+       
 
-        <v-divider vertical inset></v-divider>
 
-        <v-tooltip bottom >
-            <template v-slot:activator="{ on, attrs }">
-            <v-btn plain small  v-on="on" v-bind="attrs" @click="$store.commit('setFeedback',{show:true})"><v-img :src="require('@/assets/icons/Support-outline@3x.svg')"></v-img> FEEDBACK</v-btn>
-            </template>
-            <span>give feedback or report error</span>
-        </v-tooltip> 
-
-        <v-menu
-            bottom
-            offset-y>
-            <template v-slot:activator="{ attrs, on }">
-                <div v-bind="attrs" v-on="on">
-                <ehc-user-avatar  size="30" :photoURL="user.photoURL"></ehc-user-avatar>
-                </div>
-           </template>
-            <ehc-profile-card @changeProfilePic="picDialog=true"></ehc-profile-card>
-        </v-menu>
-
-        <ehc-image-upload 
-            v-model="picDialog" 
-            title="Upload Profile Image" 
-            :uploadPath="'/profilePictures/'+user.uid + Date.now()"  
-            @upload="setProfilePic($event)" 
-            circle
-            :size="{
-                width: 200,
-                height: 200
-            }"/>
-
-        <!-- <ehc-profile-card></ehc-profile-card> -->
         <v-progress-linear
             :active="loading"
             :indeterminate="loading"
@@ -90,10 +98,11 @@ import EhcAlert from './ehc-alert.vue';
 import auth from "@/mixins/auth.vue"
 import api from "@/mixins/api.vue"
 import mixins from '@/mixins/index.vue'
+import EhcFeedback from './ehc-feedback.vue';
 
 
 export default {
-    components: {EhcProfileCard, EhcUserAvatar, ehcImageUpload, EhcAlert},
+    components: {EhcProfileCard, EhcUserAvatar, ehcImageUpload, EhcAlert, EhcFeedback},
     mixins: [auth, api, mixins],
     name: 'ehcAppToolbar',
 

@@ -7,7 +7,6 @@
         <v-main height="100%">
             <router-view :key="$route.fullPath" />
         </v-main>
-        <ehc-feedback></ehc-feedback>
 
     </ehc-login>
   </v-app>

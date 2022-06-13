@@ -1,101 +1,97 @@
 <template>
-    <ehc-drawer v-model="showFeedback" right title="Feedback" subtitle="please let us know of any issues or feedback">
-        <ehc-form 
-            v-model="formData" 
-            :meta="meta" 
-            :shakeInvalid="shakeInvalid"
-            @valid="isValid = $event"
-            :dense="true"
-            />
-        <template v-slot:actions>
-            <v-btn 
-                width="100%" 
-                color="button" 
-                dark 
-                @click="submit()"
-                :loading="loading"
-                ><strong>{{buttonText}}</strong></v-btn>
-        </template>
-    </ehc-drawer>
+  <div class="text-center">
+    <v-menu
+      v-model="menu"
+      :close-on-content-click="false"
+      :nudge-width="400"
+      offset-x
+    >
+
+    <template v-slot:activator="{ on, attrs }">
+        <v-btn
+            icon
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-img :src="require('@/assets/icons/Support-outline@3x.svg')"></v-img> FEEDBACK
+        </v-btn>
+    </template>
+
+      <v-card>
+        <v-list>
+          <v-list-item>
+           
+            <v-list-item-content>
+              <v-list-item-title>Feedback</v-list-item-title>
+              <v-list-item-subtitle>Comments, suggestions, or issues</v-list-item-subtitle>
+            </v-list-item-content>
+
+            <v-list-item-action>
+              <v-btn
+                :class="fav ? 'red--text' : ''"
+                icon
+                @click="fav = !fav"
+              >
+                <v-icon>mdi-heart</v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
+        </v-list>
+
+        <v-divider></v-divider>
+
+        <v-list>
+          <v-list-item>
+            <v-list-item-action>
+              <v-switch
+                v-model="message"
+                color="purple"
+              ></v-switch>
+            </v-list-item-action>
+            <v-list-item-title>Enable messages</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-action>
+              <v-switch
+                v-model="hints"
+                color="purple"
+              ></v-switch>
+            </v-list-item-action>
+            <v-list-item-title>Enable hints</v-list-item-title>
+          </v-list-item>
+        </v-list>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            text
+            @click="menu = false"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="primary"
+            text
+            @click="menu = false"
+          >
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-menu>
+  </div>
 </template>
 
 
 <script>
-export default {
-    props: {
-        value: Boolean,
-        title: String
-    },
-    name: 'ehc-feedback',
+  export default {
     data: () => ({
-        show: false,
-        loading: false,
-        buttonText: "Submit",
-        isValid: false,
-        shakeInvalid: false,
-        formData: {
-            upload:[]
-        },
-        meta: [
-            {type: "text",          label: "name",                      key: "name"},
-            {type: "email",         label: "email",                     key: "email"},
-            {type: "textArea",      label: "Description of issue",      key: "description"},
-            // {type: "fileInput",     label: "upload screenshot(s)",      key: "upload",          multiple:true},        
-        ],
-        sendEmailTo: ['tom@everhost.io','grant@everhost.io','ed@everhost.io'],
+      fav: true,
+      menu: false,
+      message: false,
+      hints: true,
     }),
-    mounted() {
-        this.formData.email = this.$store.getters.user.email
-    },
-    computed: {
-        showFeedback: {
-            get() {
-                return this.$store.getters.feedback.show
-            },
-            set() {
-                this.$store.commit("setFeedback", {show: false})
-            }
-        }
-    },
-    watch: {
-        value(val) {
-            if (val != this.show) {
-                this.show= val
-            }
-        },
-        show(val) {
-            if (val != this.value) {
-                this.$emit('input', val)
-            }
-        }
-    },
-    methods: {
-        submit() {
-            const delay = ms => new Promise(res => setTimeout(res, ms));
-            let that = this
-            this.loading=true
-            this.$store.dispatch("submitFeedback", this.formData).then(async() =>{
-                that.loading=false;
-                that.buttonText = "Thank you!";
-                await delay(500);
-                that.showFeedback= false
-                let mailObj = {
-                    to: this.sendEmailTo,
-                    subject: "Feedback from an Everhost beta tester",
-                    html: `
-                        <p>Description: ${this.formData.description}</p>
-                        <p>From: ${this.formData.name} - <a href="mailto:${this.formData.email}">${this.formData.email}</a></p>
-                        `
-                }
-                this.sendMail(mailObj)
-                that.formData= {upload:[]}
-            })
-        },
-        sendMail(mailObj) {
-            this.$store.dispatch("sendMail",mailObj)
-            .then( console.log("sendMail dispatched", mailObj) )
-        }
-    }
-}
-
+  }
 </script>
