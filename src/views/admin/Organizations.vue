@@ -31,6 +31,14 @@
         <v-card>
           <v-card-text>
             Members of {{ item.membersList }}
+            <v-icon
+              small
+              class="mr-2"
+              @click="showThisUidProperties(item)"
+            >
+              mdi-file-find
+            </v-icon>
+
           </v-card-text>
         </v-card>
         <v-card>
@@ -63,7 +71,11 @@ export default {
     updateLabel: function(item) {
       console.log("updateLabel",item.companyLabel, item.orgId)
       this.$store.dispatch('addWhiteLabel',{orgId: item.orgId, label: item.companyLabel})
-    }
+    },
+    showThisUidProperties: function(item){
+      console.log("showThisUidProperties",item)
+      this.$router.push({name: "Properties", query: {search: item.membersList, showAll: true}})  
+    },
   },
   computed: {
     orgs: function(){

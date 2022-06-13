@@ -3,6 +3,7 @@
   {{searchString}}
   <v-card>
 
+<!-- DOWNLOAD BUTTON -->
     <v-card-text>
         <ehc-download-button 
           :label="'Download as CSV'" 
@@ -13,8 +14,12 @@
         />  
     </v-card-text>
 
+<!-- TABLE HEADER -->
     <v-card-text class="text-center text-h4">USERS</v-card-text>
+
+<!-- FOR ADMIN ONLY -->
     <v-card-actions v-if="userIsAdmin">
+    <!-- CREATE NEW USER BUTTON -->
       <v-btn @click="showNewUser = !showNewUser" class="float-right mr-2">
         Create a new user
       </v-btn>
@@ -22,16 +27,16 @@
         <ehc-form :meta="newUserMeta" v-model="newUserFormData" @submit="submitNewUser()"></ehc-form>
       </ehc-dialog>
 
+    <!-- MAKE USER ADMIN -->
       <v-btn @click="showPromote = !showPromote" class="float-right mr-1">
         Promote user to admin
       </v-btn>
-
-
       <ehc-dialog v-model="showPromote" :title="title" width="500" close>
         <ehc-form :meta="meta" v-model="formData" @submit="submitPromotion()"></ehc-form>
       </ehc-dialog>
    </v-card-actions>
   </v-card>
+
   <div>
     <v-data-table
       :headers="headers"
@@ -47,18 +52,8 @@
         itemsPerPageOptions: [50,100,150.-1]
       }"
     >
-    <!-- <template v-slot:top>
 
-      <v-card>
-      <v-text-field
-        v-model="searchs"
-        label="Search"
-        class="mx-4"
-      ></v-text-field>
-      </v-card>
-
-
-    </template> -->
+    <!-- LINK TO VIEW THIS USERS PROPERTIES -->
       <template v-slot:item.actions="{ item }">
       <v-icon
         small
@@ -69,6 +64,8 @@
       </v-icon>
     </template>
 
+    <!-- EXPANSION ITEMS -->
+    <!-- MOVE AN EXISTING PROPERTY TO THIS USER -->
     <template v-slot:expanded-item="{ headers, item }">
       <td :colspan="headers.length">
         <span style="font-size: .8em;">This feature is in 'beta'. Be sure you enter a valid propertyId<br/></span>
@@ -94,6 +91,7 @@
       </td>
     </template>
     </v-data-table>
+
     <ehc-alert-confirm @confirmAction="confirmAction" ></ehc-alert-confirm>
   </div>
 
@@ -278,6 +276,9 @@ export default {
   },
   created(){
     if ( !this.userIsAdmin ) { this.$router.push( {name: "Properties"} ) }
+    if ( this.$route && this.$route.query ) {
+      this.$store.commit('setSearchString', this.$route.query.search)
+    }
     this.$store.dispatch('subscribeToUsers')
   }
 }
