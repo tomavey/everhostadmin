@@ -35,7 +35,7 @@
         </v-card>
         <v-card>
           <v-card-text>
-            Add a company white label:<v-text-field v-model="whiteLabel" @change="updateLabel(item.orgId)"></v-text-field>
+            Add a company white label (displays above footer):<v-text-field v-model="item.companyLabel" @change="updateLabel(item)"></v-text-field>
           </v-card-text>
         </v-card>
       </td>
@@ -55,14 +55,14 @@ export default {
     return {
       pageTitle: "Organizations",
       expanded: [],
-      singleExpand: false,
+      singleExpand: true,
       whiteLabel: "",
     }
   },
   methods: {
-    updateLabel: function(orgId) {
-      console.log("updateLabel",this.whiteLabel, orgId)
-      this.$store.dispatch('addWhiteLabel',{orgId: orgId, label: this.whiteLabel})
+    updateLabel: function(item) {
+      console.log("updateLabel",item.companyLabel, item.orgId)
+      this.$store.dispatch('addWhiteLabel',{orgId: item.orgId, label: item.companyLabel})
     }
   },
   computed: {
