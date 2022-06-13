@@ -201,7 +201,7 @@ export default {
     created() {
         this.subscribeToProperties(this.showAll)
         if ( this.$route && this.$route.query ) {
-            this.search = this.$route.query.search
+            this.$store.commit('setSearchString', this.$route.query.search)
         }
         if ( this.$route && this.$route.query && this.userIsAdmin ) {
             this.showAll = this.$route.query.showAll
