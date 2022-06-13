@@ -6,10 +6,10 @@
     :items-per-page="30"
     :item-class="itemRowBackground"
     class="elevation-1"
-    :single-expand="singleExpand"
+    single-expand=true
     :expanded.sync="expanded"    
     :show-expand = userIsAdmin  
-    item-key="index"   
+    item-key="propertyId"   
     :footer-props="{
       showFirstLastPage: true,
       itemsPerPageOptions: [50,100,150.-1]
