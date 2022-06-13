@@ -118,7 +118,7 @@ export default {
       showPromote: false,
       showNewUser: false,
       expanded: [],
-      singleExpand: false,
+      singleExpand: true,
       newPropertyId: null,
       newPropertyMessage: null,
       moveGuestInfo: true,
