@@ -15,7 +15,7 @@
 
 <template>
 
-      <v-navigation-drawer v-model="show" v-bind="$attrs" absolute class="black2--text" width="350">
+      <v-navigation-drawer v-model="show" v-bind="$attrs" absolute temporary class="black2--text" width="350">
         <v-container>
             <div>
                 <h1>{{title}}</h1>

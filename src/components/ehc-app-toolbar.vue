@@ -52,7 +52,6 @@
            </template>
             <ehc-profile-card @changeProfilePic="picDialog=true"></ehc-profile-card>
         </v-menu>
-           <span class="mx-3">{{org.name}}</span>
 
         <ehc-image-upload 
             v-model="picDialog" 

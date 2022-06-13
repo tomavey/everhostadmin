@@ -1,3 +1,5 @@
+// needs a array of properties
+// <ehc-properties-table :properties="propertiesFiltered" @displayAsGrid='displayAs = "gallery"' ></ehc-properties-table>
 <template>
 <v-container fluid>
   <v-data-table
@@ -247,7 +249,7 @@ export default {
       if ( !item.publishedAt ) { return "" }
       return ""
     },
-           setSearchString(searchString){
+    setSearchString(searchString){
       this.$store.commit("setSearchString", searchString)
       this.$emit('displayAsGrid')
     },
