@@ -30,14 +30,20 @@
       <td :colspan="headers.length">
         <v-card>
           <v-card-text>
-            Members of {{ item.membersList }}
-            <v-icon
-              small
-              class="mr-2"
-              @click="showThisUidProperties(item)"
-            >
-              mdi-file-find
-            </v-icon>
+            Members:
+              <ul>
+                <li v-for="memberId in item.members" :key="memberId">
+                  {{memberId}} 
+                  <v-icon
+                    small
+                    class="mr-2"
+                    @click="showThisUidProperties(memberId)"
+                  >
+                    mdi-file-find
+                  </v-icon>
+                </li>
+              </ul>
+            
 
           </v-card-text>
         </v-card>
@@ -72,9 +78,9 @@ export default {
       console.log("updateLabel",item.companyLabel, item.orgId)
       this.$store.dispatch('addWhiteLabel',{orgId: item.orgId, label: item.companyLabel})
     },
-    showThisUidProperties: function(item){
-      console.log("showThisUidProperties",item)
-      this.$router.push({name: "Properties", query: {search: item.membersList, showAll: true}})  
+    showThisUidProperties: function(memberId){
+      console.log("showThisUidProperties",memberId)
+      this.$router.push({name: "Properties", query: {search: memberId, showAll: true}})  
     },
   },
   computed: {

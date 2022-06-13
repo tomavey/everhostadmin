@@ -1,11 +1,12 @@
 <template>
-    <v-app-bar flat dense app         clipped-left class="px-0 mx-0 mainAppBar" color="appBar">
-        <!-- <v-toolbar-title v-if="userIsAdmin">spacer</v-toolbar-title> -->
+    <v-app-bar flat dense app clipped-left class="px-0 mx-0 mainAppBar" color="appBar">
+
         <v-toolbar-title class="pl-0 ml-0 toolbartitle">
             <v-img src="@/assets/everhost_v3_logo 1.png" contain height="50px" min-width="190px" max-width="290px" class="ma-0 pa-0" @click="drawerShow = !drawerShow"></v-img>
         </v-toolbar-title>
        
         <v-divider vertical inset></v-divider>
+
         <v-tabs
             color="primary"
             v-model="tab"
@@ -24,9 +25,10 @@
             active-class="active"
             outlined
             label="Search"
+            clearable
             rounded
             dense
-            class="mt-7"
+            class="mt-7 searchField"
             v-model="searchString"
         >
         </v-text-field>
@@ -189,6 +191,9 @@ export default {
 }
 .toolbartitle {
     width: 300px;
+}
+.searchField{
+    width: 600px;
 }
  
 
