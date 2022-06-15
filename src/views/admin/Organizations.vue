@@ -8,10 +8,9 @@
       :items="orgs"
       item-key="creator"
       class="elevation-1"
+      @click:row="rowClick"
+      :loading = "loadingOrgs"
       :search="searchString"
-      :single-expand="singleExpand"
-      show-expand
-      :expanded.sync="expanded"
       :footer-props="{
         showFirstLastPage: true,
         itemsPerPageOptions: [50,100,150.-1]
@@ -25,34 +24,6 @@
       >
         mdi-file-find
       </v-icon>
-    </template>
-    <template v-slot:expanded-item="{ headers, item }">
-      <td :colspan="headers.length">
-        <v-card>
-          <v-card-text>
-            Members:
-              <ul>
-                <li v-for="memberId in item.members" :key="memberId">
-                  {{memberId}} 
-                  <v-icon
-                    small
-                    class="mr-2"
-                    @click="showThisUidProperties(memberId)"
-                  >
-                    mdi-file-find
-                  </v-icon>
-                </li>
-              </ul>
-            
-
-          </v-card-text>
-        </v-card>
-        <v-card>
-          <v-card-text>
-            Add a company white label (displays above footer):<v-text-field v-model="item.companyLabel" @change="updateLabel(item)"></v-text-field>
-          </v-card-text>
-        </v-card>
-      </td>
     </template>
     </v-data-table>
   </div>
@@ -71,6 +42,7 @@ export default {
       expanded: [],
       singleExpand: true,
       whiteLabel: "",
+      loading: false,
     }
   },
   methods: {
@@ -81,6 +53,10 @@ export default {
     showThisUidProperties: function(memberId){
       console.log("showThisUidProperties",memberId)
       this.$router.push({name: "Properties", query: {search: memberId, showAll: true}})  
+    },
+    rowClick: function(item) {
+      console.log("rowClick",item)
+      this.$router.push(`/organization/${item.orgId}`)  
     },
   },
   computed: {
@@ -95,6 +71,9 @@ export default {
           if(a.name > b.name) { return 1; }
           return 0;
       })
+    },
+    loadingOrgs: function(){
+      return this.orgs.length == 0
     },
     headers: function(){
       return [
@@ -115,7 +94,6 @@ export default {
             value: 'creator',
           },
           { text: 'View', value: 'actions', sortable: false },
-          { text: '', value: 'data-table-expand' },
         ]
     },
     searchString: function(){

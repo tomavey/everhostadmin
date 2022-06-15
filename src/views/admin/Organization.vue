@@ -91,6 +91,7 @@ export default {
   },
   created(){
     this.$store.dispatch('getOrganization',this.$route.params.id)
+    this.$store.dispatch('getMembers',this.$route.params.id)
   },
 }
 </script>

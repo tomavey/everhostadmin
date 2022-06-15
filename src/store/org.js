@@ -14,12 +14,14 @@ export default {
     },
     orgID: null,
     orgs: [],
+    members: {},
   },
   getters: {
     org: state=> state.org,
     orgID: state=> state.orgID,
     orgStatus: state=> state.orgStatus,
     orgs: state=> state.orgs,
+    members: state=> state.members,
   },
   mutations: {
     setOrg (state, payload) {
@@ -35,6 +37,9 @@ export default {
       for (var key in payload) { //change only the settings that were input everything else keep the same
         state.orgStatus[key] = payload[key]
       }
+    },
+    setMembers (state, payload) {
+      state.members = payload
     },
   },   
   actions: {
@@ -120,6 +125,17 @@ export default {
       .then( () => {
         console.log(`Org - ${obj.name} updated`)  
       })   
-    },     
+    },
+    async getMembers (context, orgId) {
+      let members = {}  //members is an object with the userId as the key and the user object as the value
+      let orgRef = firebase.firestore().collection("organizations").doc(orgId)
+      await orgRef.get()
+      .then( doc => {
+        members = doc.data().members
+      })
+      members.forEach( (member) => {
+        console.log("member", member)
+      })
+    }
   }
 }

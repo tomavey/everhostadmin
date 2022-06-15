@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto text-center">
-      <v-card-text v-for="field in fields" :key="field">
+      <v-card-text v-for="(field, i) in fields" :key="i">
         {{field.label}}: {{org[field.key]}}
       </v-card-text>
       <v-card-text>
@@ -28,6 +28,12 @@ export default {
     return {
     }
   },
+  methods:{
+    showThisUidProperties: function(memberId){
+      console.log("showThisUidProperties",memberId)
+      this.$router.push({name: "Properties", query: {search: memberId, showAll: true}})  
+    },
+  }
 }
 </script>
 
