@@ -1,9 +1,9 @@
 <template>
   <v-card class="mx-auto text-center">
-      <v-card-text v-for="(field, i) in fields" :key="i">
+      <v-card-text v-for="(field, i) in fields" :key="i" class="text-h5">
         {{field.label}}: {{org[field.key]}}
       </v-card-text>
-      <v-card-text>
+      <v-card-text class="text-subtitle-1">
         Members:
         <ul>
           <li v-for="memberId in org.members" :key="memberId">
