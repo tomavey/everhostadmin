@@ -92,6 +92,16 @@ export default {
         context.commit("setOrgs",orgsArray)
       })
     },
+    async getOrganization(context, payload) {
+      let org = {}
+      var orgRef = firebase.firestore().collection("organizations").doc(payload)
+      orgRef.get()
+      .then( doc => {
+        org = doc.data()
+        org.orgId = doc.id
+        context.commit("setOrg",org)  //set the org in the store  so it can be used in the component
+      })
+    },
     async addWhiteLabel (context, payload) {
       console.log("Adding White Label", payload)
       let orgRef = firebase.firestore().collection("organizations").doc(payload.orgId)
@@ -101,6 +111,15 @@ export default {
       .then( () => {
         console.log(`White Label - ${obj.companyLabel} added to ${payload.orgId}`)  
       }) 
-    }  
+    },
+    async updateOrg (context, payload) {
+      console.log("Updating Org", payload)
+      let orgRef = firebase.firestore().collection("organizations").doc(payload.orgId)
+      let obj = {...payload}
+      orgRef.update(obj)
+      .then( () => {
+        console.log(`Org - ${obj.name} updated`)  
+      })   
+    },     
   }
 }

@@ -107,11 +107,21 @@
                                     @blur="$emit('blur', {key: field.key, value: data[field.key]})"
                                     @change="$emit('change', {key: field.key, value: data[field.key]})">
                                     </v-textarea>
+                    <v-text-field   v-else-if="field.type == 'link'" 
+                                    :rules="linkRules(field)"
+                                    :color="color"
+                                    outlined 
+                                    :dense = dense
+                                    v-bind="field" 
+                                    v-model="data[field.key]" 
+                                    @blur="onBlurLink(field.key, data[field.key])"
+                                    @change="onChangeLink(field.key, data[field.key])">
+                                    </v-text-field>                                       
                     <ehc-file-input   
-                                            :color="color" 
-                                            v-else-if="field.type == 'fileInput'" 
-                                            v-model="data[field.key]" 
-                                            :props="field"></ehc-file-input>
+                                    :color="color" 
+                                    v-else-if="field.type == 'fileInput'" 
+                                    v-model="data[field.key]" 
+                                    :props="field"></ehc-file-input>
                     <v-select
                         v-else-if="field.type === 'select'"
                         v-model="data[field.key]"
@@ -225,6 +235,20 @@
                 if (field.required) { rule.push(v => !!v || errorMessage)}
 
                 return rule
+            },
+            linkRules(field) {
+                let rule = []
+                let errorMessage = (field.errorMessage) ? field.errorMessage : "required"
+                if (field.required) { rule.push(v => !!v || errorMessage)}
+                rule.push(v => /^$|null|([-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)|^(?![\s\S]))/.test(v) || 'Must be valid link (including https:// or http://)')
+
+                return rule
+            },
+            onBlurLink(key,value){
+                this.$emit('blur', {key: key, value: newValue})
+            },
+            onChangeLink(key,value){
+                this.$emit('change', {key: key, value: newValue})
             },
         },
     }

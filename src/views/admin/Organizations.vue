@@ -21,7 +21,7 @@
       <v-icon
         small
         class="mr-2"
-        @click="alert('?')"
+        @click="$router.push(`/organization/${item.orgId}`)"
       >
         mdi-file-find
       </v-icon>
@@ -114,6 +114,7 @@ export default {
             sortable: true,
             value: 'creator',
           },
+          { text: 'View', value: 'actions', sortable: false },
           { text: '', value: 'data-table-expand' },
         ]
     },

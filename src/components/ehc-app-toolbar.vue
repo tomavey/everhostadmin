@@ -121,7 +121,7 @@ export default {
     },
     methods: {
         setProfilePic(url) {
-            console.log("profile pic set", url)
+            // console.log("profile pic set", url)
             this.apiUpdateUser(this.user.uid,{photoURL: url}).then(() => {
                 this.apiGetUser(this.user.uid).then((user) => {
                     this.$store.commit('setUser', user)
@@ -134,7 +134,7 @@ export default {
     },
     watch: {
         $route(val) {
-            console.log("tab changed", val)
+            // console.log("tab changed", val)
             let clearSearchStringOn = [
                 "GuestData",
                 "Support",

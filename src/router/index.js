@@ -8,6 +8,7 @@ import Users from '../views/admin/Users.vue'
 import EmailToSend from '../views/admin/EmailToSend.vue'
 import Support from '../views/Support.vue'
 import Organizations from '../views/admin/Organizations.vue'
+import Organization from '../views/admin/Organization.vue'
 import UpdatesLog from '../views/admin/UpdatesLog.vue'
 import Firebase from 'firebase'
 
@@ -61,6 +62,10 @@ const routes = [
   {
     path: "/organizations",
     component: Organizations,
+  },
+  {
+    path: "/organization/:id",
+    component: Organization,
   },
   {
     path: "/emailtosend",
