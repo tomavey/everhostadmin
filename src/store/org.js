@@ -14,7 +14,7 @@ export default {
     },
     orgID: null,
     orgs: [],
-    members: {},
+    members: [],
   },
   getters: {
     org: state=> state.org,
@@ -39,7 +39,7 @@ export default {
       }
     },
     setMembers (state, payload) {
-      state.members = payload
+      state.org.members = payload
     },
   },   
   actions: {
@@ -127,15 +127,22 @@ export default {
       })   
     },
     async getMembers (context, orgId) {
-      let members = {}  //members is an object with the userId as the key and the user object as the value
+      let membersArr = []  
+      let members = [] //members is an array of user objects
       let orgRef = firebase.firestore().collection("organizations").doc(orgId)
       await orgRef.get()
       .then( doc => {
-        members = doc.data().members
+        membersArr = doc.data().members
+        })
+      membersArr.forEach( async (member) => {
+        let userRef = firebase.firestore().collection("users").doc(member)
+        await userRef.get()
+        .then( doc => {
+          members.push(doc.data())
+        })
+        console.log("members", members)
       })
-      members.forEach( (member) => {
-        console.log("member", member)
-      })
+      context.commit("setMembers",members)
     }
   }
 }

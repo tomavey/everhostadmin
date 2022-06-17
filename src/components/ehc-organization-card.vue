@@ -3,20 +3,27 @@
       <v-card-text v-for="(field, i) in fields" :key="i" class="text-h5">
         {{field.label}}: {{org[field.key]}}
       </v-card-text>
-      <v-card-text class="text-subtitle-1">
+      <v-card-text class="text-h5">
         Members:
-        <ul>
-          <li v-for="memberId in org.members" :key="memberId">
-            {{memberId}} 
-            <v-icon
-              small
-              class="mr-2"
-              @click="showThisUidProperties(memberId)"
-            >
-              mdi-file-find
-            </v-icon>
-          </li>
-        </ul>
+        <v-data-table
+          :headers="headers"
+          :items = "org.members"
+          class="mx-10"
+          >
+          <template v-slot:item.uid="{ item }">
+            <td>
+              {{ item.uid }}
+              <v-icon
+                small
+                class="mr-2"
+                @click="showThisUidProperties(item.uid)"
+              >
+                mdi-file-find
+              </v-icon>
+            </td>
+          </template>
+
+        </v-data-table>
       </v-card-text>
   </v-card>
 </template>
@@ -26,6 +33,11 @@ export default {
   props: ['org','fields'],
   data: function() {
     return {
+      headers: [
+        { text: 'Display Name', value: 'displayName' },
+        { text: 'Email', value: 'email' },
+        { text: 'ID', value: 'uid' },
+      ]
     }
   },
   methods:{
