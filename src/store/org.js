@@ -143,6 +143,21 @@ export default {
         console.log("members", members)
       })
       context.commit("setMembers",members)
+    },
+    async addUserToOrg (context, payload) {
+      console.log("Adding User to Org", payload)
+      //check is user exists
+      // let userExists = await this.$store.dispatch('doesUserExist', payload.uid)
+      let usersRef = firebase.firestore().collection('users').doc(payload.uid)
+      let userExists = await usersRef.get()
+      if (userExists) {
+        console.log("Adding Member", payload)
+        let orgRef = firebase.firestore().collection("organizations").doc(payload.orgId)
+        return await orgRef.update({members: firebase.firestore.FieldValue.arrayUnion(payload.uid)})
+        .then( () => {console.log("Member Added")})
+      } else {
+        console.log("User does not exist")
+      }
     }
   }
 }

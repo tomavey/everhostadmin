@@ -9,6 +9,7 @@
       <v-btn icon @click="showInfo = !showInfo; showForm=!showForm" class="mx-auto text-center"><v-icon>mdi-pencil</v-icon></v-btn>
      </v-toolbar>
     <ehc-organization-card :fields="fieldsForCard" :org="org" v-if="showInfo" />
+    <ehc-organization-add-member :org="org" />
     <v-container v-if="showForm">
         <ehc-form 
             v-model="formData" 
@@ -22,9 +23,10 @@
 </template>
 
 <script>
+import EhcOrganizationAddMember from '../../components/ehc-organization-add-member.vue'
 import ehcOrganizationCard from '../../components/ehc-organization-card.vue'
 export default {
-  components: { ehcOrganizationCard },
+  components: { ehcOrganizationCard, EhcOrganizationAddMember },
   data: function() {
     return {
       formData: {},

@@ -23,6 +23,7 @@
       <v-btn @click="showNewUser = !showNewUser" class="float-right mr-2">
         Create a new user
       </v-btn>
+      <!-- CREATE A NEW USER DIALOG -->
       <ehc-dialog v-model="showNewUser" title="Create a new user" width="500" close>
         <ehc-form :meta="newUserMeta" v-model="newUserFormData" @submit="submitNewUser()"></ehc-form>
       </ehc-dialog>

@@ -6,7 +6,7 @@
     <v-data-table
       :headers="headers"
       :items="orgs"
-      item-key="creator"
+      item-key="orgId"
       class="elevation-1"
       @click:row="rowClick"
       :loading = "loadingOrgs"
