@@ -9,7 +9,9 @@
           :headers="headers"
           :items = "org.members"
           class="mx-10"
+          v-if="org.members[0] && org.members[0].uid"
           >
+
           <template v-slot:item.uid="{ item }">
             <td>
               {{ item.uid }}
