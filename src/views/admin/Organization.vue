@@ -25,6 +25,7 @@
 <script>
 import EhcOrganizationAddMember from '../../components/ehc-organization-add-member.vue'
 import ehcOrganizationCard from '../../components/ehc-organization-card.vue'
+
 export default {
   components: { ehcOrganizationCard, EhcOrganizationAddMember },
   data: function() {

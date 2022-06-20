@@ -21,22 +21,29 @@
           </v-tab>
         </v-tabs>
         <ehc-form :meta="metaForForm" v-model="formData" @submit="submitNewUser()"></ehc-form>
+        <span class="error--text mt-0 pt-0" >{{loginError}}</span>
+
       </ehc-dialog>
 </v-container>  
 </template>
 
 <script>
+import Auth from '@/mixins/auth'
+
 export default {
   props: ['org'], 
+  mixins: [Auth],
   data: function() {
     return {
       formData: {},
+      credentials: {},
       meta: [
-        {type: 'text',              label: 'User Id',                   key: 'uid',        existingUser: true},
-        {type: "text",              label: "Display Name",              key: "displayName",        existingUser: false},
-        {type: "email",             label: "Email",                     key: "email",        existingUser: false},
-        {type: "intPhoneNumber",    label: "Phone",                     key: "phone",        existingUser: false},
-        {type: "button",            label: "submit",                    key: "submit",          emitOnClick: "submit"},
+        {type: 'text',              label: 'User Id',                   key: 'uid',           existingUser: true},
+        {type: "text",              label: "Display Name",              key: "displayName",   existingUser: false},
+        {type: "email",             label: "Email",                     key: "email",         existingUser: false},
+        {type: "text",              label: "Temporary Password",        key: "password",      existingUser: false},
+        {type: "intPhoneNumber",    label: "Phone",                     key: "phone",         existingUser: false},
+        {type: "button",            label: "submit",                    key: "submit",        emitOnClick: "submit"},
       ],
       shakeVariable: true,
       isValid: false,
@@ -47,10 +54,19 @@ export default {
       items: [
           '...from a brand new user', '... from an existing user',
         ],
+      loginError: "",
     }
   },
  
   methods: {
+    login: function(credentials) {
+        console.log("login", credentials)
+        this.$store.dispatch('signInWithEmailAndPassword', credentials).then(res=>{
+                    console.log("logged in")
+                }).catch((err) => {
+                    this.loginError = err.message
+                })
+    },
     submitNewUser: function(){
       this.tab ? this.submitNewUserFromExistingUser() : this.submitNewUserFromNewUser();
     },
@@ -62,9 +78,13 @@ export default {
       console.log("submitNewUserFromExistingUser", payload)
       this.$store.dispatch('addUserToOrg',payload)
     },
-    submitNewUserFromNewUser: function(){
-      alert('submitNewUserFromNewUser not hooked up yet');
-    },
+    submitNewUserFromNewUser: async function(){
+      console.log("submitNewUserFromNewUser", this.formData)
+      await this.$store.dispatch('createUserWithEmailAndPassword',this.formData)
+      .then((res) => {
+        console.log("user created", res)
+      }),
+    }  
   },
 
   computed: {

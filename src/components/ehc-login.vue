@@ -202,14 +202,6 @@ export default {
     },
   },
   methods: {
-    login: function(credentials) {
-        console.log("login", credentials)
-        this.$store.dispatch('signInWithEmailAndPassword', credentials).then(res=>{
-                    console.log("logged in")
-                }).catch((err) => {
-                    this.loginError = err.message
-                })
-    },
     createNewAccount: async function(){
         this.createAccountLoading = true      
       let obj = {
@@ -248,6 +240,14 @@ export default {
       .catch( err => {
           console.log("error creating user", err)
       })
+    },
+    login: function(credentials) {
+        console.log("login", credentials)
+        this.$store.dispatch('signInWithEmailAndPassword', credentials).then(res=>{
+                    console.log("logged in")
+                }).catch((err) => {
+                    this.loginError = err.message
+                })
     },
     logout: function() {
         this.$store.dispatch('logout')
