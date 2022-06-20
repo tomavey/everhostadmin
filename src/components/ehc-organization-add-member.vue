@@ -20,7 +20,7 @@
             {{ item }}
           </v-tab>
         </v-tabs>
-        <ehc-form :meta="metaForForm" v-model="formData" @submit="submitNewUser()"></ehc-form>
+        <ehc-form :meta="metaForForm" v-model="formData" @submit="submitNewMember()"></ehc-form>
         <span class="error--text mt-0 pt-0" >{{loginError}}</span>
 
       </ehc-dialog>
@@ -67,24 +67,34 @@ export default {
                     this.loginError = err.message
                 })
     },
-    submitNewUser: function(){
-      this.tab ? this.submitNewUserFromExistingUser() : this.submitNewUserFromNewUser();
+    submitNewMember: function(){
+      this.tab ? this.submitNewMemberFromExistingUser() : this.submitNewMemberFromNewUser();
     },
-    submitNewUserFromExistingUser: function(){
+    submitNewMemberFromExistingUser: async function(){
       let payload = {
         uid: this.formData.uid,
         orgId: this.org.orgId,
       }
       console.log("submitNewUserFromExistingUser", payload)
-      this.$store.dispatch('addUserToOrg',payload)
+      await this.$store.dispatch('addUserToOrg',payload)
+      await this.$store.dispatch('getMembers',payload.orgId)
+      this.showNewUser = false
+
     },
-    submitNewUserFromNewUser: async function(){
+    submitNewMemberFromNewUser: async function(){
       console.log("submitNewUserFromNewUser", this.formData)
       await this.$store.dispatch('createUserWithEmailAndPassword',this.formData)
-      .then((res) => {
-        console.log("user created", res)
-      }),
-    }  
+      .then((user) => {
+        // let obj = {
+        //   uid: res.user.uid,
+        //   orgId: this.org.orgId,
+        // }
+        // this.$store.dispatch('addUserToOrg',obj)
+        console.log("user created", user)
+      }), (err) => {
+        console.log("error creating user", err)
+      } 
+    },
   },
 
   computed: {

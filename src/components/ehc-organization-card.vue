@@ -1,5 +1,6 @@
 <template>
   <v-card class="mx-auto text-center">
+    {{org}}
       <v-card-text v-for="(field, i) in fields" :key="i" class="text-h5">
         {{field.label}}: {{org[field.key]}}
       </v-card-text>
