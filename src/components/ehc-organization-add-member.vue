@@ -42,7 +42,7 @@ export default {
         {type: "text",              label: "Display Name",              key: "displayName",   existingUser: false},
         {type: "email",             label: "Email",                     key: "email",         existingUser: false},
         {type: "text",              label: "Temporary Password",        key: "password",      existingUser: false},
-        {type: "intPhoneNumber",    label: "Phone",                     key: "phone",         existingUser: false},
+        {type: "intPhoneNumber",    label: "Phone",                     key: "phoneNumber",         existingUser: false},
         {type: "button",            label: "submit",                    key: "submit",        emitOnClick: "submit"},
       ],
       shakeVariable: true,
@@ -77,24 +77,48 @@ export default {
       }
       console.log("submitNewUserFromExistingUser", payload)
       await this.$store.dispatch('addUserToOrg',payload)
-      await this.$store.dispatch('getMembers',payload.orgId)
+      // await this.$store.dispatch('getMembers',payload.orgId)
       this.showNewUser = false
 
     },
     submitNewMemberFromNewUser: async function(){
       console.log("submitNewUserFromNewUser", this.formData)
-      await this.$store.dispatch('createUserWithEmailAndPassword',this.formData)
-      .then((user) => {
-        // let obj = {
-        //   uid: res.user.uid,
-        //   orgId: this.org.orgId,
-        // }
-        // this.$store.dispatch('addUserToOrg',obj)
-        console.log("user created", user)
+      let credentials = this.formData
+      let obj = {
+        'email': credentials.email,
+        'password': credentials.password,
+        'displayName': credentials.displayName,
+        'phoneNumber': credentials.phoneNumber
+      }
+      await this.$store.dispatch('createUserWithEmailAndPassword',obj)
+      .then((res) => {
+        console.log("user created", res)
+        let newUserId = this.getUserIdFromEmail(credentials.email)
+        let payload = {
+          uid: newUserId,
+          orgId: this.org.orgId,
+        }
+        console.log("submitNewUserFromNewUseraddUserToOrg", payload)
+        this.$store.dispatch('addUserToOrg',payload)
       }), (err) => {
         console.log("error creating user", err)
       } 
     },
+    getUserIdFromEmail: async function(email){
+      let user = await this.$store.dispatch('getUserFromEmail',obj.email)
+      .then(user => {
+        return user.uid
+      })
+      .catch( (err) => {
+        console.log("error getting user", err)
+      })
+    },  
+  },
+
+  created(){
+    let obj = {email: "tomavey@outlook.com"}
+    this.$store.dispatch('getUserFromEmail',obj.email)
+    .then(user => console.log("getUserFromEmail: ", obj.email, user.data()))
   },
 
   computed: {
@@ -104,6 +128,7 @@ export default {
     existingUser: function(){
       return this.tab ? true : false
     },
+
   },
 }
 </script>

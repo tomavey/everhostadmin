@@ -86,10 +86,14 @@ export default {
       let userRef = firebase.firestore().collection("users").doc(uid)
       await addAdmin({'uid': uid})
       await userRef.set({rights: {"admin": true}}, {merge:true})
-    }
+    },
+    async getUserFromEmail(context, email) {
+      console.log("getUserFromEmail", email)
+      const getUserFromEmail =  firebase.functions().httpsCallable('getUserObjFromEmail')
+      return await getUserFromEmail({email: email})
+    }  
   }
 }
-
 
 
 

@@ -33,7 +33,7 @@
 
 <script>
 export default {
-  props: ['org','fields'],
+  props: ['fields'],
   data: function() {
     return {
       headers: [
@@ -42,6 +42,12 @@ export default {
         { text: 'ID', value: 'uid' },
       ]
     }
+  },
+  computed: {
+    org() {
+      //return org from store
+      return this.$store.getters.org
+    },
   },
   methods:{
     showThisUidProperties: function(memberId){

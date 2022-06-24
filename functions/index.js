@@ -24,6 +24,16 @@ exports.addAdminRole = functions.https.onCall( (data, context) => {
   })
 })
 
+exports.getUserObjFromEmail = functions.https.onCall((data, context) => {
+  return admin.auth().getUserByEmail(data.email)
+    .then( (user) => {
+      return user
+    })
+    .catch( (err) => {
+      return err
+    })  
+})
+
 exports.addAdminRoleByUid = functions.https.onCall( (data, context) => {
   console.log(data)
     return admin.auth().setCustomUserClaims(data.uid, {
