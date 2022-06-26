@@ -8,7 +8,7 @@
       <v-spacer></v-spacer>
       <v-btn icon @click="showInfo = !showInfo; showForm=!showForm" class="mx-auto text-center"><v-icon>mdi-pencil</v-icon></v-btn>
      </v-toolbar>
-    <ehc-organization-card :fields="fieldsForCard" :org="org" v-if="showInfo" />
+    <ehc-organization-card :fields="fieldsForCard" v-if="showInfo" />
     <ehc-organization-add-member :org="org" />
     <v-container v-if="showForm">
         <ehc-form 

@@ -75,14 +75,16 @@ export default {
         uid: this.formData.uid,
         orgId: this.org.orgId,
       }
-      console.log("submitNewUserFromExistingUser", payload)
+      // add userId to org
       await this.$store.dispatch('addUserToOrg',payload)
-      // await this.$store.dispatch('getMembers',payload.orgId)
+      // Refresh org members
+      await this.$store.dispatch('getMembers',payload.orgId)
+      // close dialog
       this.showNewUser = false
 
     },
     submitNewMemberFromNewUser: async function(){
-      console.log("submitNewUserFromNewUser", this.formData)
+      // create a new user
       let credentials = this.formData
       let obj = {
         'email': credentials.email,
@@ -91,36 +93,28 @@ export default {
         'phoneNumber': credentials.phoneNumber
       }
       await this.$store.dispatch('createUserWithEmailAndPassword',obj)
-      .then(() => {
-        console.log("user created")
-        let newUserId = this.getNewUserIDFromEmail(credentials.email)
-        .then(user => console.log(user))
+      // get the uid of the new user
+      await this.$store.dispatch('getNewUserIDFromEmail',obj.email)
+      .then(userId => { 
+        // add the new user to the org
         let payload = {
-          uid: newUserId,
+          uid: userId,
           orgId: this.org.orgId,
         }
-        console.log("submitNewUserFromNewUseraddUserToOrg", payload)
         this.$store.dispatch('addUserToOrg',payload)
-      }), (err) => {
-        console.log("error creating user", err)
-      } 
+      })
+      .catch(err => {
+        console.log("getNewUserIDFromEmail Error: ", err)
+      })
+      // get the members of the org
+      await this.$store.dispatch('getMembers',payload.orgId)
+      // close the dialog
+      this.showNewUser = false
     },
-    getNewUserIDFromEmail: async function(email){
-      let user = await this.$store.dispatch('getNewUserIDFromEmail',email)
-      .then(user => {
-        return user.uid
-      })
-      .catch( (err) => {
-        console.log("error getting user", err)
-      })
-    },  
   },
 
   created(){
-    let obj = {email: "tomavey@outlook.com"}
-    this.$store.dispatch('getNewUserIDFromEmail',obj.email)
-    .then(userId => console.log("getNewUserIDFromEmail: ", obj.email, userId))
-  },
+    },
 
   computed: {
     metaForForm: function(){

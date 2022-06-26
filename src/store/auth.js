@@ -93,14 +93,12 @@ export default {
       await userRef.set({rights: {"admin": true}}, {merge:true})
     },
     async getNewUserIDFromEmail(context, email) {
-      console.log("getNewUserIDFromEmail", email)
       const getUserFromEmail =  firebase.functions().httpsCallable('getUserObjFromEmail')
       return await getUserFromEmail({email: email})
       .then( (user) => {
-        console.log("gotUserIdFromEmail", user.data.uid)
         return user.data.uid
       }).catch( error => {
-        console.log("first catch",error)
+        console.log("getNewUserIDFromEmail Error",error)
       })
     }  
   }

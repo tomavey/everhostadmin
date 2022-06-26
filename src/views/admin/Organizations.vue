@@ -7,7 +7,7 @@
       :headers="headers"
       :items="orgs"
       item-key="orgId"
-      class="elevation-1"
+      class="elevation-1 row-pointer"
       @click:row="rowClick"
       :loading = "loadingOrgs"
       :search="searchString"
@@ -82,16 +82,19 @@ export default {
             align: 'start',
             sortable: true,
             value: 'name',
+            class: 'pointer'
           },
           {
             text: 'Organization Id',
             sortable: true,
             value: 'orgId',
+            class: 'pointer'
           },
           {
             text: 'Created By',
             sortable: true,
             value: 'creator',
+            class: 'pointer'
           },
           { text: 'View', value: 'actions', sortable: false },
         ]
@@ -105,4 +108,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.row-pointer:hover {
+  cursor: pointer;
+}
+</style>
 

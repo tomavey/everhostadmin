@@ -1,16 +1,19 @@
 <template>
   <v-card class="mx-auto text-center">
-    {{org}}
+
+      <!-- LIST FIELDS AND VALUES -->
       <v-card-text v-for="(field, i) in fields" :key="i" class="text-h5">
         {{field.label}}: {{org[field.key]}}
       </v-card-text>
+
+      <!-- LIST MEMBERS IN A TABLE -->
       <v-card-text class="text-h5">
         Members:
         <v-data-table
           :headers="headers"
           :items = "org.members"
           class="mx-10"
-          v-if="org.members[0] && org.members[0].uid"
+          v-if="org.members && org.members[0] && org.members[0].uid"
           >
 
           <template v-slot:item.uid="{ item }">
@@ -51,7 +54,6 @@ export default {
   },
   methods:{
     showThisUidProperties: function(memberId){
-      console.log("showThisUidProperties",memberId)
       this.$router.push({name: "Properties", query: {search: memberId, showAll: true}})  
     },
   }
