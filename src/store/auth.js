@@ -6,8 +6,8 @@ import firebase from 'firebase'
 
 export default {
   state:{
-    user: null
-    
+    user: null,
+    newUserId: null,
   },
   getters: {
     user: state => state.user,
@@ -17,7 +17,9 @@ export default {
       if (state.user.rights.admin) {
         return true
       } else { return false }
-    }
+    },
+    newUserId: state => state.newUserId,
+
   },
   mutations: {
     setUser (state, payload) {
@@ -26,6 +28,9 @@ export default {
     setUserProfile (state, payload) {
       state.userProfile = payload
     },
+    setNewUserFromId (state, payload) {
+      state.newUserId = payload
+    }
   },   
   actions: {
     logout ({commit}) {
@@ -87,10 +92,16 @@ export default {
       await addAdmin({'uid': uid})
       await userRef.set({rights: {"admin": true}}, {merge:true})
     },
-    async getUserFromEmail(context, email) {
-      console.log("getUserFromEmail", email)
+    async getNewUserIDFromEmail(context, email) {
+      console.log("getNewUserIDFromEmail", email)
       const getUserFromEmail =  firebase.functions().httpsCallable('getUserObjFromEmail')
       return await getUserFromEmail({email: email})
+      .then( (user) => {
+        console.log("gotUserIdFromEmail", user.data.uid)
+        return user.data.uid
+      }).catch( error => {
+        console.log("first catch",error)
+      })
     }  
   }
 }

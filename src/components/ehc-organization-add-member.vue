@@ -91,9 +91,10 @@ export default {
         'phoneNumber': credentials.phoneNumber
       }
       await this.$store.dispatch('createUserWithEmailAndPassword',obj)
-      .then((res) => {
-        console.log("user created", res)
-        let newUserId = this.getUserIdFromEmail(credentials.email)
+      .then(() => {
+        console.log("user created")
+        let newUserId = this.getNewUserIDFromEmail(credentials.email)
+        .then(user => console.log(user))
         let payload = {
           uid: newUserId,
           orgId: this.org.orgId,
@@ -104,8 +105,8 @@ export default {
         console.log("error creating user", err)
       } 
     },
-    getUserIdFromEmail: async function(email){
-      let user = await this.$store.dispatch('getUserFromEmail',obj.email)
+    getNewUserIDFromEmail: async function(email){
+      let user = await this.$store.dispatch('getNewUserIDFromEmail',email)
       .then(user => {
         return user.uid
       })
@@ -117,8 +118,8 @@ export default {
 
   created(){
     let obj = {email: "tomavey@outlook.com"}
-    this.$store.dispatch('getUserFromEmail',obj.email)
-    .then(user => console.log("getUserFromEmail: ", obj.email, user.data()))
+    this.$store.dispatch('getNewUserIDFromEmail',obj.email)
+    .then(userId => console.log("getNewUserIDFromEmail: ", obj.email, userId))
   },
 
   computed: {
