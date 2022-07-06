@@ -50,7 +50,7 @@
       :show-expand = userIsAdmin  
       :footer-props="{
         showFirstLastPage: true,
-        itemsPerPageOptions: [50,100,150.-1]
+        itemsPerPageOptions: [50,100,150,-1]
       }"
     >
 
@@ -184,8 +184,8 @@ export default {
     addPropertyToUser: async function(uid){
       let propertyId = this.newPropertyId
       console.log("addPropertyToUser: ", uid, propertyId)
-      if ( this.moveGuestInfo ) { await this.$store.dispatch("moveGuestDataToUser", {uid: uid, propertyId: propertyId}) }
-      return await this.$store.dispatch('doesPropertyExist',propertyId)
+      if ( this.moveGuestInfo ) { await this.$store.dispatch("moveGuestDataToUser", {uid: uid, propertyId: propertyId.trim()}) }
+      return await this.$store.dispatch('doesPropertyExist',propertyId.trim())
       .then( (response) => {
         if(!response){
           this.newPropertyMessage = "Not a valid property id"
