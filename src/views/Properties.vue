@@ -206,6 +206,11 @@ export default {
         if ( this.$route && this.$route.query && this.userIsAdmin ) {
             this.showAll = this.$route.query.showAll
         }
+        // this.$store.dispatch("doesUserExist", this.user.uid).then(res => {
+        //     if ( res ) {
+        //         console.log("user exists", this.user.uid)
+        //     }
+        // })
         // this.$store.dispatch('getCustomSubsections', { propertyId: '8705181', type: 'areaguide' })
         // this.$store.dispatch('getCustomSubsections', { propertyId: '8705181', type: 'propertyinfo' })
 

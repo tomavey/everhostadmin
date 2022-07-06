@@ -8,7 +8,7 @@
     :items-per-page="30"
     :item-class="itemRowBackground"
     class="elevation-1"
-    single-expand=true
+    :single-expand=true
     :expanded.sync="expanded"    
     :show-expand = userIsAdmin  
     item-key="propertyId"   
@@ -130,6 +130,7 @@
 
     </template>
 
+    <!-- MOVE THIS PROPERTY TO A DIFFERENT USER -->
     <template v-slot:expanded-item="{ headers, item }">
       <td :colspan="headers.length">
         <span style="font-size: .8em;">This feature is in 'beta'. Be sure you enter a valid uid<br/></span>
@@ -140,7 +141,7 @@
           v-model="newUid"
           label="New User Id"
           :append-outer-icon="newUid ? 'mdi-send' : ''"
-          @click:append-outer="transferProperty({propertyId: item.propertyId, uid: newUid})"
+          @click:append-outer="transferProperty({propertyId: item.propertyId, uid: newUid.trim()})"
           >
         </v-text-field>
         <v-checkbox
@@ -214,6 +215,7 @@ export default {
       this.$store.dispatch("setGuestInfoSwitchOnProperty", item)
     },
     transferProperty(item){
+      console.log("transferProperty", item)
       this.item = item
       this.$store.commit("setShowConfirm",true)
       let message = "Are you sure that you want to transfer this property"
