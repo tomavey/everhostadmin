@@ -107,10 +107,12 @@
                 that.menu= false
                 let mailObj = {
                     to: this.sendEmailTo,
-                    subject: "Feedback from an Everhost beta tester",
+                    subject: "Feedback from an Everhost user",
                     html: `
                         <p>Description: ${this.formData.description}</p>
                         <p>From: ${this.formData.name} - <a href="mailto:${this.formData.email}">${this.formData.email}</a></p>
+                        <p>DO NOT REPLY TO THIS EMAIL!</p>
+                        <p>Send a message to <a href="mailto:${this.formData.email}">${this.formData.email}</a></p>
                         `
                 }
                 this.sendMail(mailObj)

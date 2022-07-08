@@ -14,7 +14,7 @@
     item-key="propertyId"   
     :footer-props="{
       showFirstLastPage: true,
-      itemsPerPageOptions: [50,100,150.-1]
+      itemsPerPageOptions: [50,100,150,-1]
     }"
   >
     <template v-slot:item.avatarImg="{ item }">
