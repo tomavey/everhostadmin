@@ -8,7 +8,7 @@
                 <ehc-form
                 :meta="globalAppSettingsMeta"
                 v-model="globalAppSettingsData"
-                @save="submitGlobalAppSettings()">
+                @save="saveGlobalAppSettings()">
 
                 </ehc-form>
             </v-card-text>
@@ -35,8 +35,8 @@
             }
         },
         methods: {
-            submitGlobalAppSettings() {
-                console.log("submit Global App Settings")
+            saveGlobalAppSettings() {
+                console.log("save Global App Settings")
 
             
             }
