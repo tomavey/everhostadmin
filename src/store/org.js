@@ -138,7 +138,9 @@ export default {
         let userRef = firebase.firestore().collection("users").doc(member)
         await userRef.get()
         .then( doc => {
-          members.push(doc.data())
+          if (doc.exists) {
+            members.push(doc.data())
+          }
         })
         console.log("members", members)
       })

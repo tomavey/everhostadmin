@@ -94,21 +94,15 @@ export default {
       }
       await this.$store.dispatch('createUserWithEmailAndPassword',obj)
       // get the uid of the new user
-      await this.$store.dispatch('getNewUserIDFromEmail',obj.email)
-      .then(userId => { 
-        // add the new user to the org
-        let payload = {
-          uid: userId,
-          orgId: this.org.orgId,
-        }
-        this.$store.dispatch('addUserToOrg',payload)
-      })
-      .catch(err => {
-        console.log("getNewUserIDFromEmail Error: ", err)
-      })
-      // get the members of the org
+      let userId = await this.$store.dispatch('getNewUserIDFromEmail',obj.email)
+      console.log("userId", userId)
+      let payload = {
+        uid: userId,
+        orgId: this.org.orgId,
+      }
+      console.log("payload", payload)
+      await this.$store.dispatch('addUserToOrg',payload)
       await this.$store.dispatch('getMembers',payload.orgId)
-      // close the dialog
       this.showNewUser = false
     },
   },

@@ -36,6 +36,7 @@ export default {
         {type: "text",            label: "Company White Label",           key: "companyLabel"},
         {type: "link",            label: "Web Site",                      key: "webSite"},
         {type: "intPhoneNumber",  label: "Phone",                         key: "phone"},
+        {type: "text",            label: "Image",                         key: "image",           multiple:true},
         {type: "button",          label: "submit",                        key: "submit",          emitOnClick: "submit",  hideInCard: true},
       ],
       shakeVariable: true,
