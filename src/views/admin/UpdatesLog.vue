@@ -1,5 +1,7 @@
 <template>
   <v-container>
+    <v-card-text class="text-center text-h4">{{pageTitle}}</v-card-text>
+
     <v-data-table
       :headers = headers
       :items = updatesLog
@@ -30,6 +32,7 @@ export default {
   mixins: [mixins],
   data() {
     return {
+      pageTitle: 'Updates Log',
     }
   },
   methods: {
