@@ -96,7 +96,9 @@ export default {
             value: 'creator',
             class: 'pointer'
           },
+          { text: 'Property Limit', value: 'propertyLimit', sortable: false},
           { text: 'View', value: 'actions', sortable: false },
+          
         ]
     },
     searchString: function(){
