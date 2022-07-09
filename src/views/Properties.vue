@@ -1,6 +1,7 @@
 <template>
     <ehc-page class="grey lighten-4" >
         <v-toolbar flat right class="grey lighten-4 my-5" >
+            <v-chip v-if="userIsAdmin">{{propertiesFiltered.length}} Properties</v-chip>
         <v-spacer/>
             <v-btn-toggle v-model="displayAs" mandatory>
                     <v-btn text value="gallery" >
@@ -46,7 +47,7 @@
                 indeterminate
                 color="yellow darken-2"
                 ></v-progress-linear>
-
+        
         <ehc-meta-edit v-if="!propertiesFiltered.length || showWelcomePage" docId="intro" pageTitle=""></ehc-meta-edit>
         <ehc-properties-gallery v-if="displayAs === 'gallery' && !showWelcomePage" :properties="propertiesFiltered"></ehc-properties-gallery>
         <ehc-properties-table v-if="displayAs === 'table' && !showWelcomePage" :properties="propertiesFiltered" @displayAsGrid='displayAs = "gallery"' ></ehc-properties-table>
