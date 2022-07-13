@@ -50,8 +50,8 @@
         <ehc-meta-edit v-if="!propertiesFiltered.length || showWelcomePage" docId="intro" pageTitle=""></ehc-meta-edit>
         <ehc-properties-gallery v-if="displayAs === 'gallery' && !showWelcomePage" :properties="propertiesFiltered"></ehc-properties-gallery>
         <ehc-properties-table v-if="displayAs === 'table' && !showWelcomePage" :properties="propertiesFiltered" @displayAsGrid='displayAs = "gallery"' ></ehc-properties-table>
-        <ehc-dialog max-width="300" v-model="maxPropsDialog" title="Max Properties Reached">
-            <h3>you have reached the maximum number of properties available</h3>
+        <ehc-dialog max-width="400" v-model="maxPropsDialog" title="Max Properties Reached">
+            <h3>you have reached the maximum number of properties available ({{propertyLimit}})</h3>
             <template v-slot:actions>
                 <v-spacer></v-spacer>
                 <v-btn plain color="button" @click="maxPropsDialog = false">
@@ -155,10 +155,16 @@ export default {
         showProgress() {
             return !this.propertiesFiltered.length && this.loading
         },
+        propertyLimit() {
+            if (this.gcvOrg.hasOwnProperty('propertyLimit')) {
+                return this.gcvOrg.propertyLimit
+            } 
+            return this.gcvAppSettings.defaultPropertyLimit
+        }
     },    
     methods: {
         addProperty() {
-            if (this.properties.length < 1000) {
+            if (this.properties.length < this.propertyLimit) {
                 this.addLoading=true
                 console.log("addProperty button pushed")
                 this.$store.commit("setLoading", true)

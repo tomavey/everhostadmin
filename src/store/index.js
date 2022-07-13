@@ -11,6 +11,8 @@ import Support from './support'
 import Users from './users'
 import UpdatesLog from './updateslog.js'
 import Meta from './meta'
+import appSettings from './appSettings.js'
+
 
 
 Vue.use(Vuex)
@@ -96,5 +98,5 @@ export default new Vuex.Store({
       })
     }
   },
-  modules: {Auth, Org, Properties, GuestData, Feedbacks, Mail, Users, UpdatesLog, Support, Meta},
+  modules: {Auth, Org, Properties, GuestData, Feedbacks, Mail, Users, UpdatesLog, Support, Meta, appSettings},
 })

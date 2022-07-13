@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <ehc-login>
+    <ehc-login v-model="showApp">
         <ehc-app-toolbar></ehc-app-toolbar>
         <ehc-admin-drawer v-if="userIsAdmin"/>
 
@@ -21,17 +21,24 @@ import updateMixin from '@/mixins/updateMixin.js';
 import EhcAdminDrawer from './components/ehc-admin-drawer.vue'
 import auth from "@/mixins/auth.vue"
 
+
 export default {
   components: { ehcAppToolbar, ehcLogin, EhcAppToolbar, EhcFeedback, EhcAdminDrawer },
   mixins: [updateMixin,auth],
   name: 'App',
 
   data: () => ({
-    
+    showApp: null
   }),
   watch: {
+    showApp(val) {
+      if (val == true) {
+          this.apiGetAppSettings()
+      }
+    }
   },
   methods: {
+
   },
   computed: {
     user: function(){

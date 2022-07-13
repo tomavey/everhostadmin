@@ -41,7 +41,52 @@ export default {
           console.log("apiUpdateProperty success", resp)
           return true
         })
-      } 
+      },
+      async apiGetDoc(collection, docID) {
+        console.log("apiGetDoc", collection, docID)
+
+        const docRef = firebase.firestore().collection(collection).doc(docID) 
+        return await docRef.get().then((doc) => {
+            if (doc.exists) {
+                let data = doc.data()
+                console.log("got doc", data)
+                return data
+            } else {
+                console.log("data doesn't exist")
+            }
+        })
+      },
+      async apiUpdateDoc(collection, docID, payload){
+        console.log("apiUpdateDoc", collection, docID)
+
+        const docRef = firebase.firestore().collection(collection).doc(docID) 
+
+        return await docRef.update(payload).then((resp) => {
+          console.log("updated", resp)
+          return true
+        })
+      },
+
+
+      async apiGetAppSettings() {
+        console.log("apiGetAppSettings") 
+
+        await this.apiGetDoc("settings", "globalAppSettings").then((data) => {
+          console.log("commit app settings", data)
+          
+            console.log("commit app settings")
+            this.$store.commit('setAppSettings', data)
+        })
+      },
+      async apiUpdateAppSettings(payload) {
+        console.log("apiUpdateAppSettings")
+        this.apiUpdateDoc("settings", "globalAppSettings",payload).then((data)  => {
+          this.apiGetAppSettings()
+        })
+      }
+
+
+
   },
   computed: {
 

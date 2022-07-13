@@ -16,10 +16,16 @@ import ehcDrawer from '@/components/ehc-drawer.vue'
 import ehcButton from '@/components/ehc-btn.vue'
 import ehcButtonSmall from '@/components/ehc-button-small.vue'
 
+import apiMixin from '@/mixins/api.vue'
+import globalComputedValues from '@/mixins/globalComputedValues.vue'
+
+
+
 import VueTheMask from 'vue-the-mask'
 
 
-
+Vue.mixin(apiMixin)
+Vue.mixin(globalComputedValues)
 
 Vue.component('ehc-page', ehcPage)
 Vue.component('ehc-form', ehcForm)
