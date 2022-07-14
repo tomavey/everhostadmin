@@ -83,10 +83,53 @@ export default {
         this.apiUpdateDoc("settings", "globalAppSettings",payload).then((data)  => {
           this.apiGetAppSettings()
         })
-      }
+      },
+
+
+// ORGANIZATION MANIPULATION
+      async apiGetOrg(orgID) {
+        console.log("apiGetOrg", orgID)
+
+        return await this.apiGetDoc("organizations", orgID).then((data)=> {
+          console.log("api gotOrg", data)
+          return data
+        })
+      },
+      async apiUpdateOrg(orgID, payload) {
+        console.log("apiUpdateOrg", orgID, payload)
+
+        if ( this.payload.webSite ) {
+          this.formData.webSite = this.apiPrependHttp(this.formData.webSite)
+        }
+
+        this.apiUpdateDoc('organizations', orgID, payload).then((resp)=>{
+          console.log("successfull org update")
+        })
+      },
 
 
 
+
+
+
+
+
+
+// THESE METHODS USED FOR PROCESSING DATA FOR UPLOADING
+      apiPrependHttp(url, {https = true} = {}) {
+        if (!url.length) {return null}
+        if (typeof url !== 'string') {
+            throw new TypeError(`Expected \`url\` to be of type \`string\`, got \`${typeof url}\``);
+        }
+
+        url = url.trim();
+
+        if (/^\.*\/|^(?!localhost)\w+?:/.test(url)) {
+            return url;
+        }
+
+        return url.replace(/^(?!(?:\w+?:)?\/\/)/, https ? 'https://' : 'http://');
+      },
   },
   computed: {
 
