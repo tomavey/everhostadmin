@@ -1,5 +1,6 @@
 <template>
     <ehc-page class="grey lighten-4" >
+        {{showAllLoading}}
         <v-toolbar flat right class="grey lighten-4 my-5" >
             <v-chip v-if="userIsAdmin">{{propertiesFiltered.length}} Properties</v-chip>
         <v-spacer/>
@@ -45,7 +46,7 @@
             <v-progress-linear
                 v-if="showProgress"
                 indeterminate
-                color="yellow darken-2"
+                color="primary"
                 ></v-progress-linear>
         
         <ehc-meta-edit v-if="!propertiesFiltered.length || showWelcomePage" docId="intro" pageTitle=""></ehc-meta-edit>
@@ -180,27 +181,30 @@ export default {
         },
         _showAll() {
             this.showAll = !this.showAll
+            this.$store.commit("setShowAllLoading", true)
             this.$store.commit("setSearchString", null)
         },
-        subscribeToProperties(showAll){
+        subscribeToProperties(){
             let payload = {}
+            payload.showAll = false
             if ( this.userIsAdmin ) {
                 if ( this.$store.getters.uidToShowAdmin ) { payload.uid = this.$store.getters.uidToShowAdmin }
-                payload.showAll = showAll
+                payload.showAll = true
             }
             this.$store.dispatch('subscribeToProperties',payload)
             .then ( () => this.$store.commit("setShowAllLoading" ,false))
         }
     },
     watch: {
-        // properties(){
-        //     if ( this.properties.length  ) {
-        //         this.showWelcomePage = false
-        //     }
-        // }
+        properties(){
+            console.log("properties changed", this.properties.length)
+            if ( !this.properties.length  ) {
+                this.$store.commit("setShowAllLoading" ,true)
+            }
+        }
     },
     created() {
-        this.subscribeToProperties(this.showAll)
+        this.subscribeToProperties()
         if ( this.$route && this.$route.query ) {
             this.$store.commit('setSearchString', this.$route.query.search)
         }
