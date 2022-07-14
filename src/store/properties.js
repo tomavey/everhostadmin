@@ -103,6 +103,7 @@ export default {
         })
       })
     },
+    //TODO: make this a mixin
     subscribeToProperties(context,payload){
       console.log("subscribeToProperties ", payload)
       let userId = context.getters.user.uid
