@@ -46,12 +46,6 @@
             <slot></slot>
             <template v-for="(field, fieldIndex) in meta">
                 <v-row :key="fieldIndex">
-                    <ehc-editor 
-                                    v-if="field.type === 'editor'"
-                                    v-model="data[field.key]"
-                                    class="wide"
-                                    >{{field.label}}</ehc-editor>
-                                    <!---No @blur or @change needed if we use a save button--->
                     <v-text-field   ref='input'
                                     v-if="field.type == 'text'" 
                                     :color="color"
@@ -63,8 +57,14 @@
                                     @blur="$emit('blur', {key: field.key, value: data[field.key]})"
                                     @change="$emit('change', {key: field.key, value: data[field.key]})">
                                     </v-text-field>
+                    <ehc-editor 
+                                    v-else-if="field.type === 'editor'"
+                                    v-model="data[field.key]"
+                                    class="wide"
+                                    >{{field.label}}</ehc-editor>
+                                    <!---No @blur or @change needed if we use a save button--->
                     <v-text-field   ref='input'
-                                    v-if="field.type == 'number'" 
+                                    v-else-if="field.type == 'number'" 
                                     type="number"
                                     :color="color"
                                     :rules="inputRules(field)"
