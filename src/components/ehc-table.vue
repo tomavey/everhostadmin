@@ -3,10 +3,10 @@
         <table>
             <!--Headers-->
             <tr>
-                <th foreach="(header, hindex) in headers" :key="hindex">{{header.label}}</th>
+                <th v-for="(header, hindex) in headers" :key="hindex">{{header.label}}</th>
             </tr>
-            <tr foreach="(row, rindex) in value" :key="rindex">
-                <td foreach="(cell, cindex) in headers">{{row[cell.key]}}</td>
+            <tr v-for="(row, rindex) in value" :key="rindex">
+                <td v-for="(cell, cindex) in headers" :key="cindex">{{row[cell.key]}}</td>
             </tr>
         </table>
     </div>

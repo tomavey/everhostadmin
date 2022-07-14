@@ -2,10 +2,11 @@
     <v-card>
         <v-card-text>
             {{value}} <br/>
-            {{org}}
+            {{org}} </br/>
+            {{members}}
             <ehc-table 
-                v-model="org.members" 
-                :headers=""></ehc-table>
+                v-model="members" 
+                :headers="memberHeaders"></ehc-table>
         </v-card-text>
     </v-card>
 </template>
@@ -22,8 +23,11 @@ export default {
         return {
             org: {},
             memberHeaders: [
-                {label: "ID", key: ""}
-            ]
+                {label: 'Display Name', key: 'displayName' },
+                {label: 'Email', key: 'email' },
+                {label: 'User ID', key: 'uid' },
+            ],
+            members: []
         }
     },
     watch: {
@@ -35,11 +39,18 @@ export default {
         this.getOrganization()
     },
     methods: {
+        getListOfUsers(list) {
+            this.apiGetListOfUsers(list).then((data) => {
+                console.log('got users', data)
+                this.members = data
+            })
+        },
         getOrganization() {
             console.log("getting organization")
             this.apiGetOrg(this.value).then((data) => {
                 console.log("got organization", data)
                 this.org=data
+                this.getListOfUsers(data.members)
             })
         }
     }

@@ -43,7 +43,8 @@ export default {
         { text: 'Display Name', value: 'displayName' },
         { text: 'Email', value: 'email' },
         { text: 'ID', value: 'uid' },
-      ]
+      ],
+      members: []
     }
   },
   computed: {
@@ -53,6 +54,7 @@ export default {
     },
   },
   methods:{
+
     showThisUidProperties: function(memberId){
       this.$router.push({name: "Properties", query: {search: memberId, showAll: true}})  
     },

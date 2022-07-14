@@ -33,6 +33,23 @@ export default {
           return true
         })
       },
+      // takes an array of user ID's and returns a array of objects with user info
+      async apiGetListOfUsers(uidList) {
+        console.log("apiGetListOfUsers", uidList) 
+        let members= []
+
+        uidList.forEach( async (member) => {
+        let userRef = firebase.firestore().collection("users").doc(member)
+        await userRef.get()
+            .then( doc => {
+              members.push(doc.data())
+            })
+          })
+        return members
+      },
+
+
+
       async apiUpdateProperty(id, payload) {
         console.log("apiUpdateProperty", id, payload)
         const propRef = firebase.firestore().collection('properties').doc(id)
@@ -42,6 +59,8 @@ export default {
           return true
         })
       },
+
+//GENERIC      
       async apiGetDoc(collection, docID) {
         console.log("apiGetDoc", collection, docID)
 
@@ -68,6 +87,7 @@ export default {
       },
 
 
+//HANDLING SETTINGS
       async apiGetAppSettings() {
         console.log("apiGetAppSettings") 
 
