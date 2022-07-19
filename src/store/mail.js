@@ -16,7 +16,7 @@ export default {
         html: payload.html
       }
       firebase.firestore().collection('mail').add(mailObj)
-      .then( console.log("mailObj ",mailObj))
+      .then( console.log("sent mailObj ",mailObj))
     }
   }
 }
