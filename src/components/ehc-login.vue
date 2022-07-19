@@ -309,7 +309,6 @@ export default {
           this.showSignUp = true
           this.$router.push('/')
       }
-      this.sendMail(this.mailObj)
   },  
 }
 </script>
