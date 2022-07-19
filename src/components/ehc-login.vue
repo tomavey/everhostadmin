@@ -266,11 +266,12 @@ export default {
     },
 
     sendMail(mailObj) {
-        this.$store.dispatch("sendMail",mailObj)
-        .then( console.log("sendMail dispatched", mailObj) )
-        .catch( err => {
-            console.log("error sending mail", err)
-        })
+            try {
+                this.$store.dispatch('sendMail',mailObj)
+            } catch (error) {
+                console.log("error sending mail", error)
+            }
+        }
     },
 
     login: function(credentials) {
