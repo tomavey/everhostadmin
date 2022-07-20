@@ -1,6 +1,5 @@
 <template>
     <ehc-page class="grey lighten-4" >
-        {{showAllLoading}}
         <v-toolbar flat right class="grey lighten-4 my-5" >
             <v-chip v-if="userIsAdmin">{{propertiesFiltered.length}} Properties</v-chip>
         <v-spacer/>
