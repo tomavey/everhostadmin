@@ -25,7 +25,8 @@ export default new Vuetify({
                 Gray1: '#F1F1F1',
                 Black: '#1D3557',
                 drawerIcons: '#4a5d79',
-                PrimaryPurple: '#6E38DD'
+                PrimaryPurple: '#6E38DD',
+                background: '#f5f6fa',
             }
         },
     }

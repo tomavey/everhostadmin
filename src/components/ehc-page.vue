@@ -2,14 +2,17 @@
 
 <template>
 <!-- this should wrap every page, it handles the transition in and spacing of the page -->
-    <v-container fill-height fluid class="ma-0 pa-0">
-        <v-scroll-y-reverse-transition  hide-on-leave>    
+    <v-container fill-height fluid class="ma-0 pa-0" >
+        <v-scroll-y-reverse-transition  hide-on-leave fill-height>    
             <v-container 
                 class="pt-0 pb-0 px-3" 
                 v-if="triggerTransition" 
                 fluid 
                 fill-height
+                :style="{ background: $vuetify.theme.themes['light'].background }"
                 >
+
+
                 
                 <slot></slot>
             </v-container>

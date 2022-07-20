@@ -1,13 +1,12 @@
 <template>
-  <v-app id="app">
-    <ehc-login v-model="showApp">
+  <v-app id="app" >
+    <ehc-login v-model="showApp" >
         <ehc-app-toolbar></ehc-app-toolbar>
         <ehc-admin-drawer v-if="userIsAdmin"/>
 
-        <v-main height="100%">
+        <v-main height="100%" fill-height>
             <router-view :key="$route.fullPath" />
         </v-main>
-
     </ehc-login>
   </v-app>
 </template>
