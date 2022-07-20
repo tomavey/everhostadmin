@@ -1,9 +1,12 @@
 import firebase from 'firebase'
+import WelcomeEmailStyle from '../store/emailStyle.js';
 
 export default {
   state:{
+    emailStyle: WelcomeEmailStyle.style,
   },
   getters: {
+    emailStyle: state => state.emailStyle,
   },
   mutations: {
   },

@@ -208,16 +208,27 @@ export default {
     mailObj: function(){
         let email = this.credentials.email || 'tom@everhost.io'
         let displayName = this.credentials.displayName || "User"
+        let style = this.$store.getters.emailStyle
         let mailObj = {
             to: this.sendEmailTo,
             subject: "Welcome to Everhost! (beta email message)",
-            html: `<p>Hi ${displayName},</p>
-            <p>Thank you for joining the Everhost community.  Here is your account information:</p>
+            html: `<html><head>
+                <style>
+                    ${style}
+                </style>
+            </head>
+            <body>
+            <p class="displayName">Hi ${displayName},</p>
+            <p>Thank you for joining the Everhost community. Here is your account information:</p>
             https://manage.everhost.io<br/>
             u: ${email}<br/>
-            <p>Excited to see some amazing property welcome books!  We're always looking to hear from our users.  Don't hesitate to contact support@everhost.io with your feedback.</p>
+            p: ***********<br/>
+            <p>Excited to see some amazing property welcome books! We're always looking to hear from our users.  Don't hesitate to contact support@everhost.io with your feedback.</p>
             <p>Cheers,<br/>
-            Nomad</p>            `
+            Nomad</p>
+            </body>
+            </html>
+            `
             }
         return mailObj
     },
@@ -265,12 +276,11 @@ export default {
       })
     },
 
-    sendMail(mailObj) {
-            try {
-                this.$store.dispatch('sendMail',mailObj)
-            } catch (error) {
-                console.log("error sending mail", error)
-            }
+    sendMail: function(mailObj) {
+        try {
+            this.$store.dispatch('sendMail',mailObj)
+        } catch (error) {
+            console.log("error sending mail", error)
         }
     },
 
@@ -310,6 +320,7 @@ export default {
           this.showSignUp = true
           this.$router.push('/')
       }
+      this.sendMail(this.mailObj)
   },  
 }
 </script>
