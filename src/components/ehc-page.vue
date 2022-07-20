@@ -9,7 +9,6 @@
                 v-if="triggerTransition" 
                 fluid 
                 fill-height
-                :style="{ background: $vuetify.theme.themes['light'].background }"
                 >
 
 

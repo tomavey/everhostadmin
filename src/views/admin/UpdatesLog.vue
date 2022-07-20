@@ -1,8 +1,8 @@
 <template>
-  <v-container>
+  <ehc-page>
     <v-card-text class="text-center text-h4">{{pageTitle}}</v-card-text>
 
-    <v-data-table
+    <!-- <v-data-table
       :headers = headers
       :items = updatesLog
       :footer-props="{
@@ -11,6 +11,7 @@
       }"
 
     >
+
     <template v-slot:item.actions="{ item }">
       <v-icon
         small
@@ -21,8 +22,15 @@
       </v-icon>
     </template>
 
-    </v-data-table>  
-  </v-container>
+    </v-data-table> -->
+    
+    <ehc-table
+      :headers="headers"
+      :items = "updatesLog"
+      :selectable="true">
+      
+    </ehc-table>
+  </ehc-page>
 </template>
 
 <script>
@@ -33,6 +41,7 @@ export default {
   data() {
     return {
       pageTitle: 'Updates Log',
+      updatesLog: [],
     }
   },
   methods: {
@@ -40,28 +49,34 @@ export default {
       let link=`https://everhost.io/${item.propertyId}`
       window.open(link)
     },
+    getLogs() {
+      this.apiGetDocs('updateslog').then((data) => {
+        this.updatesLog = data
+      })
+    },
   },
   computed: {
-    updatesLog: function(){
-      return this.$store.getters.updatesLog
-      .map( el => {
-        el.updatedAtAsString = this.dateFormat(el.updatedAt,"dateOnly")
-        el.searchAble = `${el.updatedAtAsString} ${el.propertyId} ${el.propertyCity} ${el.propertyName} ${el.uid}`
-        return el
-      })
-      .filter( el => {
-        if ( this.searchString ) {
-          return el.searchAble.toLowerCase().includes(this.searchString.toLowerCase())
-        } else {
-          return true
-        }
-      })
-      .sort( (a,b) => {
-          if ( a.updatedAt < b.updatedAt ) {return 1}
-          else { return -1 }
-      })
 
-    },
+    // updatesLog: function(){
+    //   return this.$store.getters.updatesLog
+    //   .map( el => {
+    //     el.updatedAtAsString = this.dateFormat(el.updatedAt,"dateOnly")
+    //     el.searchAble = `${el.updatedAtAsString} ${el.propertyId} ${el.propertyCity} ${el.propertyName} ${el.uid}`
+    //     return el
+    //   })
+    //   .filter( el => {
+    //     if ( this.searchString ) {
+    //       return el.searchAble.toLowerCase().includes(this.searchString.toLowerCase())
+    //     } else {
+    //       return true
+    //     }
+    //   })
+    //   .sort( (a,b) => {
+    //       if ( a.updatedAt < b.updatedAt ) {return 1}
+    //       else { return -1 }
+    //   })
+
+    // },
     headers: function(){
       return [
           {
@@ -96,7 +111,8 @@ export default {
     },
   },
   created(){
-    this.$store.dispatch("getUpdateLogs")
+    // this.$store.dispatch("getUpdateLogs")
+    this.getLogs()
   }
 
 }

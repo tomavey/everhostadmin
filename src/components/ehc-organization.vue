@@ -1,16 +1,18 @@
 <template>
     <ehc-page>
-    <v-card color="#f5f6fa">
-        <v-card-text>
+
             {{value}} <br/>
             {{org}} </br/>
             {{members}}
+            <ehc-show-obj>
+                
+            </ehc-show-obj>
+
             <ehc-table 
-                v-model="members" 
+                :items="members" 
                 :headers="memberHeaders"
                 ></ehc-table>
-        </v-card-text>
-    </v-card>
+
     </ehc-page>
 </template>
 
@@ -27,9 +29,9 @@ export default {
             org: {},
             page:1,
             memberHeaders: [
-                {label: 'Display Name', key: 'displayName' },
-                {label: 'Email', key: 'email' },
-                {label: 'User ID', key: 'uid' },
+                {text: 'Display Name', value: 'displayName' },
+                {text: 'Email', value: 'email' },
+                {text: 'User ID', value: 'uid' },
             ],
             members: [
                 {displayName: "Lux Midtown Penthhouse", email: "frowEmail@gmail.com", uid: "2342356245672457"},

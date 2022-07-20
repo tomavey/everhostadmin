@@ -1,6 +1,7 @@
 <template>
-  <v-app id="app" >
+  <v-app id="app"  :style="{ background: $vuetify.theme.themes['light'].background }">
     <ehc-login v-model="showApp" >
+
         <ehc-app-toolbar></ehc-app-toolbar>
         <ehc-admin-drawer v-if="userIsAdmin"/>
 

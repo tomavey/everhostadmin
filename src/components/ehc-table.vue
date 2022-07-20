@@ -1,5 +1,5 @@
             <!-- <ehc-table  
-                v-model="members" 
+                :items="members" 
                 :headers="memberHeaders"
                 :page="page"
                 :totalItems="16740"
@@ -16,21 +16,21 @@
         <table>
             <!--Headers-->
                 <tr class="header">
-                    <th v-for="(header, hindex) in headers" :key="hindex">{{header.label}}</th>
+                    <th v-for="(header, hindex) in headers" :key="hindex">{{header.text}}</th>
                 </tr>
             <tr 
                 :class="'body' +  ((selectable) ? ' selectable' : '')" 
-                v-for="(row, rindex) in value" :key="rindex">
-                <td v-for="(cell, cindex) in headers" :key="cindex">{{row[cell.key]}}</td>
+                v-for="(row, rindex) in items" :key="rindex">
+                <td v-for="(cell, cindex) in headers" :key="cindex">{{row[cell.value]}}</td>
             </tr>
         </table>
         <div class="pagination" v-if="page">
-            <span class="my-auto py-auto">Showing {{this.page*this.itemsPerPage+1-this.itemsPerPage}} to {{this.page*this.itemsPerPage + this.itemsPerPage}} of {{totalItems}}</span>
+            <span class="my-auto py-auto">Showing {{this.page*this.itemsPerPage+1-this.itemsPerPage}} to {{this.page*this.itemsPerPage + this.itemsPerPage}} of {{totalItems ? totalItems : 'unknown'}}</span>
             <v-pagination 
                 class="mt-0 py-auto"
                 v-model="pagiPage"
                 :length="numberOfPages"
-                :total-visible="7"></v-pagination>
+                :total-visible="5"></v-pagination>
         </div>
 
     </div>
@@ -43,10 +43,10 @@
 export default {
     props: {
         headers: {type: Array},
-        value: {type: Array},
+        items: {type: Array},
         page: {type: Number, default: null},
-        totalItems: {type: Number},
-        itemsPerPage: {type: Number},
+        totalItems: {type: Number, default: null},
+        itemsPerPage: {type: Number, default: null},
         selectable: {type: Boolean, default: false}
     },
     data() {
@@ -56,7 +56,8 @@ export default {
     computed: {
 
         numberOfPages()  {
-            return this.totalItems/this.itemsPerPage
+            
+            return this.totalItems ? this.totalItems/this.itemsPerPage : this.page + 1
         },  
         pagiPage: {
             get() {

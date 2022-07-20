@@ -60,7 +60,7 @@ export default {
         })
       },
 
-//GENERIC      
+//GENERIC get and update doc by ID
       async apiGetDoc(collection, docID) {
         console.log("apiGetDoc", collection, docID)
 
@@ -85,6 +85,25 @@ export default {
           return true
         })
       },
+
+//Gets list of docs  
+      //takes collection name and conditions and order by returns array of objects
+      async apiGetDocs(collection) {
+        console.log("apiGetDocs", collection)
+        const docsRef = firebase.firestore().collection(collection) 
+
+        let query = docsRef
+          .whereField
+        let results = []
+        return await docsRef.get().then((docs) => {
+          console.log("got Docs", docs)
+          docs.forEach( doc => {
+            let obj = doc.data()
+            results.push(obj)
+          })
+          return results
+        })
+      },  
 
 
 //HANDLING SETTINGS
