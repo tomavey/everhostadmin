@@ -1,3 +1,27 @@
+//Taken from https://leemunroe.github.io/responsive-html-email-template/email.html 
+// and modified to fit the needs of this project.
+// Custom content is added between bodyTableWrapperStart and this.bodyTableEnd.
+// sample from ehc-login.vue:
+// <html>
+// <head>
+//     <style>
+//         ${this.style}
+//     </style>
+// </head>
+// <body>
+// ${this.bodyTableWrapperStart}
+// <p class="displayName">Hi ${displayName},</p>
+// <p>Thank you for joining the Everhost community. Here is your account information:</p>
+// https://manage.everhost.io<br/>
+// u: ${email}<br/>
+// p: ***********<br/><br/>
+// <p>Excited to see some amazing property welcome books! We're always looking to hear from our users.  Don't hesitate to contact support@everhost.io with your feedback.</p>
+// <p>Cheers,<br/>
+// Nomad</p>
+// ${this.bodyTableEnd}
+// </body>
+// </html>
+
 export default{
   style: `img {
     border: none;
@@ -289,5 +313,35 @@ export default{
       background-color: #34495e !important;
       border-color: #34495e !important; 
     } 
-  }`
+  }`,
+  bodyTableWrapper : `<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
+            <tr>
+              <td>&nbsp;</td>
+              <td class="container">
+                <div class="content">
+
+                  <table role="presentation" class="main">
+
+                    <tr>
+                      <td class="wrapper">`, 
+  bodyTableEnd : `</td>
+        </tr>
+
+      </table>
+
+      <div class="footer">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td class="content-block powered-by">
+              Powered by <a href="https://evehost.io">Everhost</a>.
+            </td>
+          </tr>
+        </table>
+      </div>
+      </div>
+      </td>
+      <td>&nbsp;</td>
+      </tr>
+      </table>`,
+
 }

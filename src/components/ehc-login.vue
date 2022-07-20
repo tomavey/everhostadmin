@@ -142,6 +142,7 @@ export default {
         ],
         showSignUp: false,
         createAccountLoading: false,
+        // sendEmailTo: ['tom@everhost.io', 'ed@everhost.io', 'grant@everhost.io'],
         sendEmailTo: ['tom@everhost.io'],
     }
   },
@@ -205,29 +206,49 @@ export default {
         this.$store.dispatch('getMetaPage','intro')
         return this.$store.getters.metaPage
     },
-    mailObj: function(){
+    style: function(){
+        return this.$store.getters.emailStyle
+    },
+    bodyTableWrapperStart: function(){
+        return this.$store.getters.emailBodyTableWrapper
+    },
+    bodyTableEnd: function(){
+        return this.$store.getters.emailBodyTableEnd
+    },
+    emailCustomContent: function(){
         let email = this.credentials.email || 'tom@everhost.io'
         let displayName = this.credentials.displayName || "User"
-        let style = this.$store.getters.emailStyle
+        return `<p class="displayName">Hi ${displayName},</p>
+                <p>Thank you for joining the Everhost community. Here is your account information:</p>
+                https://manage.everhost.io<br/>
+                u: ${email}<br/>
+                p: ***********<br/><br/>
+                <p>Excited to see some amazing property welcome books! We're always looking to hear from our users.  Don't hesitate to contact support@everhost.io with your feedback.</p>
+                <p>Cheers,<br/>
+                Nomad</p>`
+    },
+    emailHead: function(){
+        return `<head>
+                    <style>
+                        ${this.style}
+                    </style>
+                </head>`
+    },
+    mailObj: function(){
+        let email = this.credentials.email
         let mailObj = {
-            to: this.sendEmailTo,
+            to: [email],
+            bcc: ['tom@cofh.com'],
             subject: "Welcome to Everhost! (beta email message)",
-            html: `<html><head>
-                <style>
-                    ${style}
-                </style>
-            </head>
-            <body>
-            <p class="displayName">Hi ${displayName},</p>
-            <p>Thank you for joining the Everhost community. Here is your account information:</p>
-            https://manage.everhost.io<br/>
-            u: ${email}<br/>
-            p: ***********<br/>
-            <p>Excited to see some amazing property welcome books! We're always looking to hear from our users.  Don't hesitate to contact support@everhost.io with your feedback.</p>
-            <p>Cheers,<br/>
-            Nomad</p>
-            </body>
-            </html>
+            html: `
+                <html>
+                ${this.emailHead}                
+                <body>
+                ${this.bodyTableWrapperStart}
+                ${this.emailCustomContent}
+                ${this.bodyTableEnd}
+                </body>
+                </html>
             `
             }
         return mailObj
@@ -277,6 +298,7 @@ export default {
     },
 
     sendMail: function(mailObj) {
+        console.log("sendMailMethod", mailObj)
         try {
             this.$store.dispatch('sendMail',mailObj)
         } catch (error) {
@@ -320,7 +342,7 @@ export default {
           this.showSignUp = true
           this.$router.push('/')
       }
-      this.sendMail(this.mailObj)
+        // this.sendMail(this.mailObj)
   },  
 }
 </script>
