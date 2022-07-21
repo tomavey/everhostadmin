@@ -2,12 +2,13 @@
     <ehc-page>
 
             {{value}} <br/>
-            {{org}} </br/>
+            {{org}} <br/>
             {{members}}
-            <ehc-show-obj>
-                
+            <ehc-show-obj
+            v-model="org">
             </ehc-show-obj>
 
+            
             <ehc-table 
                 :items="members" 
                 :headers="memberHeaders"
