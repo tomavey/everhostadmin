@@ -216,7 +216,7 @@ export default {
         return this.$store.getters.emailBodyTableEnd
     },
     emailCustomContent: function(){
-        let email = this.credentials.email || 'tom@everhost.io'
+        let email = this.credentials.email
         let displayName = this.credentials.displayName || "User"
         return `<p class="displayName">Hi ${displayName},</p>
                 <p>Thank you for joining the Everhost community. Here is your account information:</p>
@@ -238,8 +238,8 @@ export default {
         let email = this.credentials.email
         let mailObj = {
             to: [email],
-            bcc: ['tom@cofh.com'],
-            subject: "Welcome to Everhost! (beta email message)",
+            bcc: ['tom@everhost.io'],
+            subject: "Welcome to Everhost!",
             html: `
                 <html>
                 ${this.emailHead}                
