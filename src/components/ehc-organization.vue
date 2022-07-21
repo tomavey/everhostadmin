@@ -1,18 +1,28 @@
 <template>
     <ehc-page>
+        
+            <ehc-header :text="'Organization: ' + org.name ">
 
-            {{value}} <br/>
-            {{org}} <br/>
-            {{members}}
-            <ehc-show-obj
-            v-model="org">
+            </ehc-header>
+            <ehc-sheet>
+                <ehc-form v-model="org" :meta="orgMeta" dense @submit="updateOrg()"></ehc-form>
+            </ehc-sheet>
+        <!-- TODO make it initially display the show-obj then click an edit button to edit -->
+        <!-- <ehc-sheet>
+            <ehc-show-obj v-model="org" :meta="orgMeta">
             </ehc-show-obj>
+        </ehc-sheet> -->
 
-            
-            <ehc-table 
-                :items="members" 
-                :headers="memberHeaders"
-                ></ehc-table>
+
+
+        <ehc-card>
+            <ehc-header text="Member Users">
+            </ehc-header>
+            <ehc-sheet>
+                <ehc-table :items="members" :headers="memberHeaders"></ehc-table>
+            </ehc-sheet>
+        </ehc-card>
+
 
     </ehc-page>
 </template>
@@ -28,6 +38,14 @@ export default {
     data() {
         return {
             org: {},
+            orgMeta: [
+                { type: "text", label: "Organization Name", key: "name" },
+                { type: "text", label: "Company White Label", key: "companyLabel" },
+                { type: "link", label: "Web Site", key: "webSite" },
+                { type: "intPhoneNumber", label: "Phone", key: "phone" },
+                { type: "number", label: "Property Limit", key: "propertyLimit" },
+                { type: "button", label: "submit", key: "submit", emitOnClick: "submit", hideInCard: true },
+            ],
             page:1,
             memberHeaders: [
                 {text: 'Display Name', value: 'displayName' },
@@ -51,6 +69,12 @@ export default {
         this.getOrganization()
     },
     methods: {
+        updateOrg: function () {
+            console.log("update org", this.org)
+            this.apiUpdateOrg(this.org.orgId, this.org)
+            /* this.showInfo = true
+            this.showForm = false */
+        },
         pageChange(page) {
             this.page=page
         },  

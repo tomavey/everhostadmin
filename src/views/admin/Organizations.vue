@@ -1,5 +1,5 @@
 <template>
-<v-container>
+  <!-- <v-container>
   <p style="text-align: center; font-weight: bold; font-size: 1.3em">{{pageTitle}}</p>
   Count: {{orgs.length}}
   <div>
@@ -27,7 +27,20 @@
     </template>
     </v-data-table>
   </div>
-</v-container>  
+</v-container>   -->
+  <ehc-page>
+    <ehc-header text="Organizations"></ehc-header>
+    <ehc-sheet>
+      <ehc-table 
+        :headers="headers" 
+        :items="orgs" 
+        :selectable="true" 
+        @click:row="rowClick" 
+        :search="searchString">
+
+      </ehc-table>
+    </ehc-sheet>
+  </ehc-page>
 </template>
 
 <script>
@@ -97,7 +110,7 @@ export default {
             class: 'pointer'
           },
           { text: 'Property Limit', value: 'propertyLimit', sortable: false},
-          { text: 'View', value: 'actions', sortable: false },
+          // { text: 'View', value: 'actions', sortable: false },
           
         ]
     },

@@ -17,6 +17,13 @@ import ehcButton from '@/components/ehc-btn.vue'
 import ehcButtonSmall from '@/components/ehc-button-small.vue'
 import ehcTable from '@/components/ehc-table.vue'
 import ehcShowObj from '@/components/ehc-show-obj.vue'
+import ehcSheet from '@/components/ehc-sheet.vue'
+import ehcHeader from '@/components/ehc-header.vue'
+import ehcCard from '@/components/ehc-card.vue'
+
+
+
+
 
 
 
@@ -31,6 +38,9 @@ import VueTheMask from 'vue-the-mask'
 Vue.mixin(apiMixin)
 Vue.mixin(globalComputedValues)
 
+Vue.component('ehc-card', ehcCard)
+Vue.component('ehc-header', ehcHeader)
+Vue.component('ehc-sheet', ehcSheet)
 Vue.component('ehc-show-obj', ehcShowObj)
 Vue.component('ehc-table', ehcTable)
 Vue.component('ehc-page', ehcPage)
