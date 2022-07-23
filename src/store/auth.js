@@ -40,7 +40,12 @@ export default {
       // if ( payload.phoneNumber ) { payload.phoneNumber = `+1${payload.phoneNumber}` }
       const createUser = firebase.functions().httpsCallable('createUser');
       return await createUser(payload)
-        .then(console.log)
+        .then(
+          (result) => {
+            console.log('createUserWithEmailAndPassword result', result)  
+            return result.data
+          }
+        )
         .catch(console.error);
     },  
     async resetPassword(context,email){

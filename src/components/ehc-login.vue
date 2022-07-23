@@ -285,9 +285,18 @@ export default {
       }
       await this.$store.dispatch('createUserWithEmailAndPassword',obj)
       .then( res => {
+        console.log("createUserWithEmailAndPassword", res)
+        // if ( res.error ){
+        //   this.$store.commit('setAlertMessage', `Something went wrong: ${res.error.message}`)
+        //   this.$store.commit('setShowAlert',true)
+        //   this.createAccountLoading = false
+        //   return
+        // }
         this.$store.commit('setAlertMessage', `Account for ${this.credentials.email} was created`)
         this.$store.commit('setShowAlert',true)
-        this.sendMail(this.mailObj)
+        if ( res ){
+            this.sendMail(this.mailObj)
+        }
         this.createAccountLoading = false      
         this.showSignUp = false
         this.$route.push({name: "Properties"})
