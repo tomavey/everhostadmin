@@ -53,7 +53,7 @@ export default {
           });
     },
     doesUserExist: async function(context, uid){
-      console.log(uid)
+      console.log("doesUserExist: ", uid)
       const usersRef = firebase.firestore().collection('users').doc(uid)
       return await usersRef.get()
         .then(doc => {

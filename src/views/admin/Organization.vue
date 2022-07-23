@@ -46,6 +46,8 @@ export default {
         {type: "number", label: "Property Limit", key: "propertyLimit"},
         {type: "button", label: "submit", key: "submit", emitOnClick: "submit", hideInCard: true},
         
+        {type: "text",            label: "Image",                         key: "image",           multiple:true},
+        {type: "button",          label: "submit",                        key: "submit",          emitOnClick: "submit",  hideInCard: true},
       ],
       shakeVariable: true,
       isValid: false,

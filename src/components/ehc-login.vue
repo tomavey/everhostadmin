@@ -142,6 +142,8 @@ export default {
         ],
         showSignUp: false,
         createAccountLoading: false,
+        // sendEmailTo: ['tom@everhost.io', 'ed@everhost.io', 'grant@everhost.io'],
+        sendEmailTo: ['tom@everhost.io'],
     }
   },
   watch: {
@@ -200,6 +202,58 @@ export default {
     loginDialog: function() {
         return !this.loggedIn
     },
+    intro: function(){
+        this.$store.dispatch('getMetaPage','intro')
+        return this.$store.getters.metaPage
+    },
+    style: function(){
+        return this.$store.getters.emailStyle
+    },
+    bodyTableWrapperStart: function(){
+        return this.$store.getters.emailBodyTableWrapper
+    },
+    bodyTableEnd: function(){
+        return this.$store.getters.emailBodyTableEnd
+    },
+    emailCustomContent: function(){
+        let email = this.credentials.email
+        let displayName = this.credentials.displayName || "User"
+        return `<p class="displayName">Hi ${displayName},</p>
+                <p>Thank you for joining the Everhost community. Here is your account information:</p>
+                https://manage.everhost.io<br/>
+                u: ${email}<br/>
+                p: ***********<br/><br/>
+                <p>Excited to see some amazing property welcome books! We're always looking to hear from our users.  Don't hesitate to contact support@everhost.io with your feedback.</p>
+                <p>Cheers,<br/>
+                Nomad</p>`
+    },
+    emailHead: function(){
+        return `<head>
+                    <style>
+                        ${this.style}
+                    </style>
+                </head>`
+    },
+    mailObj: function(){
+        let email = this.credentials.email
+        let mailObj = {
+            to: [email],
+            bcc: ['tom@everhost.io'],
+            subject: "Welcome to Everhost!",
+            html: `
+                <html>
+                ${this.emailHead}                
+                <body>
+                ${this.bodyTableWrapperStart}
+                ${this.emailCustomContent}
+                ${this.bodyTableEnd}
+                </body>
+                </html>
+            `
+            }
+        return mailObj
+    },
+    
   },
   methods: {
     createNewAccount: async function(){
@@ -233,6 +287,7 @@ export default {
       .then( res => {
         this.$store.commit('setAlertMessage', `Account for ${this.credentials.email} was created`)
         this.$store.commit('setShowAlert',true)
+        this.sendMail(this.mailObj)
         this.createAccountLoading = false      
         this.showSignUp = false
         this.$route.push({name: "Properties"})
@@ -241,6 +296,16 @@ export default {
           console.log("error creating user", err)
       })
     },
+
+    sendMail: function(mailObj) {
+        console.log("sendMailMethod", mailObj)
+        try {
+            this.$store.dispatch('sendMail',mailObj)
+        } catch (error) {
+            console.log("error sending mail", error)
+        }
+    },
+
     login: function(credentials) {
         console.log("login", credentials)
         this.$store.dispatch('signInWithEmailAndPassword', credentials).then(res=>{
@@ -277,6 +342,7 @@ export default {
           this.showSignUp = true
           this.$router.push('/')
       }
+        // this.sendMail(this.mailObj)
   },  
 }
 </script>

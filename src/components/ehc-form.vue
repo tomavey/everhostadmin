@@ -57,8 +57,14 @@
                                     @blur="$emit('blur', {key: field.key, value: data[field.key]})"
                                     @change="$emit('change', {key: field.key, value: data[field.key]})">
                                     </v-text-field>
+                    <ehc-editor 
+                                    v-else-if="field.type === 'editor'"
+                                    v-model="data[field.key]"
+                                    class="wide"
+                                    >{{field.label}}</ehc-editor>
+                                    <!---No @blur or @change needed if we use a save button--->
                     <v-text-field   ref='input'
-                                    v-if="field.type == 'number'" 
+                                    v-else-if="field.type == 'number'" 
                                     type="number"
                                     :color="color"
                                     :rules="inputRules(field)"
@@ -68,7 +74,7 @@
                                     v-model="data[field.key]" 
                                     @blur="$emit('blur', {key: field.key, value: data[field.key]})"
                                     @change="$emit('change', {key: field.key, value: data[field.key]})">
-                                    </v-text-field>                                    
+                                    </v-text-field>
                     <v-text-field   v-else-if="field.type == 'email'" 
                                     :rules="emailRules(field)"
                                     :color="color"

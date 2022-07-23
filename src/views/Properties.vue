@@ -1,6 +1,7 @@
 <template>
     <ehc-page class="grey lighten-4" >
         <v-toolbar flat right class="grey lighten-4 my-5" >
+            <v-chip v-if="userIsAdmin">{{propertiesFiltered.length}} Properties</v-chip>
         <v-spacer/>
             <v-btn-toggle v-model="displayAs" mandatory>
                     <v-btn text value="gallery" >
@@ -44,9 +45,9 @@
             <v-progress-linear
                 v-if="showProgress"
                 indeterminate
-                color="yellow darken-2"
+                color="primary"
                 ></v-progress-linear>
-
+        
         <ehc-meta-edit v-if="!propertiesFiltered.length || showWelcomePage" docId="intro" pageTitle=""></ehc-meta-edit>
         <ehc-properties-gallery v-if="displayAs === 'gallery' && !showWelcomePage" :properties="propertiesFiltered"></ehc-properties-gallery>
         <ehc-properties-table v-if="displayAs === 'table' && !showWelcomePage" :properties="propertiesFiltered" @displayAsGrid='displayAs = "gallery"' ></ehc-properties-table>
@@ -185,33 +186,41 @@ export default {
         },
         _showAll() {
             this.showAll = !this.showAll
+            this.$store.commit("setShowAllLoading", true)
             this.$store.commit("setSearchString", null)
         },
-        subscribeToProperties(showAll){
+        subscribeToProperties(){
             let payload = {}
+            payload.showAll = false
             if ( this.userIsAdmin ) {
                 if ( this.$store.getters.uidToShowAdmin ) { payload.uid = this.$store.getters.uidToShowAdmin }
-                payload.showAll = showAll
+                payload.showAll = true
             }
             this.$store.dispatch('subscribeToProperties',payload)
             .then ( () => this.$store.commit("setShowAllLoading" ,false))
         }
     },
     watch: {
-        // properties(){
-        //     if ( this.properties.length  ) {
-        //         this.showWelcomePage = false
-        //     }
-        // }
+        properties(){
+            console.log("properties changed", this.properties.length)
+            if ( !this.properties.length  ) {
+                this.$store.commit("setShowAllLoading" ,true)
+            }
+        }
     },
     created() {
-        this.subscribeToProperties(this.showAll)
+        this.subscribeToProperties()
         if ( this.$route && this.$route.query ) {
             this.$store.commit('setSearchString', this.$route.query.search)
         }
         if ( this.$route && this.$route.query && this.userIsAdmin ) {
             this.showAll = this.$route.query.showAll
         }
+        // this.$store.dispatch("doesUserExist", this.user.uid).then(res => {
+        //     if ( res ) {
+        //         console.log("user exists", this.user.uid)
+        //     }
+        // })
         // this.$store.dispatch('getCustomSubsections', { propertyId: '8705181', type: 'areaguide' })
         // this.$store.dispatch('getCustomSubsections', { propertyId: '8705181', type: 'propertyinfo' })
 

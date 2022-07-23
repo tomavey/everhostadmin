@@ -103,12 +103,13 @@ export default {
         })
       })
     },
+    //TODO: make this a mixin
     subscribeToProperties(context,payload){
       console.log("subscribeToProperties ", payload)
       let userId = context.getters.user.uid
       if ( payload && payload.uid ) { userId = payload.uid }
       let userIsAdmin = context.getters.isAdmin
-      if ( payload && payload.showAll ) { showAll = true }
+      // if ( payload && payload.showAll ) { showAll = true }
       let propertiesRef = firebase.firestore().collection('properties')
       .where("deletedAt", "==", null)
       .where("uid","==", userId)
@@ -124,6 +125,9 @@ export default {
         docs.forEach( (doc) => {
             let obj = doc.data()
             obj.searchAble = obj.name + obj.city + obj.state + obj.address + obj.propertyId + obj.uid
+            if ( obj.publishedAt) {
+              obj.searchAble = obj.searchAble + 'published'
+            }
             // console.log("obj name ",obj.name)
             propertiesArray = [...propertiesArray, obj]
         })
