@@ -101,7 +101,6 @@ export default {
             const array = [
                 ...passedArray
             ]
-            console.log("presort array", array)
 
             if (key == null || direction == null) {
                 console.log('no sort')
@@ -156,8 +155,8 @@ export default {
         },
         paginateItems(array) {
             if (this.pagination != 'auto') {return array}
-            const pageSize = this.itemsPerPage
-            const pageNumber = this.pageNumber
+                const pageSize = this.itemsPerPage
+                const pageNumber = this.pageNumber
 
             return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
         }
@@ -166,10 +165,17 @@ export default {
         this.filteredItems = this.filterItems(this.search)
     },
     watch: {
-        // items =filterItems> filteredITems =sortItems=> sortedItems =paginateItems=> displayItems
+        
         page(val) {
             this.pageNumber = val
         },
+        pageNumber(val) {
+            if (this.page != val) { this.$emit('pageChange', val) }
+            this.displayItems = this.paginateItems(this.sortedItems)
+        },
+
+
+        // items =filterItems> filteredITems =sortItems=> sortedItems =paginateItems=> displayItems
         items(val) {
             console.log("items", val)
             this.filteredItems = this.filterItems(val, this.search)
@@ -186,10 +192,7 @@ export default {
             console.log("displayItems", val)
         },
 
-        pageNumber(val) {
-            if (this.page != val) { this.$emit('pageChange', val)}
-            this.paginateItems()
-        },
+
         search(val) {
             this.pageNumber = 1
             this.filteredItems = this.filterItems(this.items, val)
