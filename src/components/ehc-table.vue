@@ -18,19 +18,39 @@
         <table>
             <!--Headers-->
             <tr class="header">
-                <th v-for="(header, hindex) in headers" :key="hindex">{{header.text}}</th>
+                <template v-for="(header, hindex) in headers">
+                    <th :key="hindex" :class="(header.sortable) ? 'sortable' : ''" @click="toggleSort(header.value)">{{header.text}}</th>  
+                </template>
+
+            </tr>
+            <tr class="loading" v-if="loading">
+                <td :colspan="headers.length">
+                    <v-progress-linear
+                        height="30"
+                        indeterminate
+                        color="#edd4f0"
+                    ></v-progress-linear>
+                </td>
             </tr>
             <tr @click="$emit('click:row', row)" :class="'body' +  ((selectable) ? ' selectable' : '')"
                 v-for="(row, rindex) in displayItems" :key="rindex">
                 <td v-for="(cell, cindex) in headers" :key="cindex">{{row[cell.value]}}</td>
             </tr>
         </table>
-        <div class="pagination" v-if="pagination != null">
+        <div class="pagination" v-if="pagination === 'manual'">
             <span class="my-auto py-auto">Showing {{this.page*this.itemsPerPage+1-this.itemsPerPage}} to
                 {{this.page*this.itemsPerPage + this.itemsPerPage}} of {{totalItems ? totalItems : 'unknown'}}</span>
             <v-pagination class="mt-0 py-auto" v-model="pagiPage" :length="(numberOfPages)" :total-visible="5">
             </v-pagination>
         </div>
+        <div class="pagination" v-if="pagination === 'auto'">
+            <span class="my-auto py-auto">Showing {{this.pageNumber*this.itemsPerPage+1-this.itemsPerPage}} to
+                {{this.pageNumber*this.itemsPerPage}} of {{filteredItems.length }}</span>
+            <v-pagination class="mt-0 py-auto" v-model="pageNumber"
+                :length="Math.ceil(filteredItems.length / itemsPerPage)" :total-visible="7">
+            </v-pagination>
+        </div>
+
 
     </div>
 
@@ -48,16 +68,76 @@ export default {
         itemsPerPage: {type: Number, default: null},
         selectable: {type: Boolean, default: false },
         pagination: { type: String, default: null },
-        search: {type: String, default: ''}
+        search: { type: String, default: '' },
+        loading: {type: Boolean, default: false}
     },
     data() {
         return {
-            displayItems: []
+            pageNumber: 1,
+            filteredItems: [],
+            sortedItems: [],
+            displayItems: [],
+            sortDirection: null,
+            sortKey: null,
         }
     },
     methods: {
-        filterItems(search) {
-            const items = this.items
+        toggleSort(key) {
+            const Dir = this.sortDirection
+
+            if (Dir === 'asc') {
+                this.sortDirection = 'desc'
+            } else if (Dir == 'desc') {
+                this.sortDirection = null
+            } else {
+                this.sortDirection = 'asc'
+            }
+            this.sortKey = key
+            this.sortedItems = this.sortItems(this.filteredItems)
+        },
+        sortItems(passedArray) {
+            const direction = this.sortDirection
+            const key = this.sortKey
+            const array = [
+                ...passedArray
+            ]
+            console.log("presort array", array)
+
+            if (key == null || direction == null) {
+                console.log('no sort')
+                return array
+            } else {
+                console.log("sortItem", key, direction)
+                // https://www.sitepoint.com/sort-an-array-of-objects-in-javascript/
+                function compare(a, b) {
+
+                    // check if the key exists
+                    if (!(key in a)) { a[key] = '' }
+                    if (!(key in b)) { b[key] = '' }
+                    // Use toUpperCase() to ignore character casing
+                    // console.log("a b", a, b)
+                    const bandA = a[key].toUpperCase();
+                    const bandB = b[key].toUpperCase();
+
+                    let comparison = 0;
+                    if (bandA > bandB) {
+                        comparison = 1;
+                    } else if (bandA < bandB) {
+                        comparison = -1;
+                    }
+                    if (direction === 'asc') {
+                        return comparison;
+                    } else {
+                        return comparison * -1;
+                    }
+                }
+                
+                let sortedArray = array.sort(compare);
+
+                return sortedArray;
+            }
+        },
+        filterItems(items, search) {
             
             if (search != '' && search != null) {
                 let filtered = items.filter(item => {
@@ -73,18 +153,50 @@ export default {
             } else {
                 return items
             }
+        },
+        paginateItems(array) {
+            if (this.pagination != 'auto') {return array}
+            const pageSize = this.itemsPerPage
+            const pageNumber = this.pageNumber
+
+            return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
         }
     },
     mounted() {
-        this.displayItems = this.filterItems(this.search)
+        this.filteredItems = this.filterItems(this.search)
     },
     watch: {
-        search(val) {
-            this.displayItems = this.filterItems(val)
+        // items =filterItems> filteredITems =sortItems=> sortedItems =paginateItems=> displayItems
+        page(val) {
+            this.pageNumber = val
         },
-        items() {
-            this.displayItems = this.filterItems(this.search)
-        }
+        items(val) {
+            console.log("items", val)
+            this.filteredItems = this.filterItems(val, this.search)
+        },
+        filteredItems(val) {
+            console.log("filteredItems", val)
+            this.sortedItems = this.sortItems(val)
+        },
+        sortedItems(val) {
+            console.log("sortedItems", val)
+            this.displayItems = this.paginateItems(val)
+        },
+        displayItems(val) {
+            console.log("displayItems", val)
+        },
+
+        pageNumber(val) {
+            if (this.page != val) { this.$emit('pageChange', val)}
+            this.paginateItems()
+        },
+        search(val) {
+            this.pageNumber = 1
+            this.filteredItems = this.filterItems(this.items, val)
+        },
+
+
+        
     },
     computed: {
         paginationLength() {
@@ -112,6 +224,28 @@ export default {
 </script>
 
 <style>
+
+.ehc-Table .loading td {
+    padding-top:2px;
+    padding-bottom: 2px;
+    padding-left: 0px;
+    padding-right: 0px;
+    
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.ehc-Table .sortable{
+    cursor: pointer;
+}
+
+.ehc-Table .sortable:hover {
+    color: #1d3557;
+}
+
+
 
 .ehc-Table .pagination {
     margin-top: 20px;
@@ -180,7 +314,7 @@ export default {
     padding-top: 11px;
     padding-bottom: 12px;
     padding-left: 10px;
-    padding-right: 60px;
+    padding-right: 10px;
     text-align: left;
     
     /* Black */
@@ -213,7 +347,7 @@ export default {
     padding-top: 15px;
     padding-bottom: 15px;
     padding-left: 10px;
-    padding-right: 60px;
+    padding-right: 10px;
     text-align: left;
     
     /* Black */

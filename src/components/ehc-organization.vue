@@ -7,7 +7,7 @@
             <ehc-sheet>
                 <ehc-form v-model="org" :meta="orgMeta" dense @submit="updateOrg()"></ehc-form>
             </ehc-sheet>
-        <!-- TODO make it initially display the show-obj then click an edit button to edit -->
+        <!-- TODO: make it initially display the show-obj then click an edit button to edit -->
         <!-- <ehc-sheet>
             <ehc-show-obj v-model="org" :meta="orgMeta">
             </ehc-show-obj>
@@ -44,6 +44,7 @@ export default {
                 { type: "link", label: "Web Site", key: "webSite" },
                 { type: "intPhoneNumber", label: "Phone", key: "phone" },
                 { type: "number", label: "Property Limit", key: "propertyLimit" },
+                { type: "select", label: "Subscription Type", key:"subType", options: ["Free", "Premium"], required: true, errorMessage: "you must select something" },
                 { type: "button", label: "submit", key: "submit", emitOnClick: "submit", hideInCard: true },
             ],
             page:1,
@@ -70,8 +71,7 @@ export default {
     },
     methods: {
         updateOrg: function () {
-            console.log("update org", this.org)
-            this.apiUpdateOrg(this.org.orgId, this.org)
+            this.apiUpdateOrg(this.value, this.org)
             /* this.showInfo = true
             this.showForm = false */
         },

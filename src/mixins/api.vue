@@ -137,8 +137,8 @@ export default {
       async apiUpdateOrg(orgID, payload) {
         console.log("apiUpdateOrg", orgID, payload)
 
-        if ( this.payload.webSite ) {
-          this.formData.webSite = this.apiPrependHttp(this.formData.webSite)
+        if ( "webSite" in payload ) {
+          payload.webSite = this.apiPrependHttp(payload.webSite)
         }
 
         this.apiUpdateDoc('organizations', orgID, payload).then((resp)=>{

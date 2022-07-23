@@ -30,12 +30,11 @@
 
 <script>
 import EhcOrganizationAddMember from '../../components/ehc-organization-add-member.vue'
-import ehcOrganizationCard from '../../components/ehc-organization-card.vue'
 import ehcOrganization from '../../components/ehc-organization.vue'
 
 
 export default {
-  components: { ehcOrganizationCard, EhcOrganizationAddMember, ehcOrganization },
+  components: {  EhcOrganizationAddMember, ehcOrganization },
   data: function() {
     return {
       formData: {},
@@ -44,8 +43,9 @@ export default {
         {type: "text",            label: "Company White Label",           key: "companyLabel"},
         {type: "link",            label: "Web Site",                      key: "webSite"},
         {type: "intPhoneNumber",  label: "Phone",                         key: "phone"},
-        {type: "number",          label: "Property Limit",                key: "propertyLimit"},
-        {type: "button",          label: "submit",                        key: "submit",          emitOnClick: "submit",  hideInCard: true},
+        {type: "number", label: "Property Limit", key: "propertyLimit"},
+        {type: "button", label: "submit", key: "submit", emitOnClick: "submit", hideInCard: true},
+        
       ],
       shakeVariable: true,
       isValid: false,
@@ -67,7 +67,8 @@ export default {
     },
   },
   methods: {
-    updateOrg: function(){
+    updateOrg: function () {
+      console.log("updateOrg form data", this.formData)
       this.apiUpdateOrg(this.formData.orgId, this.formData)
       this.showInfo = true
       this.showForm = false

@@ -36,7 +36,11 @@
         :items="orgs" 
         :selectable="true" 
         @click:row="rowClick" 
-        :search="searchString">
+        :search="searchString"
+        pagination="auto"
+        :itemsPerPage="15"
+        :loading="loading"
+        >
 
       </ehc-table>
     </ehc-sheet>
@@ -109,7 +113,7 @@ export default {
             value: 'creator',
             class: 'pointer'
           },
-          { text: 'Property Limit', value: 'propertyLimit', sortable: false},
+          { text: 'Property Limit', value: 'propertyLimit', sortable: true},
           // { text: 'View', value: 'actions', sortable: false },
           
         ]
@@ -118,8 +122,13 @@ export default {
       return this.$store.getters.searchString
     },  
   },
-  created(){
-    this.$store.dispatch('getOrgs')
+  created() {
+    // TODO: MOVE THIS FROM STORE TO LOCAL COMPONENT
+    this.loading= true
+    this.$store.dispatch('getOrgs').then((resp) => {
+      this.loading=false
+    })
+
   }
 }
 </script>

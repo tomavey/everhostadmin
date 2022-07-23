@@ -86,7 +86,7 @@ export default {
     async getOrgs(context) {
       let obj = {}
       var orgsRef = firebase.firestore().collection("organizations")
-      orgsRef.get()
+      return await orgsRef.get()
       .then( docs => {
         let orgsArray = []
         docs.forEach(doc => {
@@ -94,7 +94,8 @@ export default {
           obj.orgId = doc.id
           orgsArray.push(obj)
         })
-        context.commit("setOrgs",orgsArray)
+        context.commit("setOrgs", orgsArray)
+        return true
       })
     },
     async getOrganization(context, payload) {
