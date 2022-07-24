@@ -13,8 +13,9 @@
 
 
 <template>
-
+        
     <div class="ehc-Table">
+        
         <table>
             <!--Headers-->
             <tr class="header">
@@ -32,8 +33,10 @@
                     ></v-progress-linear>
                 </td>
             </tr>
-            <tr @click="$emit('click:row', row)" :class="'body' +  ((selectable) ? ' selectable' : '')"
-                v-for="(row, rindex) in displayItems" :key="rindex">
+            <tr @click="$emit('click:row', row)" 
+                :class="'body' +  ((selectable) ? ' selectable' : '')"
+                v-for="(row, rindex) in displayItems" 
+                :key="rindex">
                 <td v-for="(cell, cindex) in headers" :key="cindex">{{row[cell.value]}}</td>
             </tr>
         </table>
@@ -137,6 +140,7 @@ export default {
             }
         },
         filterItems(items, search) {
+
             
             if (search != '' && search != null) {
                 let filtered = items.filter(item => {
@@ -162,7 +166,7 @@ export default {
         }
     },
     mounted() {
-        this.filteredItems = this.filterItems(this.search)
+        this.filteredItems = this.filterItems(this.items, this.search)
     },
     watch: {
         
