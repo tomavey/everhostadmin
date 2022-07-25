@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-fade-transition leave-absolute>
-        <v-container fluid  class="ma-0 pa-0" v-if="!showApp">
+        <v-container fluid  class="ma-0 pa-0 login" v-if="!showApp">
             <v-row align="center">
                 <v-col cols=4 class="pb-0">
                     <v-slide-x-reverse-transition>
@@ -360,5 +360,9 @@ export default {
 .bgFixed .v-image__image--cover{
       background-attachment: fixed;
       min-height: 100%;
+      
+}
+.login {
+    background-color: white;
 }
 </style>

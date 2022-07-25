@@ -1,5 +1,5 @@
 <template>
-<v-container>
+<!-- <v-container>
     <v-toolbar
       color="primary"
       dark
@@ -15,19 +15,26 @@
             v-model="formData" 
             :meta="meta" 
             :shakeInvalid="shakeVariable"
-            @submit="updateOrg(org)"
+            @submit="updateOrg()"
             @valid="isValid = $event"
             />
     </v-container>
-  </v-container>
+  </v-container> -->
+
+  <ehc-page>
+    <ehc-organization v-model="orgID">
+
+    </ehc-organization>
+  </ehc-page>
 </template>
 
 <script>
 import EhcOrganizationAddMember from '../../components/ehc-organization-add-member.vue'
-import ehcOrganizationCard from '../../components/ehc-organization-card.vue'
+import ehcOrganization from '../../components/ehc-organization.vue'
+
 
 export default {
-  components: { ehcOrganizationCard, EhcOrganizationAddMember },
+  components: {  EhcOrganizationAddMember, ehcOrganization },
   data: function() {
     return {
       formData: {},
@@ -36,6 +43,9 @@ export default {
         {type: "text",            label: "Company White Label",           key: "companyLabel"},
         {type: "link",            label: "Web Site",                      key: "webSite"},
         {type: "intPhoneNumber",  label: "Phone",                         key: "phone"},
+        {type: "number", label: "Property Limit", key: "propertyLimit"},
+        {type: "button", label: "submit", key: "submit", emitOnClick: "submit", hideInCard: true},
+        
         {type: "text",            label: "Image",                         key: "image",           multiple:true},
         {type: "button",          label: "submit",                        key: "submit",          emitOnClick: "submit",  hideInCard: true},
       ],
@@ -46,6 +56,9 @@ export default {
     }
   },
   computed: {
+    orgID() {
+      return this.$route.params.id
+    },
     org: function(){
       let org = this.$store.getters.org
       return org
@@ -56,11 +69,9 @@ export default {
     },
   },
   methods: {
-    updateOrg: function(){
-      if ( this.formData.webSite ) {
-        this.formData.webSite = this.prependHttp(this.formData.webSite)
-      }
-      this.$store.dispatch('updateOrg',this.formData)
+    updateOrg: function () {
+      console.log("updateOrg form data", this.formData)
+      this.apiUpdateOrg(this.formData.orgId, this.formData)
       this.showInfo = true
       this.showForm = false
     },
@@ -72,20 +83,20 @@ export default {
       console.log("showThisUidProperties",memberId)
       this.$router.push({name: "Properties", query: {search: memberId, showAll: true}})  
     },
-    prependHttp(url, {https = true} = {}) {
-      if (!url.length) {return null}
-      if (typeof url !== 'string') {
-          throw new TypeError(`Expected \`url\` to be of type \`string\`, got \`${typeof url}\``);
-      }
+    // prependHttp(url, {https = true} = {}) {
+    //   if (!url.length) {return null}
+    //   if (typeof url !== 'string') {
+    //       throw new TypeError(`Expected \`url\` to be of type \`string\`, got \`${typeof url}\``);
+    //   }
 
-      url = url.trim();
+    //   url = url.trim();
 
-      if (/^\.*\/|^(?!localhost)\w+?:/.test(url)) {
-          return url;
-      }
+    //   if (/^\.*\/|^(?!localhost)\w+?:/.test(url)) {
+    //       return url;
+    //   }
 
-      return url.replace(/^(?!(?:\w+?:)?\/\/)/, https ? 'https://' : 'http://');
-    },
+    //   return url.replace(/^(?!(?:\w+?:)?\/\/)/, https ? 'https://' : 'http://');
+    // },
 
   },
   watch: {
@@ -95,7 +106,7 @@ export default {
   },
   created(){
     this.$store.dispatch('getOrganization',this.$route.params.id)
-    this.$store.dispatch('getMembers',this.$route.params.id)
+    // this.$store.dispatch('getMembers',this.$route.params.id)
   },
 }
 </script>

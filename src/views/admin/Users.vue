@@ -1,101 +1,81 @@
 <template>
-<v-container>
-  <v-card>
+  <ehc-page>
+    <!-- <ehc-header text="USERS"></ehc-header>
+    <ehc-sheet>
+      <ehc-table :headers="headers" :items="users" pagination="auto" :itemsPerPage="20" :search="search">
 
-<!-- DOWNLOAD BUTTON -->
-    <v-card-text>
-        <ehc-download-button 
-          :label="'Download as CSV'" 
-          :fileName="'USERS'" 
-          :data="usersForDownload"
-          :header="'EVERHOST USER DATA'"
-          :type="'csv'"
-        />  
-    </v-card-text>
+      </ehc-table>
+    </ehc-sheet> -->
 
-<!-- TABLE HEADER -->
-    <v-card-text class="text-center text-h4">USERS</v-card-text>
 
-<!-- FOR ADMIN ONLY -->
-    <v-card-actions v-if="userIsAdmin">
-    <!-- CREATE NEW USER BUTTON -->
-      <v-btn @click="showNewUser = !showNewUser" class="float-right mr-2">
-        Create a new user
-      </v-btn>
-      <!-- CREATE A NEW USER DIALOG -->
-      <ehc-dialog v-model="showNewUser" title="Create a new user" width="500" close>
-        <ehc-form :meta="newUserMeta" v-model="newUserFormData" @submit="submitNewUser()"></ehc-form>
-      </ehc-dialog>
+    <v-card>
 
-    <!-- MAKE USER ADMIN -->
-      <v-btn @click="showPromote = !showPromote" class="float-right mr-1">
-        Promote user to admin
-      </v-btn>
-      <ehc-dialog v-model="showPromote" :title="title" width="500" close>
-        <ehc-form :meta="meta" v-model="formData" @submit="submitPromotion()"></ehc-form>
-      </ehc-dialog>
-   </v-card-actions>
-  </v-card>
+      <!-- DOWNLOAD BUTTON -->
+      <v-card-text>
+        <ehc-download-button :label="'Download as CSV'" :fileName="'USERS'" :data="usersForDownload"
+          :header="'EVERHOST USER DATA'" :type="'csv'" />
+      </v-card-text>
 
-  <div>
-    <v-data-table
-      :headers="headers"
-      :items="users"
-      item-key="createdAt"
-      class="elevation-1"
-      :search="search"
-      :single-expand="singleExpand"
-      :expanded.sync="expanded"    
-      :show-expand = userIsAdmin  
-      :footer-props="{
+      <!-- TABLE HEADER -->
+      <v-card-text class="text-center text-h4">USERS</v-card-text>
+
+      <!-- FOR ADMIN ONLY -->
+      <v-card-actions v-if="userIsAdmin">
+        <!-- CREATE NEW USER BUTTON -->
+        <v-btn @click="showNewUser = !showNewUser" class="float-right mr-2">
+          Create a new user
+        </v-btn>
+        <!-- CREATE A NEW USER DIALOG -->
+        <ehc-dialog v-model="showNewUser" title="Create a new user" width="500" close>
+          <ehc-form :meta="newUserMeta" v-model="newUserFormData" @submit="submitNewUser()"></ehc-form>
+        </ehc-dialog>
+
+        <!-- MAKE USER ADMIN -->
+        <v-btn @click="showPromote = !showPromote" class="float-right mr-1">
+          Promote user to admin
+        </v-btn>
+        <ehc-dialog v-model="showPromote" :title="title" width="500" close>
+          <ehc-form :meta="meta" v-model="formData" @submit="submitPromotion()"></ehc-form>
+        </ehc-dialog>
+      </v-card-actions>
+    </v-card>
+
+    <div>
+      <v-data-table :headers="headers" :items="users" item-key="createdAt" class="elevation-1" :search="search"
+        :single-expand="singleExpand" :expanded.sync="expanded" :show-expand=userIsAdmin :footer-props="{
         showFirstLastPage: true,
         itemsPerPageOptions: [50,100,150,-1]
-      }"
-    >
+      }">
 
-    <!-- LINK TO VIEW THIS USERS PROPERTIES -->
-      <template v-slot:item.actions="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="showThisUidProperties(item)"
-      >
-        mdi-file-find
-      </v-icon>
-    </template>
+        <!-- LINK TO VIEW THIS USERS PROPERTIES -->
+        <template v-slot:item.actions="{ item }">
+          <v-icon small class="mr-2" @click="showThisUidProperties(item)">
+            mdi-file-find
+          </v-icon>
+        </template>
 
-    <!-- EXPANSION ITEMS -->
-    <!-- MOVE AN EXISTING PROPERTY TO THIS USER -->
-    <template v-slot:expanded-item="{ headers, item }">
-      <td :colspan="headers.length">
-        <span style="font-size: .8em;">This feature is in 'beta'. Be sure you enter a valid propertyId<br/></span>
-        Add an existing property to {{item.email}}:&nbsp;
-        <v-col cols="4">
-        <v-text-field
-          v-if="!newPropertyMessage"
-          v-model="newPropertyId"
-          label="New Property Id"
-          :append-outer-icon="newPropertyId ? 'mdi-send' : ''"
-          @click:append-outer="transferProperty(item)"
-          >
-        </v-text-field>
-        <v-checkbox
-          v-if="!newPropertyMessage"
-          v-model="moveGuestInfo"
-          label="Transfer guest data also"
-          :value=moveGuestInfo
-          class="my-1"
-        ></v-checkbox>
-        <p v-if="newPropertyMessage">{{newPropertyMessage}}</p>
-        </v-col>
-      </td>
-    </template>
-    </v-data-table>
+        <!-- EXPANSION ITEMS -->
+        <!-- MOVE AN EXISTING PROPERTY TO THIS USER -->
+        <template v-slot:expanded-item="{ headers, item }">
+          <td :colspan="headers.length">
+            <span style="font-size: .8em;">This feature is in 'beta'. Be sure you enter a valid propertyId<br /></span>
+            Add an existing property to {{item.email}}:&nbsp;
+            <v-col cols="4">
+              <v-text-field v-if="!newPropertyMessage" v-model="newPropertyId" label="New Property Id"
+                :append-outer-icon="newPropertyId ? 'mdi-send' : ''" @click:append-outer="transferProperty(item)">
+              </v-text-field>
+              <v-checkbox v-if="!newPropertyMessage" v-model="moveGuestInfo" label="Transfer guest data also"
+                :value=moveGuestInfo class="my-1"></v-checkbox>
+              <p v-if="newPropertyMessage">{{newPropertyMessage}}</p>
+            </v-col>
+          </td>
+        </template>
+      </v-data-table>
 
-    <ehc-alert-confirm @confirmAction="confirmAction" ></ehc-alert-confirm>
-  </div>
+      <ehc-alert-confirm @confirmAction="confirmAction"></ehc-alert-confirm>
+    </div>
 
-</v-container>  
+  </ehc-page>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-<v-container>
+  <!-- <v-container>
   <p style="text-align: center; font-weight: bold; font-size: 1.3em">{{pageTitle}}</p>
   Count: {{orgs.length}}
   <div>
@@ -27,7 +27,24 @@
     </template>
     </v-data-table>
   </div>
-</v-container>  
+</v-container>   -->
+  <ehc-page>
+    <ehc-header text="Organizations"></ehc-header>
+    <ehc-sheet>
+      <ehc-table 
+        :headers="headers" 
+        :items="orgs" 
+        :selectable="true" 
+        @click:row="rowClick" 
+        :search="searchString"
+        pagination="auto"
+        :itemsPerPage="15"
+        :loading="loading"
+        >
+
+      </ehc-table>
+    </ehc-sheet>
+  </ehc-page>
 </template>
 
 <script>
@@ -96,15 +113,22 @@ export default {
             value: 'creator',
             class: 'pointer'
           },
-          { text: 'View', value: 'actions', sortable: false },
+          { text: 'Property Limit', value: 'propertyLimit', sortable: true},
+          // { text: 'View', value: 'actions', sortable: false },
+          
         ]
     },
     searchString: function(){
       return this.$store.getters.searchString
     },  
   },
-  created(){
-    this.$store.dispatch('getOrgs')
+  created() {
+    // TODO: MOVE THIS FROM STORE TO LOCAL COMPONENT
+    this.loading= true
+    this.$store.dispatch('getOrgs').then((resp) => {
+      this.loading=false
+    })
+
   }
 }
 </script>

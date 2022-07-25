@@ -46,6 +46,12 @@
             </v-list-item-icon>
             <v-list-item-title>Updates Log</v-list-item-title>
           </v-list-item>
+          <v-list-item link @click="$router.push('/adminSettings')">
+            <v-list-item-icon>
+              <v-img :src="require('@/assets/icons/clock@3x.svg')"></v-img>
+            </v-list-item-icon>
+            <v-list-item-title>Admin Settings</v-list-item-title>
+          </v-list-item>
         </v-list>
       </v-navigation-drawer>
 </template>

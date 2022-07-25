@@ -1,6 +1,20 @@
 <template>
-  <v-container>
-    <v-card-text class="text-center text-h4">{{pageTitle}}</v-card-text>
+  <ehc-page>
+    <ehc-header text="Update Log"></ehc-header>
+    <ehc-sheet>
+      <ehc-table 
+        :headers = headers
+        :search = "searchString"
+        :items = updatesLog
+        :selectable="true"
+        pagination="auto"
+        :itemsPerPage="20"
+        @click:row="showProperty($event)"
+        :loading="loading"
+        ></ehc-table>
+    </ehc-sheet>
+
+    <!-- <v-card-text class="text-center text-h4">{{pageTitle}}</v-card-text>
 
     <v-data-table
       :headers = headers
@@ -11,6 +25,7 @@
       }"
 
     >
+
     <template v-slot:item.actions="{ item }">
       <v-icon
         small
@@ -21,8 +36,9 @@
       </v-icon>
     </template>
 
-    </v-data-table>  
-  </v-container>
+    </v-data-table> -->
+    
+  </ehc-page>
 </template>
 
 <script>
@@ -33,35 +49,48 @@ export default {
   data() {
     return {
       pageTitle: 'Updates Log',
+      loading: false,
+      updatesLog: []
+      // updatesLog: [],
     }
   },
   methods: {
+    
     showProperty: function(item){
       let link=`https://everhost.io/${item.propertyId}`
       window.open(link)
     },
+    getLogs() {
+      this.loading = true
+      this.apiGetDocs('updateslog').then((data) => {
+        this.updatesLog = data
+        this.loading=false
+      })
+    },
+  },
+  mounted() {
+    this.getLogs()
   },
   computed: {
-    updatesLog: function(){
-      return this.$store.getters.updatesLog
-      .map( el => {
-        el.updatedAtAsString = this.dateFormat(el.updatedAt,"dateOnly")
-        el.searchAble = `${el.updatedAtAsString} ${el.propertyId} ${el.propertyCity} ${el.propertyName} ${el.uid}`
-        return el
-      })
-      .filter( el => {
-        if ( this.searchString ) {
-          return el.searchAble.toLowerCase().includes(this.searchString.toLowerCase())
-        } else {
-          return true
-        }
-      })
-      .sort( (a,b) => {
-          if ( a.updatedAt < b.updatedAt ) {return 1}
-          else { return -1 }
-      })
-
-    },
+    // updatesLog: function () {
+    //    return this.$store.getters.updatesLog
+    //    .map( el => {
+    //      el.updatedAtAsString = this.dateFormat(el.updatedAt,"dateOnly")
+    //      el.searchAble = `${el.updatedAtAsString} ${el.propertyId} ${el.propertyCity} ${el.propertyName} ${el.uid}`
+    //      return el
+    //    })
+    //    .filter( el => {
+    //     if ( this.searchString ) {
+    //       return el.searchAble.toLowerCase().includes(this.searchString.toLowerCase())
+    //     } else {
+    //       return true
+    //     }
+    //   })
+    //   .sort( (a,b) => {
+    //       if ( a.updatedAt < b.updatedAt ) {return 1}
+    //       else { return -1 }
+    //   })
+    // },
     headers: function(){
       return [
           {
@@ -97,6 +126,7 @@ export default {
   },
   created(){
     this.$store.dispatch("getUpdateLogs")
+    // this.getLogs()
   }
 
 }

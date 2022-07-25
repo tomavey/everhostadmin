@@ -1,13 +1,13 @@
 <template>
-  <v-app id="app">
-    <ehc-login>
+  <v-app id="app"  :style="{ background: $vuetify.theme.themes['light'].background }">
+    <ehc-login v-model="showApp" >
+
         <ehc-app-toolbar></ehc-app-toolbar>
         <ehc-admin-drawer v-if="userIsAdmin"/>
 
-        <v-main height="100%">
+        <v-main height="100%" fill-height>
             <router-view :key="$route.fullPath" />
         </v-main>
-
     </ehc-login>
   </v-app>
 </template>
@@ -21,17 +21,24 @@ import updateMixin from '@/mixins/updateMixin.js';
 import EhcAdminDrawer from './components/ehc-admin-drawer.vue'
 import auth from "@/mixins/auth.vue"
 
+
 export default {
   components: { ehcAppToolbar, ehcLogin, EhcAppToolbar, EhcFeedback, EhcAdminDrawer },
   mixins: [updateMixin,auth],
   name: 'App',
 
   data: () => ({
-    
+    showApp: null
   }),
   watch: {
+    showApp(val) {
+      if (val == true) {
+          this.apiGetAppSettings()
+      }
+    }
   },
   methods: {
+
   },
   computed: {
     user: function(){
