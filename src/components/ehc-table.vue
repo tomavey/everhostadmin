@@ -13,33 +13,72 @@
 
 
 <template>
-        
+
     <div class="ehc-Table">
-        
+
         <table>
             <!--Headers-->
             <tr class="header">
                 <template v-for="(header, hindex) in headers">
-                    <th :key="hindex" :class="(header.sortable) ? 'sortable' : ''" @click="toggleSort(header.value)">{{header.text}}</th>  
+                    <th :key="hindex" :class="(header.sortable) ? 'sortable' : ''" @click="toggleSort(header.value)">
+                        {{header.text}}</th>
                 </template>
+                <th v-if="expansionPanel"></th>
 
             </tr>
             <tr class="loading" v-if="loading">
                 <td :colspan="headers.length">
-                    <v-progress-linear
-                        height="30"
-                        indeterminate
-                        color="#edd4f0"
-                    ></v-progress-linear>
+                    <v-progress-linear height="30" indeterminate color="#edd4f0"></v-progress-linear>
                 </td>
             </tr>
-            <tr @click="$emit('click:row', row)" 
-                :class="'body' +  ((selectable) ? ' selectable' : '')"
-                v-for="(row, rindex) in displayItems" 
-                :key="rindex">
-                <td v-for="(cell, cindex) in headers" :key="cindex">{{row[cell.value]}}</td>
-            </tr>
+
+
+            <!-- BODY SECTION -->
+            <template v-for="(row, rindex) in displayItems">
+                <tr @click="$emit('click:row', row)" :class="'body' +  ((selectable) ? ' selectable' : '')"
+                    :key="rindex">
+                    <template v-for="(cell, cindex) in headers">
+                        <!-- default -->
+                        <td :key="cindex" v-if="!('type' in cell)" class="px-2 pl-2 pr-5"> {{row[cell.value]}}</td>
+                        <!-- slot -->
+                        <td :key="cindex" v-else-if="cell.type ==='slot'" class="px-2 pl-2 pr-5">
+                            <slot :name="cell.slotName" v-bind:item="row"></slot>
+                        </td>
+
+                        <!-- avatar -->
+                        <td :key="cindex" v-else-if='cell.type==="avatar"' class="px-1 py-1">
+                            <ehc-user-avatar class="" :photoURL="row[cell.value]" />
+                        </td>
+
+                        <!-- boolean -->
+                        <td :key="cindex" v-else-if='cell.type === "boolean"' class="px-2 pl-2 pr-5">
+                            <v-list-item-icon>
+                                <v-img v-if="row[cell.value]" :src="require('@/assets/icons/Seen@3x.svg')" small
+                                    class="mr-2" />
+                                <v-img v-else :src="require('@/assets/icons/Close.svg')" small class="mr-2" />
+                            </v-list-item-icon>
+                        </td>
+                    </template>
+                    <td v-if="epxansion"></td>
+                </tr>
+                <!-- expansion panel -->
+                <tr :key="rindex" v-if="expansionPanel" class="body">
+                    <td :colspan="headers.length">
+                        <slot name="expansionPanel" v-bind:item="row">
+                            test
+                        </slot>
+                    </td>
+                </tr>
+
+
+            </template>
+
+
         </table>
+
+
+
+        <!-- pagination section -->
         <div class="pagination" v-if="pagination === 'manual'">
             <span class="my-auto py-auto">Showing {{this.page*this.itemsPerPage+1-this.itemsPerPage}} to
                 {{this.page*this.itemsPerPage + this.itemsPerPage}} of {{totalItems ? totalItems : 'unknown'}}</span>
@@ -61,8 +100,13 @@
 
 
 <script>
+import EhcUserAvatar from './ehc-user-avatar.vue' 
+
 
 export default {
+    components: {
+        EhcUserAvatar
+    },
     props: {
         headers: {type: Array},
         items: {type: Array},
@@ -72,7 +116,8 @@ export default {
         selectable: {type: Boolean, default: false },
         pagination: { type: String, default: null },
         search: { type: String, default: '' },
-        loading: {type: Boolean, default: false}
+        loading: { type: Boolean, default: false },
+        expansionPanel: {type: Boolean, default: false}
     },
     data() {
         return {
@@ -351,10 +396,10 @@ export default {
     line-height: 120%;
     /* identical to box height, or 17px */
 
-    padding-top: 15px;
+    /* padding-top: 15px;
     padding-bottom: 15px;
     padding-left: 10px;
-    padding-right: 10px;
+    padding-right: 10px; */
     text-align: left;
     
     /* Black */
