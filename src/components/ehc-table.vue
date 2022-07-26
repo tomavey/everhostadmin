@@ -39,9 +39,9 @@
                     :key="rindex">
                     <template v-for="(cell, cindex) in headers">
                         <!-- default -->
-                        <td :key="cindex" v-if="!('type' in cell)" class="px-2 pl-2 pr-5"> {{row[cell.value]}}</td>
+                        <td :key="cindex" v-if="!('type' in cell)" class="pl-2 pr-12 py-2"> {{row[cell.value]}}</td>
                         <!-- slot -->
-                        <td :key="cindex" v-else-if="cell.type ==='slot'" class="px-2 pl-2 pr-5">
+                        <td :key="cindex" v-else-if="cell.type ==='slot'" class="px-4 pl-2 pr-5">
                             <slot :name="cell.slotName" v-bind:item="row"></slot>
                         </td>
 

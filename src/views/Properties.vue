@@ -49,6 +49,7 @@
                 ></v-progress-linear>
         
         <ehc-meta-edit v-if="!propertiesFiltered.length || showWelcomePage" docId="intro" pageTitle=""></ehc-meta-edit>
+        
         <ehc-properties-gallery v-if="displayAs === 'gallery' && !showWelcomePage" :properties="propertiesFiltered"></ehc-properties-gallery>
         <ehc-properties-table v-if="displayAs === 'table' && !showWelcomePage" :properties="propertiesFiltered" @displayAsGrid='displayAs = "gallery"' ></ehc-properties-table>
         <ehc-dialog max-width="400" v-model="maxPropsDialog" title="Max Properties Reached">

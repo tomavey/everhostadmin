@@ -81,7 +81,7 @@
       </ehc-table>
     </ehc-sheet>
 
-    <ehc-dialog v-model="adminDialog.show" :title="'admin features: ' + adminDialog.item.name">
+    <ehc-dialog v-model="adminDialog.show" :title="'admin features: ' + adminDialog.item.name" max-width="700px">
       <span style="font-size: .8em;">This feature is in 'beta'. Be sure you enter a valid uid<br /></span>
       Change User ID for Property ID: {{ adminDialog.item.propertyId}}:&nbsp;
       <v-col cols="4">

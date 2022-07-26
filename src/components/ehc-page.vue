@@ -8,8 +8,9 @@
                 class="pt-0 pb-0 px-3" 
                 v-if="triggerTransition" 
                 fluid 
-                fill-height>
-
+                fill-height
+                d-block>
+                
 
                 <div>
                     <slot></slot>
