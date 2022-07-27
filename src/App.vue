@@ -2,19 +2,21 @@
   <v-app id="app" :style="{ background: $vuetify.theme.themes['light'].background }">
 
     <ehc-login v-model="showApp">
-
-      <ehc-app-toolbar></ehc-app-toolbar>
+    
+      <ehc-mobile-app-toolbar v-if="gcvIsMobile"></ehc-mobile-app-toolbar>
+      <ehc-app-toolbar v-else></ehc-app-toolbar>
+      
       <ehc-admin-drawer v-if="userIsAdmin" />
 
       <v-main height="100%" fill-height>
         <router-view :key="$route.fullPath" />
       </v-main>
-
     </ehc-login>
   </v-app>
 </template>
 
 <script>
+import ehcMobileAppToolbar from './components/ehc-mobile-app-toolbar.vue';
 import ehcAppToolbar from './components/ehc-app-toolbar.vue';
 import ehcLogin from './components/ehc-login.vue';
 import EhcAppToolbar from './components/ehc-app-toolbar.vue';
@@ -25,7 +27,7 @@ import auth from "@/mixins/auth.vue"
 
 
 export default {
-  components: { ehcAppToolbar, ehcLogin, EhcAppToolbar, EhcFeedback, EhcAdminDrawer },
+  components: { ehcAppToolbar,ehcMobileAppToolbar, ehcLogin, EhcAppToolbar, EhcFeedback, EhcAdminDrawer },
   mixins: [updateMixin,auth],
   name: 'App',
 
