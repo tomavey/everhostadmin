@@ -1,13 +1,15 @@
 <template>
-  <v-app id="app"  :style="{ background: $vuetify.theme.themes['light'].background }">
-    <ehc-login v-model="showApp" >
+  <v-app id="app" :style="{ background: $vuetify.theme.themes['light'].background }">
 
-        <ehc-app-toolbar></ehc-app-toolbar>
-        <ehc-admin-drawer v-if="userIsAdmin"/>
+    <ehc-login v-model="showApp">
 
-        <v-main height="100%" fill-height>
-            <router-view :key="$route.fullPath" />
-        </v-main>
+      <ehc-app-toolbar></ehc-app-toolbar>
+      <ehc-admin-drawer v-if="userIsAdmin" />
+
+      <v-main height="100%" fill-height>
+        <router-view :key="$route.fullPath" />
+      </v-main>
+
     </ehc-login>
   </v-app>
 </template>
