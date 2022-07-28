@@ -1,6 +1,6 @@
 <template>
     <ehc-page class="grey lighten-4" >
-        <v-toolbar flat right class="grey lighten-4 my-5" >
+       <!-- <v-toolbar flat right class="grey lighten-4 my-5" >
             <v-chip v-if="userIsAdmin">{{propertiesFiltered.length}} Properties</v-chip>
         <v-spacer/>
             <v-btn-toggle v-model="displayAs" mandatory>
@@ -49,7 +49,18 @@
                 ></v-progress-linear>
         
         <ehc-meta-edit v-if="!propertiesFiltered.length || showWelcomePage" docId="intro" pageTitle=""></ehc-meta-edit>
+        -->
         
+            <ehc-header 
+                text="Properties" 
+                :actions="headerActions"
+                @addProperty="addProperty()"
+                @showAll="_showAll()"
+                @viewChange='viewChange($event)'
+                ></ehc-header>
+          
+
+
         <ehc-properties-gallery v-if="displayAs === 'gallery' && !showWelcomePage" :properties="propertiesFiltered"></ehc-properties-gallery>
         <ehc-properties-table v-if="displayAs === 'table' && !showWelcomePage" :properties="propertiesFiltered" @displayAsGrid='displayAs = "gallery"' ></ehc-properties-table>
         <ehc-dialog max-width="400" v-model="maxPropsDialog" title="Max Properties Reached">
@@ -79,20 +90,39 @@ export default {
     mixins: [mixins,auth],
     name: 'properties',
 
-    data: () => ({
-        maxProperties: 3,
-        maxPropsDialog: false,
-        addLoading: false,
-        search: null,
-        displayAs: "gallery",
-        showAll: false,
-    }),
+    data() {
+
+        return {
+            maxProperties: 3,
+            maxPropsDialog: false,
+            addLoading: false,
+            search: null,
+            displayAs: "gallery",
+            showAll: false,
+        }
+    },
     watch: {
         loading(val) {
             this.$store.commit('setLoading', val)
         },
     },
     computed: {
+        headerActions() {
+            const showAllType = (this.userPermissionCheck('superAdmin')) ? 'v-btn': ''
+
+            let actions = [
+                {actionType: 'v-btn-toggle', dense: true, changeEmit: "viewChange", default: "gallery", mandatory: true,
+                    buttons: [     
+                        {label: 'Grid View', value: 'gallery', outlined: true, prependIconURL: require('@/assets/icons/Grid View@3x.svg')},
+                        {label: 'List View', value: 'table', outlined: true, prependIconURL: require('@/assets/icons/List View@3x.svg')}
+                    ]},
+                {actionType: (this.userPermissionCheck('superAdmin')) ? 'v-btn': '', label: "Show All", color: "tertiary", dark: false, prependIconURL: require("@/assets/icons/show@3x.svg"), clickEmit: "showAll", permissions: 'superAdmin'},
+                {actionType: 'v-btn', label: "add property", color: "primary", dark: true, prependIcon: "mdi-plus", clickEmit: "addProperty"},
+            ]
+
+
+            return actions
+        },
         showWelcomePage: function(){
             return this.$store.getters.showWelcomePage   
         },
@@ -165,6 +195,9 @@ export default {
         }
     },    
     methods: {
+        viewChange(event) {
+            this.displayAs = event
+        },
         addProperty() {
             if (this.properties.length < this.propertyLimit) {
                 this.addLoading=true

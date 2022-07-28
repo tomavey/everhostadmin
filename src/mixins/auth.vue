@@ -9,7 +9,11 @@ export default {
   created() {
   },
   methods:{
-
+    // returns true if user has permission level passed
+    userPermissionCheck(perm) {
+      if(perm=='') {return true}
+      return this.user.permissions.includes(perm)
+    },
   },
   computed: {
     userIsAuthenticated: function () {

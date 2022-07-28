@@ -15,6 +15,7 @@
 <template>
 
     <div class="ehc-Table">
+        <div class="table">
 
         <table>
             <!--Headers-->
@@ -75,6 +76,7 @@
 
 
         </table>
+        </div>
 
 
 
@@ -276,6 +278,19 @@ export default {
 </script>
 
 <style>
+.ehc-Table {
+    
+    max-width: 81vw;
+}
+
+.ehc-Table .table {
+    overflow-x: auto !important; 
+}
+
+.ehc-Table table{
+
+    white-space: nowrap;
+}
 
 .ehc-Table .loading td {
     padding-top:2px;

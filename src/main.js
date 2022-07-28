@@ -29,6 +29,8 @@ import ehcCard from '@/components/ehc-card.vue'
 
 import apiMixin from '@/mixins/api.vue'
 import globalComputedValues from '@/mixins/globalComputedValues.vue'
+import authMixin from '@/mixins/auth.vue'
+
 
 
 
@@ -36,6 +38,7 @@ import VueTheMask from 'vue-the-mask'
 
 
 Vue.mixin(apiMixin)
+Vue.mixin(authMixin)
 Vue.mixin(globalComputedValues)
 
 Vue.component('ehc-card', ehcCard)
@@ -51,7 +54,7 @@ Vue.component('ehc-btn', ehcButton)
 Vue.component('ehc-button-small', ehcButtonSmall)
 
 
-  
+
 Vue.use(VueTheMask)
 
 
@@ -103,6 +106,6 @@ const app = new Vue({
   render: h => h(App)
 })
 
-app.$mount('#app') 
+app.$mount('#app')
 
 

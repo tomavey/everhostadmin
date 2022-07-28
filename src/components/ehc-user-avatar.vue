@@ -1,16 +1,9 @@
 <template>
 <div>
-    <v-avatar 
-        color="button" 
-        v-bind="$attrs"
-        class="avatar"
-        >
-        <v-img class="avatarimg" :src="url" v-if="url"></v-img>
-        <v-icon dark v-else>
-            mdi-account-circle
-        </v-icon>
-        <span v-if="label">{{label}}</span>
-    </v-avatar>
+     <v-avatar size="40">
+        <img class="avatarimg"  :src="url" v-if="url"></img>
+    </v-avatar> 
+    <span v-if="label">{{label}}</span>
 </div>
 </template>
 

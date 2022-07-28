@@ -1,10 +1,13 @@
 <template>
     <v-btn 
+        class="ehc-btn"
         v-bind="$attrs" 
         :color="color" 
         :dark="dark" 
         :class="btnClass"
         @click="$emit('click')">
+        <slot name="left"></slot>
+        
        <strong> <slot></slot></strong>
     </v-btn>
 </template>
@@ -27,3 +30,14 @@ export default {
 
 
 </script>
+
+<style>
+.ehc-btn {
+    border-radius: 8px;
+}
+
+.ehc-btn.theme--light.v-btn{
+    color: #893393;
+}
+
+</style>
