@@ -29,7 +29,6 @@
                     outlined
                     label="Search"
                     clearable
-                    rounded
                     dense
                     class="mt-7 searchField"
                     v-model="searchString"

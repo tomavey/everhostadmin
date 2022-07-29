@@ -8,16 +8,15 @@
 
 
 <template>
-    <v-menu offset-y>
+    <v-menu offset-y v-model="showMenu" >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-          class="menu-btn"
+          class="ehc-download-button mr-2 mb-2 elevation-0"
+          v-bind="$attrs"
+          @click="showMenu = true"
         >
-          Download
+          <slot name="left"></slot>
+          <strong><slot></slot></strong>
         </v-btn>
       </template>
       <v-list>
@@ -31,7 +30,7 @@
                 :name="item.fileName"
                 :header="header"
                 :type="item.type"
-                :escapeCsv = false
+                :escapeCsv = "false"
                 >
                 {{item.label}}
             </vue-json-to-excel>
@@ -68,10 +67,12 @@ export default {
         type: {
           type: String,
           default: 'xls'
-        }
+        },
+        btnClass:   {type: String,  default:"elevation-0"}
     },
   data: function() {
     return {
+      showMenu: false,
       items: [
         {
           label: "CSV",
@@ -92,5 +93,13 @@ export default {
 <style scoped>
 .menu-btn {
   float: right;
+}
+
+.ehc-download-button {
+    border-radius: 8px;
+}
+
+.ehc-download-button.theme--light.v-btn{
+    color: #893393;
 }
 </style>

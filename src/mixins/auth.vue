@@ -9,10 +9,16 @@ export default {
   created() {
   },
   methods:{
-    // returns true if user has permission level passed
-    userPermissionCheck(perm) {
-      if(perm=='') {return true}
-      return this.user.permissions.includes(perm)
+    // takes an array of strings and vallue to be returned if the current user has any of the passed strings as permission
+    userHasPermission(perms, response = true) {
+      if (!('permissions' in this.user)) {return false}
+      const userPerms = this.user.permissions
+
+      for (var i=0; i < perms.length; i++) {
+        if (this.user.permissions.includes(perms[i])) {return response}
+      }
+
+      return false
     },
   },
   computed: {

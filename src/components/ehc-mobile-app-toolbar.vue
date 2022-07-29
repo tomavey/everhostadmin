@@ -8,7 +8,8 @@
                 outlined
                 dense
                 label="search here"
-                prepend-inner-icon="mdi-magnify"></v-text-field>
+                prepend-inner-icon="mdi-magnify"
+                v-model="searchString"></v-text-field>
             <v-img src="@/assets/icons/message-favorite@3x.svg" contain height="25px" max-width="25px" class="my-2  ml-2 mr-2 pa-0"></v-img>
             <v-img src="@/assets/icons/Menu.svg" contain height="25px" max-width="25px" class="my-2  ml-2 mr-0 pa-0"></v-img>
             <ehc-user-avatar  size="30" :photoURL="user.photoURL" class="ml-2"></ehc-user-avatar>
@@ -31,6 +32,16 @@ export default {
         return {
 
         }
+    },
+    computed: {
+        searchString:{
+            get() {
+                return this.$store.getters.searchString
+            },
+            set(val) {
+                this.$store.commit('setSearchString', val)
+            }
+        },
     }
 }
 

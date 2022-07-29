@@ -41,7 +41,19 @@
             </template>
         </v-btn-toggle>
 
-
+        <ehc-download-button 
+            v-else-if="action.actionType == 'ehc-download-button'"
+            v-bind="action"
+            class="mr-2 mb-2" 
+            >
+            <template v-slot:left>
+              <v-icon left v-if="'prependIcon' in action">
+                  {{action.prependIcon}}
+              </v-icon>
+              <img v-if="'prependIconURL' in action" :src="action.prependIconURL" class="mr-2" />
+            </template>
+            {{action.label}}
+        </ehc-download-button>
 
 
       </template>
@@ -52,8 +64,12 @@
 </template>
 
 <script>
+
+import EhcDownloadButton from '@/components/ehc-download-button.vue'
+
 export default {
   props: ["text", "actions"],
+  components: {EhcDownloadButton}, 
   data() {
     return {};
   },

@@ -9,6 +9,9 @@
                 :selectable="true"
                 pagination="manual"  --could  'manual' or 'auto'
                 ></ehc-table>
+
+
+                TODO: make actions drop down menu type of column
                  -->
 
 
@@ -21,7 +24,9 @@
             <!--Headers-->
             <tr class="header">
                 <template v-for="(header, hindex) in headers">
-                    <th :key="hindex" :class="(header.sortable) ? 'sortable' : ''" @click="toggleSort(header.value)">
+                    <th :key="hindex" 
+                    :class="thClass(header)" 
+                    @click="toggleSort(header.value)">
                         {{header.text}}</th>
                 </template>
                 <th v-if="expansionPanel"></th>
@@ -36,29 +41,54 @@
 
             <!-- BODY SECTION -->
             <template v-for="(row, rindex) in displayItems">
-                <tr @click="$emit('click:row', row)" :class="'body' +  ((selectable) ? ' selectable' : '')"
+                <tr :class="'body' +  ((selectable) ? ' selectable' : '')"
                     :key="rindex">
                     <template v-for="(cell, cindex) in headers">
                         <!-- default -->
-                        <td :key="cindex" v-if="!('type' in cell)" class="pl-2 pr-12 py-2"> {{row[cell.value]}}</td>
+                        <td :key="cindex" v-if="!('type' in cell)" class="pl-2 pr-12 py-2" @click="tdClick(row,cell)"> {{row[cell.value]}}</td>
                         <!-- slot -->
-                        <td :key="cindex" v-else-if="cell.type ==='slot'" class="px-4 pl-2 pr-5">
+                        <td :key="cindex" v-else-if="cell.type ==='slot'" class="px-4 pl-2 pr-5" @click="tdClick(row,cell)">
                             <slot :name="cell.slotName" v-bind:item="row"></slot>
                         </td>
 
                         <!-- avatar -->
-                        <td :key="cindex" v-else-if='cell.type==="avatar"' class="px-1 py-1">
+                        <td :key="cindex" v-else-if='cell.type==="avatar"' class="px-1 py-1" @click="tdClick(row,cell)">
                             <ehc-user-avatar class="" :photoURL="row[cell.value]" />
                         </td>
 
                         <!-- boolean -->
-                        <td :key="cindex" v-else-if='cell.type === "boolean"' class="px-2 pl-2 pr-5">
+                        <td :key="cindex" v-else-if='cell.type === "boolean"' class="px-2 pl-2 pr-5" @click="tdClick(row,cell)">
                             <v-list-item-icon>
                                 <v-img v-if="row[cell.value]" :src="require('@/assets/icons/Seen@3x.svg')" small
                                     class="mr-2" />
                                 <v-img v-else :src="require('@/assets/icons/Close.svg')" small class="mr-2" />
                             </v-list-item-icon>
                         </td>
+
+
+                        <!-- menu -->
+                        <td :key="cindex" v-else-if='cell.type==="menu"' class="pl-0 pr-0 menu" >
+                            <v-menu offset-y rounded="lg">
+                                <template #activator="{on, attrs}">
+                                    <v-icon left v-if="'icon' in cell" v-bind="attrs" v-on="on">
+                                        {{cell.icon}}
+                                    </v-icon>
+                                    <img v-if="'iconURL' in cell" :src="cell.iconURL" class="mr-2" v-bind="attrs" v-on="on"/>
+                                </template>
+                                <v-list>
+                                    <v-list-item v-for="(item, iindex) in cell.items" :key="iindex" @click="$emit(item.emitClick,row)">
+                                        <v-list-item-title>
+                                            {{item.label}}
+                                        </v-list-item-title>
+                                    </v-list-item>                                
+                                </v-list>
+                            
+                            
+                            </v-menu>
+                            
+                        </td>
+
+
                     </template>
                     <td v-if="epxansion"></td>
                 </tr>
@@ -132,6 +162,17 @@ export default {
         }
     },
     methods: {
+        tdClick(row, cell) {
+            this.$emit('click:row', row)
+            this.$emit('click:coll:'+cell.value, row)
+        },
+        thClass(header) {
+            let thClass = ''
+            if (header.sortable) {thClass = thClass + 'sortable '}
+            if (header.type == 'menu') {thClass = thClass + 'menu '}
+
+            return thClass
+        },
         toggleSort(key) {
             const Dir = this.sortDirection
 
@@ -363,11 +404,17 @@ export default {
 
 .ehc-Table tr { border: none; }
 .ehc-Table td, .ehc-Table th{
-  border-right: solid 2px #dfe3ea; 
+  border-left: solid 2px #dfe3ea; 
 }
-.ehc-Table td:last-child, .ehc-Table th:last-child{
-  border-right:  0px; 
+.ehc-Table td:first-child, 
+.ehc-Table th:first-child,
+.ehc-Table tr.selectable:hover td:first-child,   
+.ehc-Table td.menu, 
+.ehc-Table th.menu{
+  border-left:  0px; 
 }
+
+
 
 
 .ehc-Table th {
@@ -389,9 +436,15 @@ export default {
     opacity: 1;
 }   
 
-.ehc-Table tr.selectable:hover, .ehc-Table tr.selectable:hover td  {
+
+.ehc-Table tr.selectable:hover td {
     background-color: #edd4f0 !important; 
-    border-right: solid 2px white ;
+    border-left: solid 2px white ;
+}
+
+.ehc-Table tr.selectable:hover td.menu,
+.ehc-Table tr.selectable:hover td:first-child   {
+    border-left: 0px!important;
 }
 
 

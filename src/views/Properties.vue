@@ -108,15 +108,13 @@ export default {
     },
     computed: {
         headerActions() {
-            const showAllType = (this.userPermissionCheck('superAdmin')) ? 'v-btn': ''
-
             let actions = [
                 {actionType: 'v-btn-toggle', dense: true, changeEmit: "viewChange", default: "gallery", mandatory: true,
                     buttons: [     
                         {label: 'Grid View', value: 'gallery', outlined: true, prependIconURL: require('@/assets/icons/Grid View@3x.svg')},
                         {label: 'List View', value: 'table', outlined: true, prependIconURL: require('@/assets/icons/List View@3x.svg')}
                     ]},
-                {actionType: (this.userPermissionCheck('superAdmin')) ? 'v-btn': '', label: "Show All", color: "tertiary", dark: false, prependIconURL: require("@/assets/icons/show@3x.svg"), clickEmit: "showAll", permissions: 'superAdmin'},
+                {actionType: this.userHasPermission(['superAdmin'],'v-btn'), label: "Show All", color: "tertiary", dark: false, prependIconURL: require("@/assets/icons/show@3x.svg"), clickEmit: "showAll"},
                 {actionType: 'v-btn', label: "add property", color: "primary", dark: true, prependIcon: "mdi-plus", clickEmit: "addProperty"},
             ]
 
