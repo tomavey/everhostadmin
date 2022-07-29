@@ -1,5 +1,5 @@
 <template>
-    <div class="ehc-sheet" >
+    <div class="ehc-sheet mb-4" >
         <slot>
 
         </slot>
@@ -20,6 +20,7 @@ export default {
 
 <style>
 .ehc-sheet {
+    max-width:100%;
     margin-top: 15px;
     padding: 20px;
     background-color: #ffffff;

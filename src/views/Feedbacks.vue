@@ -1,6 +1,22 @@
 <template>
     <ehc-page>
-    <v-card class="mx-auto" width="900">
+    <ehc-header text="Feedback Data"></ehc-header>
+    <ehc-sheet>
+        <ehc-table
+            :headers="headers"
+            :items="feedbacks"
+            pagination="auto"
+            :itemsPerPage = "20"
+            selectable="true"
+            @click:row="feedbackDialog = {show: true, item: $event}">
+            </ehc-table>
+    </ehc-sheet>
+
+    <ehc-dialog v-model="feedbackDialog.show" :title="'feedback: ' + feedbackDialog.item.email" width="500px">
+        {{ feedbackDialog.item.description }}
+    </ehc-dialog>
+
+  <!--  <v-card class="mx-auto" width="900">
         <v-card-title>{{pageTitle}}</v-card-title>
         <v-data-table
             :headers="headers"
@@ -24,7 +40,7 @@
         </template>
     
         </v-data-table>
-    </v-card>
+    </v-card>-->
     </ehc-page>
 </template>
 
@@ -36,6 +52,10 @@ export default {
     mixins: [auth,mixins],
     data() {
         return {
+            feedbackDialog: {
+                show: false,
+                item: {}
+            },
             pageTitle: "Feedback Data",
             search: '',
             expanded: [],

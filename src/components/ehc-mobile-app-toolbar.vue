@@ -1,7 +1,7 @@
 <template>
     <v-app-bar flat dense app clipped-left class="px-0 mx-0 mobileAppBar" color="appBar">
         <v-app-bar-nav-icon>
-            <v-img src="@/assets/ehicond.png" contain height="25px" max-width="25px" class="my-2 pa-0"></v-img>
+            <v-img src="@/assets/ehicond.png" contain height="25px" max-width="25px" class="my-2 pa-0" @click = "drawerShow = !drawerShow"></v-img>
         </v-app-bar-nav-icon>
             <v-text-field
                 class="pt-1 mr-2"
@@ -34,6 +34,14 @@ export default {
         }
     },
     computed: {
+        drawerShow: {
+            get() {
+                return this.$store.getters.drawer.show
+            },
+            set(val) {
+                this.$store.commit('setDrawer', {show: val})
+            }
+        },
         searchString:{
             get() {
                 return this.$store.getters.searchString

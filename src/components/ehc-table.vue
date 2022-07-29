@@ -321,7 +321,7 @@ export default {
 <style>
 .ehc-Table {
     
-    max-width: 81vw;
+    max-width: 100%;
 }
 
 .ehc-Table .table {
